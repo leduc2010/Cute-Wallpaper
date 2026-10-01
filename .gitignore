@@ -1,0 +1,25 @@
+*.iml
+.gradle/
+.idea/
+/local.properties
+.DS_Store
+**/build/
+captures/
+.externalNativeBuild/
+.cxx/
+.env
+
+# Firebase app-specific configuration
+google-services.json
+**/google-services.json
+
+# Signing / release secrets
+key.properties
+*.jks
+*.keystore
+
+# Build artifacts
+*.apk
+*.aab
+*.ap_
+app/release/

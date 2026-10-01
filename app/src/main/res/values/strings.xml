@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Cute Wallpaper</string>
+    <string name="home_title">Cute Wallpaper</string>
+    <string name="splash_loading">Loading…</string>
+    <string name="choose_language">Choose language</string>
+    <string name="next">Next</string>
+    <string name="continue_label">Continue</string>
+    <string name="try_again">Try again</string>
+    <string name="welcome_back">Welcome back</string>
+    <string name="welcome_back_description">Continue where you left off.</string>
+    <string name="onboarding_title_1">Discover your style</string>
+    <string name="onboarding_description_1">Explore a fresh experience built for you.</string>
+    <string name="onboarding_title_2">Make it yours</string>
+    <string name="onboarding_description_2">Personalize the app as you go.</string>
+    <string name="onboarding_title_3">Ready to start?</string>
+    <string name="onboarding_description_3">Continue to the app and start exploring.</string>
+</resources>

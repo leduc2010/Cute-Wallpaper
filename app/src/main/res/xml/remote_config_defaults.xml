@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<defaults>
+    <entry><key>ad_unit_id_placement</key><value>{}</value></entry>
+    <entry><key>ad_enable_placement</key><value>{}</value></entry>
+    <entry><key>hien_qc</key><value>false</value></entry>
+    <entry><key>show_onb_screen</key><value>true</value></entry>
+    <entry><key>show_lfo_screen</key><value>true</value></entry>
+    <entry><key>show_uninstall</key><value>false</value></entry>
+    <entry><key>show_welcome_back</key><value>false</value></entry>
+    <entry><key>onboarding_swipe_enable</key><value>{}</value></entry>
+    <entry><key>ad_show_onclick_enable_placement</key><value>{}</value></entry>
+    <entry><key>inter_splash_timeout</key><value>20000</value></entry>
+</defaults>
