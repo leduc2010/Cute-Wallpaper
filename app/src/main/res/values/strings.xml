@@ -1,6 +1,20 @@
 <resources>
     <string name="app_name">Cute Wallpaper</string>
     <string name="home_title">Cute Wallpaper</string>
+    <string name="wallpapers">Wallpapers</string>
+    <string name="video_wallpapers">Video Wallpapers</string>
+    <string name="ringtones">Ringtones</string>
+    <string name="profile_pictures">Profile Pictures</string>
+    <string name="quotes">Quotes</string>
+    <string name="favorites">Favorites</string>
+    <string name="search_wallpapers">Search wallpapers</string>
+    <string name="search_video_wallpapers">Search video wallpapers</string>
+    <string name="search_ringtones">Search ringtones</string>
+    <string name="search_profile_pictures">Search profile pictures</string>
+    <string name="search_quotes">Search quotes</string>
+    <string name="search_favorites">Search favorites</string>
+    <string name="no_favorites_yet">No favorites yet</string>
+    <string name="no_favorites_description">Tap the heart on wallpapers, sounds, or quotes to save them here.</string>
     <string name="splash_loading">Loading…</string>
     <string name="choose_language">Choose language</string>
     <string name="next">Next</string>
@@ -14,4 +28,33 @@
     <string name="onboarding_description_2">Personalize the app as you go.</string>
     <string name="onboarding_title_3">Ready to start?</string>
     <string name="onboarding_description_3">Continue to the app and start exploring.</string>
+
+    <!-- Home -->
+    <string name="home_brand">Cuti</string>
+    <string name="home_tagline">Dual cute world ✨</string>
+    <string name="home_wallpaper_category">Wallpaper</string>
+    <string name="home_dual_wallpapers_category">Dual Wallpapers</string>
+    <string name="home_best_category">Best</string>
+    <string name="home_premium">Premium</string>
+    <string name="home_video_shortcut">Browse video wallpapers</string>
+    <string name="home_filter">Choose a collection</string>
+    <string name="home_demo_title">Coming soon</string>
+    <string name="home_demo_message">This is a design preview. Content will be available when the catalog is ready.</string>
+    <string name="home_demo_preview">Preview content</string>
+    <string name="home_preview_close">Close</string>
+    <string name="home_add_favorite">Add %1$s to favorites</string>
+    <string name="home_remove_favorite">Remove %1$s from favorites</string>
+    <string name="home_no_results">No matches found</string>
+    <string name="home_no_results_description">Try another word or choose a different collection.</string>
+    <string name="home_sound_duration">0:30 · Preview</string>
+    <string name="home_filter_close">Close search filters</string>
+    <string name="home_filter_color_description">Filter by %1$s</string>
+
+    <!-- Search -->
+    <string name="search_back">Back</string>
+    <string name="search_color_description">Show %1$s results</string>
+    <string name="search_filter_description">Filter by %1$s</string>
+    <string name="search_no_results_title">No wallpapers found</string>
+    <string name="search_no_results_description">Try another keyword or color.</string>
+    <string name="search_clear">Clear search</string>
 </resources>

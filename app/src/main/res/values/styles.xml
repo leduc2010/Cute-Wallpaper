@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TypographyBase">
+        <item name="fontFamily">@font/poppins_regular</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- Headline -->
+    <style name="Headline40B" parent="@style/TypographyBase">
+        <item name="android:textSize">40sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Headline40R" parent="@style/TypographyBase">
+        <item name="android:textSize">40sp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <!-- Heading 28 -->
+    <style name="Heading28B" parent="@style/TypographyBase">
+        <item name="android:textSize">28sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Heading28S" parent="@style/TypographyBase">
+        <item name="android:textSize">28sp</item>
+        <item name="fontFamily">@font/poppins_semi_bold</item>
+    </style>
+
+    <style name="Heading28M" parent="@style/TypographyBase">
+        <item name="android:textSize">28sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="Heading28R" parent="@style/TypographyBase">
+        <item name="android:textSize">28sp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <!-- Heading 26 -->
+    <style name="Heading26B" parent="@style/TypographyBase">
+        <item name="android:textSize">26sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Heading26S" parent="@style/TypographyBase">
+        <item name="android:textSize">26sp</item>
+        <item name="fontFamily">@font/poppins_semi_bold</item>
+    </style>
+
+    <style name="Heading26M" parent="@style/TypographyBase">
+        <item name="android:textSize">26sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <!-- Heading 24 -->
+    <style name="Heading24B" parent="@style/TypographyBase">
+        <item name="android:textSize">24sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Heading24S" parent="@style/TypographyBase">
+        <item name="android:textSize">24sp</item>
+        <item name="fontFamily">@font/poppins_semi_bold</item>
+    </style>
+
+    <style name="Heading24M" parent="@style/TypographyBase">
+        <item name="android:textSize">24sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="Heading24R" parent="@style/TypographyBase">
+        <item name="android:textSize">24sp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <!-- Heading 20 -->
+    <style name="Heading20B" parent="@style/TypographyBase">
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Heading20S" parent="@style/TypographyBase">
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/poppins_semi_bold</item>
+    </style>
+
+    <style name="Heading20M" parent="@style/TypographyBase">
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="Heading20R" parent="@style/TypographyBase">
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <!-- Heading 18 -->
+    <style name="Heading18B" parent="@style/TypographyBase">
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Heading18S" parent="@style/TypographyBase">
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/poppins_semi_bold</item>
+    </style>
+
+    <style name="Heading18M" parent="@style/TypographyBase">
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="Heading18R" parent="@style/TypographyBase">
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <!-- Body 16 -->
+    <style name="Body16B" parent="@style/TypographyBase">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Body16S" parent="@style/TypographyBase">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_semi_bold</item>
+    </style>
+
+    <style name="Body16M" parent="@style/TypographyBase">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="Body16R" parent="@style/TypographyBase">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <!-- Body 14 -->
+    <style name="Body14B" parent="@style/TypographyBase">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Body14S" parent="@style/TypographyBase">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins_semi_bold</item>
+    </style>
+
+    <style name="Body14M" parent="@style/TypographyBase">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="Body14R" parent="@style/TypographyBase">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <!-- Button 20 -->
+    <style name="Button20B" parent="@style/TypographyBase">
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Button20S" parent="@style/TypographyBase">
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/poppins_semi_bold</item>
+    </style>
+
+    <style name="Button20M" parent="@style/TypographyBase">
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="Button20R" parent="@style/TypographyBase">
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <!-- Button 16 -->
+    <style name="Button16B" parent="@style/TypographyBase">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Button16S" parent="@style/TypographyBase">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_semi_bold</item>
+    </style>
+
+    <style name="Button16M" parent="@style/TypographyBase">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="Button16R" parent="@style/TypographyBase">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <!-- Button 14 -->
+    <style name="Button14B" parent="@style/TypographyBase">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Button14S" parent="@style/TypographyBase">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins_semi_bold</item>
+    </style>
+
+    <style name="Button14M" parent="@style/TypographyBase">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="Button14R" parent="@style/TypographyBase">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <!-- Label -->
+    <style name="Label12B" parent="@style/TypographyBase">
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Label12R" parent="@style/TypographyBase">
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <style name="Label11B" parent="@style/TypographyBase">
+        <item name="android:textSize">11sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Label11R" parent="@style/TypographyBase">
+        <item name="android:textSize">11sp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <style name="Label10B" parent="@style/TypographyBase">
+        <item name="android:textSize">10sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="Label10R" parent="@style/TypographyBase">
+        <item name="android:textSize">10sp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.HomeArtwork" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.CollectionIcon" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+</resources>

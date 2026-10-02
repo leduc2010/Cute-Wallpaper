@@ -1,11 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+<!-- Primary -->
+    <color name="primary_950">#2E0016</color>
+    <color name="primary_900">#520027</color>
+    <color name="primary_800">#750038</color>
+    <color name="primary_700">#990049</color>
+    <color name="primary_600">#C2005F</color>
+    <color name="primary_500">#EC5B8C</color>
+    <color name="primary_400">#F07BA3</color>
+    <color name="primary_300">#F49BBA</color>
+    <color name="primary_200">#F8BCD1</color>
+    <color name="primary_100">#FBDCE8</color>
+    <color name="primary_50">#FDEEF4</color>
+
+    <!-- Neutral -->
+    <color name="neutral_950">#0A0B0C</color>
+    <color name="neutral_900">#16181A</color>
+    <color name="neutral_800">#232628</color>
+    <color name="neutral_700">#333638</color>
+    <color name="neutral_600">#4D5153</color>
+    <color name="neutral_500">#71787B</color>
+    <color name="neutral_400">#8A7F85</color>
+    <color name="neutral_300">#BDC2C4</color>
+    <color name="neutral_200">#D8DBDC</color>
+    <color name="neutral_100">#ECEEF0</color>
+    <color name="neutral_50">#F6F7F7</color>
+    <color name="neutral_0">#FFFFFF</color>
+
+    <!-- Secondary -->
+    <color name="secondary_950">#0F0526</color>
+    <color name="secondary_900">#1E0A4D</color>
+    <color name="secondary_800">#2D1073</color>
+    <color name="secondary_700">#3E1899</color>
+    <color name="secondary_600">#6B3FBF</color>
+    <color name="secondary_500">#A985E5</color>
+    <color name="secondary_400">#BA9DEB</color>
+    <color name="secondary_300">#CAB5F0</color>
+    <color name="secondary_200">#DBCEF5</color>
+    <color name="secondary_100">#ECE6FA</color>
+    <color name="secondary_50">#F5F2FD</color>
+
+    <!-- Tertiary -->
+    <color name="tertiary_950">#241917</color>
+    <color name="tertiary_900">#3D2D2A</color>
+    <color name="tertiary_800">#523C37</color>
+    <color name="tertiary_700">#674B44</color>
+    <color name="tertiary_600">#7E5F56</color>
+    <color name="tertiary_500">#98766A</color>
+    <color name="tertiary_400">#B6978B</color>
+    <color name="tertiary_300">#D1BBB2</color>
+    <color name="tertiary_200">#E6D8D2</color>
+    <color name="tertiary_100">#F3ECE9</color>
+    <color name="tertiary_50">#FAF7F6</color>
+
+    <!-- Semantic -->
+    <color name="success_500">#00CC2C</color>
+    <color name="error_500">#FF0000</color>
+    <color name="warning_500">#FFD500</color>
+
+    <!-- Gradient -->
+    <color name="gradient_primary_start">#FF9A00</color>
+    <color name="gradient_primary_center">#FF3D77</color>
+    <color name="gradient_primary_end">#7A2CFF</color>
+
+<!-- Alpha Dark: base #0A0B0C -->
+    <color name="alpha_dark_90">#E60A0B0C</color>
+    <color name="alpha_dark_80">#CC0A0B0C</color>
+    <color name="alpha_dark_70">#B30A0B0C</color>
+    <color name="alpha_dark_60">#990A0B0C</color>
+    <color name="alpha_dark_50">#800A0B0C</color>
+    <color name="alpha_dark_40">#660A0B0C</color>
+    <color name="alpha_dark_30">#4D0A0B0C</color>
+    <color name="alpha_dark_20">#330A0B0C</color>
+    <color name="alpha_dark_10">#1A0A0B0C</color>
+    <color name="alpha_dark_05">#0D0A0B0C</color>
+
+    <!-- Alpha Light: base #FFFFFF -->
+    <color name="alpha_light_90">#E6FFFFFF</color>
+    <color name="alpha_light_80">#CCFFFFFF</color>
+    <color name="alpha_light_70">#B3FFFFFF</color>
+    <color name="alpha_light_60">#99FFFFFF</color>
+    <color name="alpha_light_50">#80FFFFFF</color>
+    <color name="alpha_light_40">#66FFFFFF</color>
+    <color name="alpha_light_30">#4DFFFFFF</color>
+    <color name="alpha_light_20">#33FFFFFF</color>
+    <color name="alpha_light_10">#1AFFFFFF</color>
+    <color name="alpha_light_05">#0DFFFFFF</color>
+
+    <!-- Alpha Primary: base #EC5B8C -->
+    <color name="alpha_primary_90">#E6EC5B8C</color>
+    <color name="alpha_primary_80">#CCEC5B8C</color>
+    <color name="alpha_primary_70">#B3EC5B8C</color>
+    <color name="alpha_primary_60">#99EC5B8C</color>
+    <color name="alpha_primary_50">#80EC5B8C</color>
+    <color name="alpha_primary_40">#66EC5B8C</color>
+    <color name="alpha_primary_30">#4DEC5B8C</color>
+    <color name="alpha_primary_20">#33EC5B8C</color>
+    <color name="alpha_primary_10">#1AEC5B8C</color>
+    <color name="alpha_primary_05">#0DEC5B8C</color>
+
+<!-- Existing semantic aliases used by current core UI -->
     <color name="primary">#F72B85</color>
     <color name="primary_dark">#D81B70</color>
     <color name="on_primary">#FFFFFF</color>
     <color name="background">#FFF8FC</color>
     <color name="surface">#FFFFFF</color>
     <color name="on_surface">#24191F</color>
-    <color name="neutral_400">#8A7F85</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+
+    <!-- Bottom navigation aliases -->
+    <color name="bottom_nav_selected">@color/primary_500</color>
+    <color name="bottom_nav_selected_background">@color/primary_50</color>
+    <color name="bottom_nav_unselected">@color/tertiary_500</color>
 </resources>
