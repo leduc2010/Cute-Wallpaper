@@ -2,7 +2,7 @@ package com.cute.wallpaper.ringtones.presentation.main
 
 import androidx.annotation.StringRes
 import com.cute.wallpaper.ringtones.R
-import com.cute.wallpaper.ringtones.core.model.ContentType
+import com.cute.wallpaper.ringtones.domain.model.ContentType
 
 enum class MainTab(
     @param:StringRes val titleRes: Int,
@@ -42,4 +42,4 @@ enum class MainTab(
 }
 
 val MainTab.hasCollections: Boolean
-    get() = this == MainTab.WALLPAPERS || this == MainTab.VIDEO_WALLPAPERS || this == MainTab.PROFILE_PICTURES
+    get() = this == MainTab.WALLPAPERS

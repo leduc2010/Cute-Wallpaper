@@ -1,6 +1,11 @@
 package com.cute.wallpaper.ringtones.presentation.home
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
+import android.widget.Toast
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -9,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -20,14 +26,16 @@ import androidx.viewpager2.widget.ViewPager2
 import com.cute.wallpaper.ringtones.R
 import com.cute.wallpaper.ringtones.databinding.FragmentHomeBinding
 import com.cute.wallpaper.ringtones.presentation.base.BaseFragment
-import com.cute.wallpaper.ringtones.presentation.home.demo.DemoCollection
 import com.cute.wallpaper.ringtones.presentation.main.MainFragment
 import com.cute.wallpaper.ringtones.presentation.main.MainTab
 import com.cute.wallpaper.ringtones.presentation.main.MainViewModel
 import com.cute.wallpaper.ringtones.presentation.main.hasCollections
+import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneActionEvent
+import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneViewModel
 import com.cute.wallpaper.ringtones.presentation.search.SearchMode
 import com.cute.wallpaper.ringtones.presentation.search.SearchViewModel
 import com.google.android.material.chip.Chip
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.transition.MaterialSharedAxis
 import com.google.android.material.transition.SlideDistanceProvider
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,18 +44,41 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private val viewModel: HomeViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels(ownerProducer = { requireParentFragment() })
+    private val ringtoneViewModel: RingtoneViewModel by viewModels()
     private val tab: MainTab by lazy {
         MainTab.entries.firstOrNull { it.name == arguments?.getString(ARG_TAB) } ?: MainTab.WALLPAPERS
     }
     private val colorChips = mutableMapOf<String, Chip>()
     private val genreChips = mutableMapOf<String, Chip>()
     private var updatingFilterSelection = false
+    private var ringtoneTabMediator: TabLayoutMediator? = null
     private var hasRenderedSearchFilterVisibility = false
+
+    private val writeSettingsLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        ringtoneViewModel.retryPendingSet()
+    }
+
+    private val storagePermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            ringtoneViewModel.retryPendingSet()
+        } else {
+            showToast(R.string.ringtone_storage_permission_required)
+        }
+    }
 
     private val collectionPagerCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
-            if (!tab.hasCollections) return
-            DemoCollection.pages.getOrNull(position)?.let(mainViewModel::selectCollection)
+            when {
+                tab.hasCollections -> WallpaperCollection.pages.getOrNull(position)
+                    ?.let(mainViewModel::selectCollection)
+
+                tab == MainTab.RINGTONES -> RingtoneCategory.pages.getOrNull(position)
+                    ?.let(viewModel::selectRingtoneCategory)
+            }
         }
     }
 
@@ -58,6 +89,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun initView() {
         hasRenderedSearchFilterVisibility = false
         binding.etSearch.setHint(tab.searchHintRes)
+        binding.ringtoneTabs.isVisible = tab == MainTab.RINGTONES
         binding.collectionPager.apply {
             adapter = HomeCollectionPagerAdapter(
                 childFragmentManager,
@@ -65,18 +97,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 tab
             )
             isSaveEnabled = false
-            isUserInputEnabled = tab.hasCollections
-            if (tab.hasCollections) offscreenPageLimit = DemoCollection.pages.lastIndex
-            val initialPage = if (tab.hasCollections) {
-                DemoCollection.pages.indexOf(
-                    mainViewModel.selectedCollection.value?.canonical()
-                        ?: DemoCollection.WALLPAPER
+            isUserInputEnabled = tab.hasCollections || tab == MainTab.RINGTONES
+            if (tab.hasCollections) offscreenPageLimit = WallpaperCollection.pages.lastIndex
+            if (tab == MainTab.RINGTONES) offscreenPageLimit = RingtoneCategory.pages.lastIndex
+            val initialPage = when {
+                tab.hasCollections -> WallpaperCollection.pages.indexOf(
+                    mainViewModel.selectedCollection.value ?: WallpaperCollection.WALLPAPER
                 )
-            } else {
-                0
+
+                tab == MainTab.RINGTONES -> RingtoneCategory.pages.indexOf(
+                    viewModel.selectedRingtoneCategory.value ?: RingtoneCategory.RINGTONES
+                )
+
+                else -> 0
             }
             setCurrentItem(initialPage, false)
             registerOnPageChangeCallback(collectionPagerCallback)
+        }
+        if (tab == MainTab.RINGTONES) {
+            ringtoneTabMediator = TabLayoutMediator(
+                binding.ringtoneTabs,
+                binding.collectionPager
+            ) { ringtoneTab, position ->
+                ringtoneTab.text = getString(RingtoneCategory.pages[position].titleRes)
+            }.also { it.attach() }
         }
     }
 
@@ -106,13 +150,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         viewModel.selectedColorId.observe(viewLifecycleOwner, ::updateColorSelection)
         viewModel.selectedGenreIds.observe(viewLifecycleOwner, ::updateGenreSelection)
         mainViewModel.selectedCollection.observe(viewLifecycleOwner) { collection ->
-            val page = DemoCollection.pages.indexOf(collection.canonical())
+            val page = WallpaperCollection.pages.indexOf(collection)
             if (tab.hasCollections && binding.collectionPager.currentItem != page) {
                 binding.collectionPager.setCurrentItem(page, true)
             }
         }
+        viewModel.selectedRingtoneCategory.observe(viewLifecycleOwner) { category ->
+            if (tab == MainTab.RINGTONES) {
+                val page = RingtoneCategory.pages.indexOf(category)
+                if (page >= 0 && binding.collectionPager.currentItem != page) {
+                    binding.collectionPager.setCurrentItem(page, true)
+                }
+            }
+        }
         mainViewModel.bottomContentPadding.observe(viewLifecycleOwner) {
             viewModel.updateBottomContentPadding(it)
+        }
+        if (tab == MainTab.RINGTONES || tab == MainTab.FAVORITES) {
+            ringtoneViewModel.actionEvent.observe(viewLifecycleOwner) { event ->
+                event.getContentIfNotHandled()?.let(::handleRingtoneAction)
+            }
         }
     }
 
@@ -253,13 +310,47 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         navViewModel.navigate(R.id.searchFragment, args)
     }
 
+    private fun handleRingtoneAction(event: RingtoneActionEvent) {
+        when (event) {
+            RingtoneActionEvent.RequestWriteSettings -> {
+                showToast(R.string.ringtone_write_settings_required)
+                writeSettingsLauncher.launch(
+                    Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS).apply {
+                        data = Uri.parse("package:${requireContext().packageName}")
+                    }
+                )
+            }
+
+            RingtoneActionEvent.RequestStoragePermission -> {
+                storagePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
+
+            is RingtoneActionEvent.SetSuccess -> showToast(R.string.ringtone_set_success)
+            RingtoneActionEvent.SetFailed -> showToast(R.string.ringtone_set_failed)
+            RingtoneActionEvent.PreviewFailed -> showToast(R.string.ringtone_preview_failed)
+        }
+    }
+
+    private fun showToast(messageRes: Int) {
+        Toast.makeText(requireContext(), messageRes, Toast.LENGTH_SHORT).show()
+    }
+
     fun revealChromeIfActive(sourceTab: MainTab) {
         if (mainViewModel.selectedTab.value == sourceTab) {
             (parentFragment as? MainFragment)?.revealChrome()
         }
     }
 
+    override fun onPause() {
+        if (tab == MainTab.RINGTONES || tab == MainTab.FAVORITES) {
+            ringtoneViewModel.stopPreview()
+        }
+        super.onPause()
+    }
+
     override fun onDestroyView() {
+        ringtoneTabMediator?.detach()
+        ringtoneTabMediator = null
         binding.collectionPager.unregisterOnPageChangeCallback(collectionPagerCallback)
         binding.collectionPager.adapter = null
         colorChips.clear()

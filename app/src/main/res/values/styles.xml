@@ -255,6 +255,11 @@
 
     <style name="ShapeAppearanceOverlay.HomeArtwork" parent="">
         <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">23dp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.SearchArtwork" parent="">
+        <item name="cornerFamily">rounded</item>
         <item name="cornerSize">20dp</item>
     </style>
 

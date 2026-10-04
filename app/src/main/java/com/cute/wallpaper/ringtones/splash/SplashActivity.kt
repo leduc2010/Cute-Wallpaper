@@ -5,9 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.cute.wallpaper.ringtones.R
-import com.cute.wallpaper.ringtones.core.locale.AppLocaleManager
-import com.cute.wallpaper.ringtones.core.locale.LanguageCodeNormalizer
+import com.cute.wallpaper.ringtones.utils.AppLocaleManager
+import com.cute.wallpaper.ringtones.utils.LanguageCodeNormalizer
 import com.cute.wallpaper.ringtones.data.local.preference.AppPreferences
+import com.cute.wallpaper.ringtones.domain.repository.ContentRepository
 import com.cute.wallpaper.ringtones.presentation.main.MainActivity
 import com.leansoft.ads.ui.activity.LeansoftSplashActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,8 +23,12 @@ class SplashActivity : LeansoftSplashActivity() {
     lateinit var appPreferences: AppPreferences
     @Inject
     lateinit var appLocaleManager: AppLocaleManager
+    @Inject
+    lateinit var contentRepository: ContentRepository
 
-    override fun loadedRemoteConfig(isSuccess: Boolean) = Unit
+    override fun loadedRemoteConfig(isSuccess: Boolean) {
+        contentRepository.refresh()
+    }
 
     override fun finishOnboarding(bundle: Bundle) {
         startActivity(Intent(this, MainActivity::class.java))

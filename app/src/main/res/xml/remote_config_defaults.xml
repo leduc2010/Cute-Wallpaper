@@ -10,4 +10,7 @@
     <entry><key>onboarding_swipe_enable</key><value>{}</value></entry>
     <entry><key>ad_show_onclick_enable_placement</key><value>{}</value></entry>
     <entry><key>inter_splash_timeout</key><value>20000</value></entry>
+    <entry><key>wallpaper_data</key><value>[]</value></entry>
+    <entry><key>sound_data</key><value>[]</value></entry>
+    <entry><key>quote_data</key><value>[]</value></entry>
 </defaults>

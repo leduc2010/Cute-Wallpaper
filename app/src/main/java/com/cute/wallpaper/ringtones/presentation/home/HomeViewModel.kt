@@ -6,10 +6,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.cute.wallpaper.ringtones.core.model.ContentRef
-import com.cute.wallpaper.ringtones.data.fake.FakeContentDataSource
-import com.cute.wallpaper.ringtones.data.fake.FakeQuickFilterKind
+import com.cute.wallpaper.ringtones.domain.model.ContentRef
+import com.cute.wallpaper.ringtones.domain.repository.ContentRepository
 import com.cute.wallpaper.ringtones.data.local.preference.AppPreferences
+import com.cute.wallpaper.ringtones.presentation.main.MainTab
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,36 +17,66 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val appPreferences: AppPreferences,
-    fakeContentDataSource: FakeContentDataSource,
+    contentRepository: ContentRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+    private val contents = contentRepository.getContents().map { it.toUiModel() }
+    private val tab = MainTab.entries.firstOrNull {
+        it.name == savedStateHandle.get<String>(ARG_MAIN_TAB)
+    } ?: MainTab.WALLPAPERS
+    private val filterContents = if (tab == MainTab.FAVORITES) {
+        contents
+    } else {
+        contents.filter { it.type == tab.contentType }
+    }
     private val _searchQuery = savedStateHandle.getLiveData("search_query", "")
     private val _searchFiltersVisible = savedStateHandle.getLiveData("search_filters_visible", false)
     private val _selectedColorId = savedStateHandle.getLiveData("selected_color_id", "")
     private val _selectedGenreIds = savedStateHandle.getLiveData("selected_genre_ids", arrayListOf<String>())
+    private val availableColors = filterContents.mapNotNull { it.color }
+        .distinct()
+    private val availableTags = buildList {
+        val seen = linkedSetOf<String>()
+        filterContents.forEach { item ->
+            item.tags.forEach { tag ->
+                if (seen.add(tag)) add(tag)
+            }
+        }
+    }
     private val _searchFilterOptions = MutableLiveData(
         SearchFilterUiModel(
-            colors = fakeContentDataSource.colors.map {
-                SearchColorUiModel(it.id, it.label, it.colorHex)
+            colors = availableColors.map { color ->
+                SearchColorUiModel(
+                    id = color,
+                    label = color.replaceFirstChar(Char::titlecase),
+                    colorHex = color.toDisplayColorHex()
+                )
             },
-            genres = fakeContentDataSource.genres.map {
-                SearchGenreUiModel(it.id, it.label, it.emoji)
+            genres = availableTags.map { tag ->
+                SearchGenreUiModel(
+                    id = tag,
+                    label = tag.replaceFirstChar(Char::titlecase),
+                    emoji = ""
+                )
             },
-            quickFilters = fakeContentDataSource.quickFilters.map {
+            quickFilters = availableTags.take(MAX_QUICK_FILTERS).map { tag ->
                 SearchQuickFilterUiModel(
-                    id = it.id,
-                    label = it.label,
-                    emoji = it.emoji,
-                    kind = when (it.kind) {
-                        FakeQuickFilterKind.COLOR -> SearchQuickFilterKind.COLOR
-                        FakeQuickFilterKind.GENRE -> SearchQuickFilterKind.GENRE
-                    }
+                    id = tag,
+                    label = tag.replaceFirstChar(Char::titlecase),
+                    emoji = "",
+                    kind = SearchQuickFilterKind.GENRE
                 )
             }
         )
     )
+    private val _selectedRingtoneCategory = savedStateHandle.getLiveData(
+        "ringtone_category",
+        RingtoneCategory.RINGTONES
+    )
+    val selectedRingtoneCategory: LiveData<RingtoneCategory> = _selectedRingtoneCategory
+
     private val _bottomContentPadding = MutableLiveData(0)
-    private val _contentItems = MutableLiveData(fakeContentDataSource.contents.map { it.toUiModel() })
+    private val _contentItems = MutableLiveData(contents)
 
     val searchQuery: LiveData<String> = _searchQuery
     val searchFiltersVisible: LiveData<Boolean> = _searchFiltersVisible
@@ -77,6 +107,12 @@ class HomeViewModel @Inject constructor(
         if (_selectedGenreIds.value != value) _selectedGenreIds.value = value
     }
 
+    fun selectRingtoneCategory(category: RingtoneCategory) {
+        if (_selectedRingtoneCategory.value != category) {
+            _selectedRingtoneCategory.value = category
+        }
+    }
+
     fun updateBottomContentPadding(padding: Int) {
         if (_bottomContentPadding.value != padding) _bottomContentPadding.value = padding
     }
@@ -87,4 +123,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private companion object {
+        const val ARG_MAIN_TAB = "main_tab"
+        const val MAX_QUICK_FILTERS = 8
+    }
 }

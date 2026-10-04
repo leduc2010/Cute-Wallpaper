@@ -2,15 +2,15 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="76dp"
+    android:minHeight="80dp"
     android:background="@drawable/bg_bottom_nav"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:elevation="12dp"
-    android:paddingStart="12dp"
-    android:paddingTop="18dp"
-    android:paddingEnd="12dp"
-    android:paddingBottom="14dp">
+    android:paddingStart="20dp"
+    android:paddingTop="20dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="20dp">
 
     <HorizontalScrollView
         android:id="@+id/navigationScroll"
@@ -40,7 +40,7 @@
                 android:gravity="center"
                 android:minWidth="44dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="10dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -71,7 +71,7 @@
                 android:gravity="center"
                 android:minWidth="44dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -103,7 +103,7 @@
                 android:gravity="center"
                 android:minWidth="44dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -135,7 +135,7 @@
                 android:gravity="center"
                 android:minWidth="44dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -167,7 +167,7 @@
                 android:gravity="center"
                 android:minWidth="44dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -199,7 +199,7 @@
                 android:gravity="center"
                 android:minWidth="44dp"
                 android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+                android:paddingHorizontal="12dp">
 
                 <ImageView
                     android:layout_width="24dp"

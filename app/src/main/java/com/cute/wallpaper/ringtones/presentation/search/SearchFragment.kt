@@ -1,6 +1,10 @@
 package com.cute.wallpaper.ringtones.presentation.search
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.Gravity
@@ -12,6 +16,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
@@ -25,6 +31,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.cute.wallpaper.ringtones.R
 import com.cute.wallpaper.ringtones.databinding.FragmentSearchBinding
 import com.cute.wallpaper.ringtones.presentation.base.BaseFragment
+import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneActionEvent
+import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +40,24 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     private val viewModel: SearchViewModel by viewModels()
+    private val ringtoneViewModel: RingtoneViewModel by viewModels()
     private var tabMediator: TabLayoutMediator? = null
+
+    private val writeSettingsLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        ringtoneViewModel.retryPendingSet()
+    }
+
+    private val storagePermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            ringtoneViewModel.retryPendingSet()
+        } else {
+            showToast(R.string.ringtone_storage_permission_required)
+        }
+    }
 
     private val pageCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
@@ -120,6 +145,39 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                 binding.etSearch.setSelection(query.length)
             }
         }
+        if (
+            viewModel.tab == com.cute.wallpaper.ringtones.presentation.main.MainTab.RINGTONES ||
+            viewModel.tab == com.cute.wallpaper.ringtones.presentation.main.MainTab.FAVORITES
+        ) {
+            ringtoneViewModel.actionEvent.observe(viewLifecycleOwner) { event ->
+                event.getContentIfNotHandled()?.let(::handleRingtoneAction)
+            }
+        }
+    }
+
+    private fun handleRingtoneAction(event: RingtoneActionEvent) {
+        when (event) {
+            RingtoneActionEvent.RequestWriteSettings -> {
+                showToast(R.string.ringtone_write_settings_required)
+                writeSettingsLauncher.launch(
+                    Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS).apply {
+                        data = Uri.parse("package:${requireContext().packageName}")
+                    }
+                )
+            }
+
+            RingtoneActionEvent.RequestStoragePermission -> {
+                storagePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
+
+            is RingtoneActionEvent.SetSuccess -> showToast(R.string.ringtone_set_success)
+            RingtoneActionEvent.SetFailed -> showToast(R.string.ringtone_set_failed)
+            RingtoneActionEvent.PreviewFailed -> showToast(R.string.ringtone_preview_failed)
+        }
+    }
+
+    private fun showToast(messageRes: Int) {
+        Toast.makeText(requireContext(), messageRes, Toast.LENGTH_SHORT).show()
     }
 
     private fun createCategoryTab(page: SearchPageUiModel): TextView {
@@ -129,7 +187,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             gravity = Gravity.CENTER
             setPadding(dp(12), 0, dp(12), 0)
             setTextAppearance(R.style.Body14R)
-            text = "${page.emoji} ${page.label}"
+            text = listOf(page.emoji, page.label)
+                .filter(String::isNotBlank)
+                .joinToString(" ")
             isClickable = false
             isFocusable = false
             updateCategoryTab(this, false)
@@ -189,7 +249,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                 dp(1),
                 ContextCompat.getColor(
                     requireContext(),
-                    if (selected) R.color.primary_500 else R.color.primary_200
+                    if (selected) R.color.primary_500 else R.color.primary_100
                 )
             )
         }
@@ -215,6 +275,16 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             else -> Color.TRANSPARENT
         }
         setStroke(if (selected || page.id == "white") dp(2) else 0, strokeColor)
+    }
+
+    override fun onPause() {
+        if (
+            viewModel.tab == com.cute.wallpaper.ringtones.presentation.main.MainTab.RINGTONES ||
+            viewModel.tab == com.cute.wallpaper.ringtones.presentation.main.MainTab.FAVORITES
+        ) {
+            ringtoneViewModel.stopPreview()
+        }
+        super.onPause()
     }
 
     override fun onDestroyView() {

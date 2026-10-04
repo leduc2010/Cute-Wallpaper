@@ -5,30 +5,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cute.wallpaper.ringtones.R
-import com.cute.wallpaper.ringtones.core.model.ContentType
-import com.cute.wallpaper.ringtones.data.fake.FakeContentDataSource
+import com.cute.wallpaper.ringtones.domain.model.ContentType
+import com.cute.wallpaper.ringtones.domain.model.RingtoneTarget
 import com.cute.wallpaper.ringtones.databinding.FragmentSearchResultBinding
 import com.cute.wallpaper.ringtones.presentation.base.BaseFragment
+import com.cute.wallpaper.ringtones.presentation.detail.VideoWallpaperDetailViewModel
 import com.cute.wallpaper.ringtones.presentation.detail.WallpaperDetailViewModel
 import com.cute.wallpaper.ringtones.presentation.home.HomeContentUiModel
-import com.cute.wallpaper.ringtones.presentation.home.demo.DemoArtwork
-import com.cute.wallpaper.ringtones.presentation.home.demo.DemoContentAdapter
-import com.cute.wallpaper.ringtones.presentation.home.demo.DemoContentCard
+import com.cute.wallpaper.ringtones.presentation.home.ContentAdapter
+import com.cute.wallpaper.ringtones.presentation.home.ContentCard
+import com.cute.wallpaper.ringtones.presentation.main.MainTab
+import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneTargetBottomSheet
+import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SearchResultFragment : BaseFragment<FragmentSearchResultBinding>() {
-    @Inject lateinit var fakeContentDataSource: FakeContentDataSource
-
     private val viewModel: SearchViewModel by viewModels(ownerProducer = { requireParentFragment() })
+    private val ringtoneViewModel: RingtoneViewModel by viewModels(ownerProducer = { requireParentFragment() })
     private val page: SearchPageUiModel by lazy {
         SearchPageUiModel(
             id = requireArguments().getString(ARG_PAGE_ID).orEmpty(),
@@ -40,8 +40,7 @@ class SearchResultFragment : BaseFragment<FragmentSearchResultBinding>() {
             colorHex = requireArguments().getString(ARG_PAGE_COLOR).orEmpty()
         )
     }
-    private var contentAdapter: DemoContentAdapter? = null
-    private var infoDialog: AlertDialog? = null
+    private var contentAdapter: ContentAdapter? = null
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -55,18 +54,34 @@ class SearchResultFragment : BaseFragment<FragmentSearchResultBinding>() {
     }
 
     override fun initView() {
-        val artwork = DemoArtwork(resources, fakeContentDataSource.artworkRegions)
-        contentAdapter = DemoContentAdapter(artwork, { content, favorite ->
-            viewModel.setFavorite(content.ref, favorite)
-        }, ::openDetail, compactArtwork = true).apply {
+        childFragmentManager.setFragmentResultListener(
+            RingtoneTargetBottomSheet.REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, result ->
+            val contentId = result.getString(RingtoneTargetBottomSheet.RESULT_CONTENT_ID).orEmpty()
+            val target = RingtoneTarget.entries.firstOrNull {
+                it.name == result.getString(RingtoneTargetBottomSheet.RESULT_TARGET)
+            } ?: return@setFragmentResultListener
+            ringtoneViewModel.requestSet(contentId, target)
+        }
+
+        contentAdapter = ContentAdapter(
+            onFavorite = { content, favorite ->
+                viewModel.setFavorite(content.ref, favorite)
+            },
+            onPreview = ::openDetail,
+            compactArtwork = true,
+            onRingtoneSet = ::showRingtoneTarget
+        ).apply {
             stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
         binding.rvContent.apply {
-            layoutManager = GridLayoutManager(requireContext(), SEARCH_COLUMN_COUNT)
+            val columns = if (viewModel.tab == MainTab.RINGTONES) 1 else SEARCH_COLUMN_COUNT
+            layoutManager = GridLayoutManager(requireContext(), columns)
             adapter = contentAdapter
             itemAnimator = null
             updatePadding(bottom = dp(24))
-            addItemDecoration(GridSpacing(dp(10)))
+            addItemDecoration(GridSpacing(dp(12), if (viewModel.tab == MainTab.RINGTONES) 1 else SEARCH_COLUMN_COUNT))
         }
     }
 
@@ -74,12 +89,21 @@ class SearchResultFragment : BaseFragment<FragmentSearchResultBinding>() {
         viewModel.contentItems.observe(viewLifecycleOwner) { renderContent() }
         viewModel.query.observe(viewLifecycleOwner) { renderContent() }
         viewModel.favoriteKeys.observe(viewLifecycleOwner) { renderContent() }
+        ringtoneViewModel.playbackState.observe(viewLifecycleOwner) { renderContent() }
     }
 
     private fun renderContent() {
         val favorites = viewModel.favoriteKeys.value.orEmpty()
         val cards = viewModel.filteredItems(page).map { content ->
-            DemoContentCard(content, content.ref.toFavoriteKey() in favorites)
+            val playback = ringtoneViewModel.playbackState.value
+            val active = playback?.contentId == content.id
+            ContentCard(
+                content = content,
+                isFavorite = content.ref.toFavoriteKey() in favorites,
+                isPlaying = active && playback?.isPlaying == true,
+                isPreparing = active && playback?.isPreparing == true,
+                playbackProgress = if (active) playback?.progress ?: 0 else 0
+            )
         }
         contentAdapter?.submitList(cards)
         val empty = cards.isEmpty()
@@ -87,31 +111,39 @@ class SearchResultFragment : BaseFragment<FragmentSearchResultBinding>() {
         binding.searchEmptyState.isVisible = empty
     }
 
-    private fun showComingSoon() {
-        infoDialog?.dismiss()
-        infoDialog = AlertDialog.Builder(requireContext())
-            .setTitle(R.string.home_demo_title)
-            .setMessage(R.string.home_demo_message)
-            .setPositiveButton(R.string.home_preview_close, null)
-            .show()
+    private fun openDetail(content: HomeContentUiModel) {
+        if (content.contentUrl.isNullOrBlank()) return
+        when (content.type) {
+            ContentType.WALLPAPER -> navViewModel.navigate(
+                R.id.wallpaperDetailFragment,
+                Bundle().apply {
+                    putString(WallpaperDetailViewModel.ARG_CONTENT_ID, content.id)
+                    putString(WallpaperDetailViewModel.ARG_CONTENT_TYPE, content.type.name)
+                }
+            )
+
+            ContentType.VIDEO_WALLPAPER -> navViewModel.navigate(
+                R.id.videoWallpaperDetailFragment,
+                Bundle().apply {
+                    putString(VideoWallpaperDetailViewModel.ARG_CONTENT_ID, content.id)
+                }
+            )
+
+            ContentType.RINGTONE -> ringtoneViewModel.togglePreview(content.id)
+            else -> Unit
+        }
     }
 
-    private fun openDetail(content: HomeContentUiModel) {
-        if (content.type != ContentType.WALLPAPER || content.artworkIndex == null) {
-            return showComingSoon()
-        }
-        navViewModel.navigate(
-            R.id.wallpaperDetailFragment,
-            Bundle().apply {
-                putString(WallpaperDetailViewModel.ARG_CONTENT_ID, content.id)
-                putString(WallpaperDetailViewModel.ARG_CONTENT_TYPE, content.type.name)
-            }
+    private fun showRingtoneTarget(content: HomeContentUiModel) {
+        if (content.type != ContentType.RINGTONE) return
+        if (childFragmentManager.findFragmentByTag(RingtoneTargetBottomSheet.TAG) != null) return
+        RingtoneTargetBottomSheet.newInstance(content.id).show(
+            childFragmentManager,
+            RingtoneTargetBottomSheet.TAG
         )
     }
 
     override fun onDestroyView() {
-        infoDialog?.dismiss()
-        infoDialog = null
         binding.rvContent.adapter = null
         contentAdapter = null
         super.onDestroyView()
@@ -119,7 +151,10 @@ class SearchResultFragment : BaseFragment<FragmentSearchResultBinding>() {
 
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
 
-    private class GridSpacing(private val gap: Int) : RecyclerView.ItemDecoration() {
+    private class GridSpacing(
+        private val gap: Int,
+        private val columns: Int
+    ) : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(
             outRect: Rect,
             view: View,
@@ -128,9 +163,9 @@ class SearchResultFragment : BaseFragment<FragmentSearchResultBinding>() {
         ) {
             val position = parent.getChildAdapterPosition(view)
             if (position == RecyclerView.NO_POSITION) return
-            val column = position % SEARCH_COLUMN_COUNT
-            outRect.left = gap * column / SEARCH_COLUMN_COUNT
-            outRect.right = gap * (SEARCH_COLUMN_COUNT - 1 - column) / SEARCH_COLUMN_COUNT
+            val column = position % columns
+            outRect.left = if (columns <= 1) 0 else gap * column / columns
+            outRect.right = if (columns <= 1) 0 else gap * (columns - 1 - column) / columns
             outRect.bottom = gap
         }
     }

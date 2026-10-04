@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.cute.wallpaper.ringtones.presentation.home.demo.DemoCollection
+import com.cute.wallpaper.ringtones.presentation.home.WallpaperCollection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -15,25 +15,19 @@ class MainViewModel @Inject constructor(savedStateHandle: SavedStateHandle) : Vi
 
     private val _selectedCollection = savedStateHandle.getLiveData(
         "main_collection",
-        DemoCollection.WALLPAPER
+        WallpaperCollection.WALLPAPER
     )
-    val selectedCollection: LiveData<DemoCollection> = _selectedCollection
+    val selectedCollection: LiveData<WallpaperCollection> = _selectedCollection
 
     private val _bottomContentPadding = MutableLiveData(0)
     val bottomContentPadding: LiveData<Int> = _bottomContentPadding
-
-    init {
-        _selectedCollection.value = _selectedCollection.value?.canonical()
-            ?: DemoCollection.WALLPAPER
-    }
 
     fun selectTab(tab: MainTab) {
         if (_selectedTab.value != tab) _selectedTab.value = tab
     }
 
-    fun selectCollection(collection: DemoCollection) {
-        val canonical = collection.canonical()
-        if (_selectedCollection.value != canonical) _selectedCollection.value = canonical
+    fun selectCollection(collection: WallpaperCollection) {
+        if (_selectedCollection.value != collection) _selectedCollection.value = collection
     }
 
     fun updateBottomContentPadding(padding: Int) {

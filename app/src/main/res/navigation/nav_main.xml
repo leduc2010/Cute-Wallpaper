@@ -44,4 +44,32 @@
             app:argType="string"
             android:defaultValue="WALLPAPER" />
     </fragment>
+    <fragment
+        android:id="@+id/videoWallpaperDetailFragment"
+        android:name="com.cute.wallpaper.ringtones.presentation.detail.VideoWallpaperDetailFragment"
+        android:label="@string/video_wallpapers">
+        <argument
+            android:name="video_detail_content_id"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/liveWallpaperSuccessFragment"
+        android:name="com.cute.wallpaper.ringtones.presentation.detail.LiveWallpaperSuccessFragment"
+        android:label="@string/wallpaper_success_title">
+        <argument
+            android:name="live_wallpaper_success_preview_url"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/wallpaperSuccessFragment"
+        android:name="com.cute.wallpaper.ringtones.presentation.detail.WallpaperSuccessFragment"
+        android:label="@string/wallpaper_success_title">
+        <argument
+            android:name="wallpaper_success_preview_url"
+            app:argType="string" />
+        <argument
+            android:name="wallpaper_success_target"
+            app:argType="string"
+            android:defaultValue="BOTH" />
+    </fragment>
 </navigation>

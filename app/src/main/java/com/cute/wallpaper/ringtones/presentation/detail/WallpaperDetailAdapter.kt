@@ -3,12 +3,11 @@ package com.cute.wallpaper.ringtones.presentation.detail
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.cute.wallpaper.ringtones.databinding.ItemWallpaperDetailBinding
 import com.cute.wallpaper.ringtones.presentation.home.HomeContentUiModel
-import com.cute.wallpaper.ringtones.presentation.home.demo.DemoArtwork
 
 class WallpaperDetailAdapter(
-    private val artwork: DemoArtwork,
     private val items: List<HomeContentUiModel>
 ) : RecyclerView.Adapter<WallpaperDetailAdapter.WallpaperHolder>() {
 
@@ -32,9 +31,10 @@ class WallpaperDetailAdapter(
         private val binding: ItemWallpaperDetailBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: HomeContentUiModel) {
-            binding.wallpaperImage.setImageDrawable(
-                artwork.drawable(requireNotNull(item.artworkIndex))
-            )
+            Glide.with(binding.wallpaperImage)
+                .load(item.contentUrl ?: item.thumbnailUrl)
+                .centerCrop()
+                .into(binding.wallpaperImage)
         }
     }
 }

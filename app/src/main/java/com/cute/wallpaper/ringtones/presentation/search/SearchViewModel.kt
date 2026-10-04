@@ -6,11 +6,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.cute.wallpaper.ringtones.core.model.ContentRef
-import com.cute.wallpaper.ringtones.data.fake.FakeContentDataSource
-import com.cute.wallpaper.ringtones.data.fake.FakeQuickFilterKind
+import com.cute.wallpaper.ringtones.domain.model.ContentRef
+import com.cute.wallpaper.ringtones.domain.repository.ContentRepository
 import com.cute.wallpaper.ringtones.data.local.preference.AppPreferences
 import com.cute.wallpaper.ringtones.presentation.home.HomeContentUiModel
+import com.cute.wallpaper.ringtones.presentation.home.RingtoneCategory
+import com.cute.wallpaper.ringtones.presentation.home.toDisplayColorHex
 import com.cute.wallpaper.ringtones.presentation.home.toUiModel
 import com.cute.wallpaper.ringtones.presentation.main.MainTab
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val appPreferences: AppPreferences,
-    fakeContentDataSource: FakeContentDataSource,
+    contentRepository: ContentRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     val mode: SearchMode = enumValueOrDefault(savedStateHandle[ARG_MODE], SearchMode.KEYWORD)
@@ -29,37 +30,47 @@ class SearchViewModel @Inject constructor(
     private val initialColorId: String = savedStateHandle.get<String>(ARG_COLOR_ID).orEmpty()
     private val initialGenreId: String = savedStateHandle.get<String>(ARG_GENRE_ID).orEmpty()
     private val _query = savedStateHandle.getLiveData(ARG_QUERY, "")
-    private val _contentItems = MutableLiveData(fakeContentDataSource.contents.map { it.toUiModel() })
+    private val contents = contentRepository.getContents().map { it.toUiModel() }
+    private val _contentItems = MutableLiveData(contents)
+    private val filterContents = if (tab == MainTab.FAVORITES) {
+        contents
+    } else {
+        contents.filter { it.type == tab.contentType }
+    }
+    private val colors = filterContents.mapNotNull { it.color }.distinct()
+    private val tags = buildList {
+        val seen = linkedSetOf<String>()
+        filterContents.forEach { item ->
+            item.tags.forEach { tag -> if (seen.add(tag)) add(tag) }
+        }
+    }
 
-    val pages: List<SearchPageUiModel> = when (mode) {
-        SearchMode.COLOR -> fakeContentDataSource.colors.map {
+    val pages: List<SearchPageUiModel> = if (tab == MainTab.RINGTONES) {
+        RingtoneCategory.pages.map { category ->
             SearchPageUiModel(
-                id = it.id,
-                label = it.label,
+                id = category.remoteKey,
+                label = category.name.lowercase().replaceFirstChar(Char::titlecase),
+                emoji = "",
+                kind = SearchPageKind.CATEGORY
+            )
+        }
+    } else when (mode) {
+        SearchMode.COLOR -> colors.map { color ->
+            SearchPageUiModel(
+                id = color,
+                label = color.replaceFirstChar(Char::titlecase),
                 emoji = "",
                 kind = SearchPageKind.COLOR,
-                colorHex = it.colorHex
+                colorHex = color.toDisplayColorHex()
             )
         }
 
-        SearchMode.GENRE -> fakeContentDataSource.genres.map {
+        SearchMode.GENRE, SearchMode.KEYWORD -> tags.map { tag ->
             SearchPageUiModel(
-                id = it.id,
-                label = it.label.replaceFirstChar { char -> char.uppercase() },
-                emoji = it.emoji,
+                id = tag,
+                label = tag.replaceFirstChar(Char::titlecase),
+                emoji = "",
                 kind = SearchPageKind.GENRE
-            )
-        }
-
-        SearchMode.KEYWORD -> fakeContentDataSource.quickFilters.map {
-            SearchPageUiModel(
-                id = it.id,
-                label = it.label,
-                emoji = it.emoji,
-                kind = when (it.kind) {
-                    FakeQuickFilterKind.COLOR -> SearchPageKind.COLOR
-                    FakeQuickFilterKind.GENRE -> SearchPageKind.GENRE
-                }
             )
         }
     }
@@ -101,8 +112,9 @@ class SearchViewModel @Inject constructor(
                 item.type == tab.contentType
             }
             val matchesPage = when (page.kind) {
-                SearchPageKind.COLOR -> page.id in item.colorIds
-                SearchPageKind.GENRE -> page.id in item.genreIds
+                SearchPageKind.COLOR -> page.id == item.color
+                SearchPageKind.GENRE -> page.id in item.tags
+                SearchPageKind.CATEGORY -> page.id == item.category
             }
             matchesTab && matchesPage && item.matches(queryValue)
         }

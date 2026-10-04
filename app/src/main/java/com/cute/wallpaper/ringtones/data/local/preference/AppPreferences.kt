@@ -1,52 +1,75 @@
 package com.cute.wallpaper.ringtones.data.local.preference
 
 import android.content.Context
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.core.stringSetPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private val Context.appDataStore by preferencesDataStore(name = "app_preferences")
-
 @Singleton
 class AppPreferences @Inject constructor(
-    @param:ApplicationContext private val context: Context
+    @ApplicationContext context: Context
 ) {
-    val languageCode: Flow<String?> = context.appDataStore.data.map { preferences ->
-        preferences[LANGUAGE_CODE]
-    }
+    private val preferences = context.getSharedPreferences(
+        PREFERENCES_NAME,
+        Context.MODE_PRIVATE
+    )
 
-    val favoriteKeys: Flow<Set<String>> = context.appDataStore.data.map { preferences ->
-        preferences[FAVORITE_KEYS].orEmpty()
-    }
+    private val _languageCode = MutableStateFlow(
+        preferences.getString(KEY_LANGUAGE_CODE, null)
+    )
+    val languageCode: StateFlow<String?> = _languageCode.asStateFlow()
+
+    private val _favoriteKeys = MutableStateFlow(readFavoriteKeys())
+    val favoriteKeys: StateFlow<Set<String>> = _favoriteKeys.asStateFlow()
+
+    private val _liveWallpaperUrl = MutableStateFlow(
+        preferences.getString(KEY_LIVE_WALLPAPER_URL, null)
+    )
+    val liveWallpaperUrl: StateFlow<String?> = _liveWallpaperUrl.asStateFlow()
 
     suspend fun setLanguageCode(code: String) {
-        context.appDataStore.edit { preferences ->
-            preferences[LANGUAGE_CODE] = code
-        }
+        preferences.edit()
+            .putString(KEY_LANGUAGE_CODE, code)
+            .apply()
+        _languageCode.value = code
+    }
+
+    suspend fun setLiveWallpaperUrl(url: String) {
+        require(url.isNotBlank()) { "Live wallpaper URL must not be blank" }
+        preferences.edit()
+            .putString(KEY_LIVE_WALLPAPER_URL, url)
+            .apply()
+        _liveWallpaperUrl.value = url
     }
 
     suspend fun setFavorite(key: String, isFavorite: Boolean) {
         require(key.isNotBlank()) { "Favorite key must not be blank" }
 
-        context.appDataStore.edit { preferences ->
-            val favorites = preferences[FAVORITE_KEYS].orEmpty().toMutableSet()
-            if (isFavorite) {
-                favorites += key
-            } else {
-                favorites -= key
+        val favorites = synchronized(preferences) {
+            readFavoriteKeys().toMutableSet().apply {
+                if (isFavorite) add(key) else remove(key)
+            }.toSet().also { updated ->
+                preferences.edit()
+                    .putStringSet(KEY_FAVORITE_KEYS, updated)
+                    .apply()
             }
-            preferences[FAVORITE_KEYS] = favorites
         }
+        _favoriteKeys.value = favorites
+    }
+
+    private fun readFavoriteKeys(): Set<String> {
+        return preferences.getStringSet(KEY_FAVORITE_KEYS, emptySet())
+            ?.toSet()
+            .orEmpty()
     }
 
     private companion object {
-        val LANGUAGE_CODE = stringPreferencesKey("language_code")
-        val FAVORITE_KEYS = stringSetPreferencesKey("favorite_keys")
+        const val PREFERENCES_NAME = "app_preferences"
+        const val KEY_LANGUAGE_CODE = "language_code"
+        const val KEY_FAVORITE_KEYS = "favorite_keys"
+        const val KEY_LIVE_WALLPAPER_URL = "live_wallpaper_url"
     }
 }

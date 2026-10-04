@@ -5,41 +5,42 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cute.wallpaper.ringtones.R
-import com.cute.wallpaper.ringtones.core.model.ContentType
-import com.cute.wallpaper.ringtones.data.fake.FakeContentDataSource
+import com.cute.wallpaper.ringtones.domain.model.ContentType
+import com.cute.wallpaper.ringtones.domain.model.RingtoneTarget
 import com.cute.wallpaper.ringtones.databinding.FragmentHomeCollectionBinding
 import com.cute.wallpaper.ringtones.presentation.base.BaseFragment
+import com.cute.wallpaper.ringtones.presentation.detail.VideoWallpaperDetailViewModel
 import com.cute.wallpaper.ringtones.presentation.detail.WallpaperDetailViewModel
-import com.cute.wallpaper.ringtones.presentation.home.demo.DemoArtwork
-import com.cute.wallpaper.ringtones.presentation.home.demo.DemoCollection
-import com.cute.wallpaper.ringtones.presentation.home.demo.DemoContentAdapter
-import com.cute.wallpaper.ringtones.presentation.home.demo.DemoContentCard
 import com.cute.wallpaper.ringtones.presentation.main.MainTab
 import com.cute.wallpaper.ringtones.presentation.main.hasCollections
+import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneTargetBottomSheet
+import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeCollectionFragment : BaseFragment<FragmentHomeCollectionBinding>() {
-    @Inject lateinit var fakeContentDataSource: FakeContentDataSource
-
     private val viewModel: HomeViewModel by viewModels(ownerProducer = { requireParentFragment() })
+    private val ringtoneViewModel: RingtoneViewModel by viewModels(ownerProducer = { requireParentFragment() })
     private val tab: MainTab by lazy {
         MainTab.entries.firstOrNull { it.name == arguments?.getString(ARG_TAB) } ?: MainTab.WALLPAPERS
     }
-    private val collection: DemoCollection by lazy {
-        DemoCollection.entries.firstOrNull { it.name == arguments?.getString(ARG_COLLECTION) }
-            ?.canonical() ?: DemoCollection.WALLPAPER
+    private val collection: WallpaperCollection by lazy {
+        WallpaperCollection.entries.firstOrNull {
+            it.name == arguments?.getString(ARG_COLLECTION)
+        } ?: WallpaperCollection.WALLPAPER
     }
-    private var contentAdapter: DemoContentAdapter? = null
-    private var infoDialog: AlertDialog? = null
+    private val ringtoneCategory: RingtoneCategory by lazy {
+        RingtoneCategory.entries.firstOrNull {
+            it.name == arguments?.getString(ARG_RINGTONE_CATEGORY)
+        } ?: RingtoneCategory.RINGTONES
+    }
+    private var contentAdapter: ContentAdapter? = null
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -49,17 +50,32 @@ class HomeCollectionFragment : BaseFragment<FragmentHomeCollectionBinding>() {
     }
 
     override fun initView() {
-        val artwork = DemoArtwork(resources, fakeContentDataSource.artworkRegions)
-        contentAdapter = DemoContentAdapter(artwork, { content, favorite ->
-            viewModel.setFavorite(content.ref, favorite)
-        }, ::openDetail).apply {
+        childFragmentManager.setFragmentResultListener(
+            RingtoneTargetBottomSheet.REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, result ->
+            val contentId = result.getString(RingtoneTargetBottomSheet.RESULT_CONTENT_ID).orEmpty()
+            val target = RingtoneTarget.entries.firstOrNull {
+                it.name == result.getString(RingtoneTargetBottomSheet.RESULT_TARGET)
+            } ?: return@setFragmentResultListener
+            ringtoneViewModel.requestSet(contentId, target)
+        }
+
+        contentAdapter = ContentAdapter(
+            onFavorite = { content, favorite ->
+                viewModel.setFavorite(content.ref, favorite)
+            },
+            onPreview = ::openDetail,
+            onRingtoneSet = ::showRingtoneTarget
+        ).apply {
             stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
         binding.rvContent.apply {
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            val columns = if (tab == MainTab.RINGTONES) 1 else 2
+            layoutManager = GridLayoutManager(requireContext(), columns)
             adapter = contentAdapter
             itemAnimator = null
-            addItemDecoration(GridSpacing(dp(14)))
+            addItemDecoration(GridSpacing(dp(16), if (tab == MainTab.RINGTONES) 1 else 2))
         }
     }
 
@@ -67,6 +83,7 @@ class HomeCollectionFragment : BaseFragment<FragmentHomeCollectionBinding>() {
         viewModel.contentItems.observe(viewLifecycleOwner) { renderContent() }
         viewModel.searchQuery.observe(viewLifecycleOwner) { renderContent() }
         viewModel.favoriteKeys.observe(viewLifecycleOwner) { renderContent() }
+        ringtoneViewModel.playbackState.observe(viewLifecycleOwner) { renderContent() }
         viewModel.bottomContentPadding.observe(viewLifecycleOwner) { padding ->
             binding.rvContent.updatePadding(bottom = padding + dp(16))
         }
@@ -82,9 +99,21 @@ class HomeCollectionFragment : BaseFragment<FragmentHomeCollectionBinding>() {
                 item.type == tab.contentType
             }
             val matchesCollection = !tab.hasCollections || item.collection == collection
+            val matchesRingtoneCategory = tab != MainTab.RINGTONES ||
+                item.category == ringtoneCategory.remoteKey
             val matchesSearch = item.matches(query)
-            matchesTab && matchesCollection && matchesSearch
-        }.map { DemoContentCard(it, it.ref.toFavoriteKey() in favorites) }
+            matchesTab && matchesCollection && matchesRingtoneCategory && matchesSearch
+        }.map { item ->
+            val playback = ringtoneViewModel.playbackState.value
+            val active = playback?.contentId == item.id
+            ContentCard(
+                content = item,
+                isFavorite = item.ref.toFavoriteKey() in favorites,
+                isPlaying = active && playback?.isPlaying == true,
+                isPreparing = active && playback?.isPreparing == true,
+                playbackProgress = if (active) playback?.progress ?: 0 else 0
+            )
+        }
 
         contentAdapter?.submitList(cards)
         val empty = cards.isEmpty()
@@ -103,31 +132,39 @@ class HomeCollectionFragment : BaseFragment<FragmentHomeCollectionBinding>() {
         )
     }
 
-    private fun showComingSoon() {
-        infoDialog?.dismiss()
-        infoDialog = AlertDialog.Builder(requireContext())
-            .setTitle(R.string.home_demo_title)
-            .setMessage(R.string.home_demo_message)
-            .setPositiveButton(R.string.home_preview_close, null)
-            .show()
+    private fun openDetail(content: HomeContentUiModel) {
+        if (content.contentUrl.isNullOrBlank()) return
+        when (content.type) {
+            ContentType.WALLPAPER -> navViewModel.navigate(
+                R.id.wallpaperDetailFragment,
+                Bundle().apply {
+                    putString(WallpaperDetailViewModel.ARG_CONTENT_ID, content.id)
+                    putString(WallpaperDetailViewModel.ARG_CONTENT_TYPE, content.type.name)
+                }
+            )
+
+            ContentType.VIDEO_WALLPAPER -> navViewModel.navigate(
+                R.id.videoWallpaperDetailFragment,
+                Bundle().apply {
+                    putString(VideoWallpaperDetailViewModel.ARG_CONTENT_ID, content.id)
+                }
+            )
+
+            ContentType.RINGTONE -> ringtoneViewModel.togglePreview(content.id)
+            else -> Unit
+        }
     }
 
-    private fun openDetail(content: HomeContentUiModel) {
-        if (content.type != ContentType.WALLPAPER || content.artworkIndex == null) {
-            return showComingSoon()
-        }
-        navViewModel.navigate(
-            R.id.wallpaperDetailFragment,
-            Bundle().apply {
-                putString(WallpaperDetailViewModel.ARG_CONTENT_ID, content.id)
-                putString(WallpaperDetailViewModel.ARG_CONTENT_TYPE, content.type.name)
-            }
+    private fun showRingtoneTarget(content: HomeContentUiModel) {
+        if (content.type != ContentType.RINGTONE) return
+        if (childFragmentManager.findFragmentByTag(RingtoneTargetBottomSheet.TAG) != null) return
+        RingtoneTargetBottomSheet.newInstance(content.id).show(
+            childFragmentManager,
+            RingtoneTargetBottomSheet.TAG
         )
     }
 
     override fun onDestroyView() {
-        infoDialog?.dismiss()
-        infoDialog = null
         binding.rvContent.adapter = null
         contentAdapter = null
         super.onDestroyView()
@@ -135,7 +172,10 @@ class HomeCollectionFragment : BaseFragment<FragmentHomeCollectionBinding>() {
 
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
 
-    private class GridSpacing(private val gap: Int) : RecyclerView.ItemDecoration() {
+    private class GridSpacing(
+        private val gap: Int,
+        private val columns: Int
+    ) : RecyclerView.ItemDecoration() {
         override fun getItemOffsets(
             outRect: Rect,
             view: View,
@@ -144,8 +184,13 @@ class HomeCollectionFragment : BaseFragment<FragmentHomeCollectionBinding>() {
         ) {
             val position = parent.getChildAdapterPosition(view)
             if (position == RecyclerView.NO_POSITION) return
-            outRect.left = if (position % 2 == 1) gap / 2 else 0
-            outRect.right = if (position % 2 == 0) gap / 2 else 0
+            if (columns <= 1) {
+                outRect.left = 0
+                outRect.right = 0
+            } else {
+                outRect.left = if (position % columns == 1) gap / 2 else 0
+                outRect.right = if (position % columns == 0) gap / 2 else 0
+            }
             outRect.bottom = gap
         }
     }
@@ -153,11 +198,17 @@ class HomeCollectionFragment : BaseFragment<FragmentHomeCollectionBinding>() {
     companion object {
         private const val ARG_TAB = "main_tab"
         private const val ARG_COLLECTION = "home_collection"
+        private const val ARG_RINGTONE_CATEGORY = "ringtone_category"
 
-        fun newInstance(tab: MainTab, collection: DemoCollection) = HomeCollectionFragment().apply {
+        fun newInstance(
+            tab: MainTab,
+            collection: WallpaperCollection,
+            ringtoneCategory: RingtoneCategory = RingtoneCategory.RINGTONES
+        ) = HomeCollectionFragment().apply {
             arguments = Bundle().apply {
                 putString(ARG_TAB, tab.name)
                 putString(ARG_COLLECTION, collection.name)
+                putString(ARG_RINGTONE_CATEGORY, ringtoneCategory.name)
             }
         }
     }

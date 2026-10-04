@@ -108,7 +108,7 @@
         android:layout_marginBottom="8dp"
         android:columnCount="3"
         android:orientation="horizontal"
-        android:rowCount="2"
+        android:rowCount="1"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/primaryActionContainer"
         app:layout_constraintEnd_toEndOf="parent"
@@ -116,40 +116,18 @@
         tools:visibility="visible">
 
         <ImageView
-            android:id="@+id/actionPhone"
+            android:id="@+id/actionSetWallpaper"
             android:layout_width="44dp"
             android:layout_height="44dp"
             android:layout_margin="5dp"
             android:background="@drawable/bg_detail_primary_action"
             android:clickable="true"
+            android:contentDescription="@string/wallpaper_action_set"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:padding="12dp"
             android:src="@drawable/ic_detail_phone" />
 
-        <ImageView
-            android:id="@+id/actionLock"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/bg_detail_primary_action"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:padding="12dp"
-            android:src="@drawable/ic_detail_lock" />
-
-        <ImageView
-            android:id="@+id/actionPhoneLock"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/bg_detail_primary_action"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:padding="12dp"
-            android:src="@drawable/ic_detail_phone_lock" />
 
         <ImageView
             android:id="@+id/actionDownload"
@@ -158,6 +136,7 @@
             android:layout_margin="5dp"
             android:background="@drawable/bg_detail_primary_action"
             android:clickable="true"
+            android:contentDescription="@string/wallpaper_action_download"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:padding="12dp"
@@ -170,22 +149,12 @@
             android:layout_margin="5dp"
             android:background="@drawable/bg_detail_primary_action"
             android:clickable="true"
+            android:contentDescription="@string/wallpaper_action_share"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:padding="12dp"
             android:src="@drawable/ic_detail_share" />
 
-        <ImageView
-            android:id="@+id/actionSafe"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/bg_detail_primary_action"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:padding="12dp"
-            android:src="@drawable/ic_detail_shield" />
     </GridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

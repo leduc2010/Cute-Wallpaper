@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/categoryScroll"
     android:layout_width="wrap_content"
-    android:layout_height="54dp"
+    android:layout_height="52dp"
     android:layout_gravity="center_horizontal"
-    android:layout_marginHorizontal="18dp"
-    android:layout_marginTop="4dp"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginTop="16dp"
     android:background="@drawable/bg_home_categories"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:overScrollMode="never"
-    android:padding="5dp"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="8dp"
     android:scrollbars="none">
 
     <LinearLayout
@@ -34,12 +35,12 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingEnd="6dp">
+            android:paddingEnd="12dp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/categoryWallpaperImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:duplicateParentState="true"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
@@ -52,8 +53,8 @@
                 android:id="@+id/categoryWallpaperLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="0dp"
                 android:singleLine="true"
                 android:text="@string/home_wallpaper_category" />
         </LinearLayout>
@@ -62,7 +63,7 @@
             android:id="@+id/categoryDualWallpapers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="12dp"
             android:background="@drawable/bg_home_category_item"
             android:clickable="true"
             android:contentDescription="@string/home_dual_wallpapers_category"
@@ -70,12 +71,12 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingEnd="6dp">
+            android:paddingEnd="12dp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/categoryDualWallpapersImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:duplicateParentState="true"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
@@ -88,8 +89,8 @@
                 android:id="@+id/categoryDualWallpapersLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="0dp"
                 android:singleLine="true"
                 android:text="@string/home_dual_wallpapers_category"
                 android:visibility="gone" />
@@ -99,7 +100,7 @@
             android:id="@+id/categoryBest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
+            android:layout_marginStart="12dp"
             android:background="@drawable/bg_home_category_item"
             android:clickable="true"
             android:contentDescription="@string/home_best_category"
@@ -107,12 +108,12 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingEnd="6dp">
+            android:paddingEnd="12dp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/categoryBestImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:duplicateParentState="true"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
@@ -125,8 +126,8 @@
                 android:id="@+id/categoryBestLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:layout_marginEnd="6dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="0dp"
                 android:singleLine="true"
                 android:text="@string/home_best_category"
                 android:visibility="gone" />

@@ -1,20 +1,23 @@
 package com.cute.wallpaper.ringtones.presentation.home
 
-import com.cute.wallpaper.ringtones.core.model.ContentRef
-import com.cute.wallpaper.ringtones.core.model.ContentType
-import com.cute.wallpaper.ringtones.data.fake.FakeContentRecord
-import com.cute.wallpaper.ringtones.presentation.home.demo.DemoCollection
+import com.cute.wallpaper.ringtones.domain.model.ContentRef
+import com.cute.wallpaper.ringtones.domain.model.ContentType
+import com.cute.wallpaper.ringtones.domain.model.ContentItem
 
 data class HomeContentUiModel(
     val id: String,
     val title: String,
     val type: ContentType,
-    val collection: DemoCollection,
-    val artworkIndex: Int?,
+    val category: String,
+    val collection: WallpaperCollection?,
+    val thumbnailUrl: String?,
+    val contentUrl: String?,
+    val secondaryContentUrl: String?,
     val quote: String?,
-    val colorIds: Set<String>,
-    val genreIds: Set<String>,
-    val keywords: Set<String>
+    val color: String?,
+    val tags: Set<String>,
+    val rank: Int,
+    val downloadEnabled: Boolean
 ) {
     val ref: ContentRef get() = ContentRef(type, id)
 
@@ -22,18 +25,23 @@ data class HomeContentUiModel(
         if (query.isBlank()) return true
         return title.contains(query, ignoreCase = true) ||
             quote.orEmpty().contains(query, ignoreCase = true) ||
-            keywords.any { it.contains(query, ignoreCase = true) }
+            category.contains(query, ignoreCase = true) ||
+            tags.any { it.contains(query, ignoreCase = true) }
     }
 }
 
-fun FakeContentRecord.toUiModel() = HomeContentUiModel(
+fun ContentItem.toUiModel() = HomeContentUiModel(
     id = id,
     title = title,
     type = type,
-    collection = DemoCollection.fromDataId(collectionId),
-    artworkIndex = artworkIndex,
+    category = category,
+    collection = WallpaperCollection.pages.firstOrNull { it.category == category },
+    thumbnailUrl = thumbnailUrl,
+    contentUrl = contentUrl,
+    secondaryContentUrl = secondaryContentUrl,
     quote = quote,
-    colorIds = colorIds,
-    genreIds = genreIds,
-    keywords = keywords
+    color = color,
+    tags = tags,
+    rank = rank,
+    downloadEnabled = downloadEnabled
 )

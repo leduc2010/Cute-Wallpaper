@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.cute.wallpaper.ringtones.core.locale.LanguageCodeNormalizer
+import com.cute.wallpaper.ringtones.utils.LanguageCodeNormalizer
 import com.cute.wallpaper.ringtones.databinding.FragmentLanguageBinding
 import com.leansoft.ads.ui.language.LeansoftLanguageInterface
 import com.leansoft.ads.view.NativeAdViewContainer

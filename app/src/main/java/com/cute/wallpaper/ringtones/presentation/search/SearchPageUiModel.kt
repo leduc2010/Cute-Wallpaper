@@ -1,6 +1,6 @@
 package com.cute.wallpaper.ringtones.presentation.search
 
-enum class SearchPageKind { COLOR, GENRE }
+enum class SearchPageKind { COLOR, GENRE, CATEGORY }
 
 data class SearchPageUiModel(
     val id: String,

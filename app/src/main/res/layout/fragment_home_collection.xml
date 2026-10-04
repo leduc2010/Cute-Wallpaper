@@ -12,14 +12,14 @@
         android:layout_height="0dp"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingHorizontal="18dp"
+        android:paddingHorizontal="20dp"
         android:paddingBottom="100dp"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/item_demo_wallpaper" />
+        tools:listitem="@layout/item_wallpaper" />
 
     <LinearLayout
         android:id="@+id/favoriteEmptyState"

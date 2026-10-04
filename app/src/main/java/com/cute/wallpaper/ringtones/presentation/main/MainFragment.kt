@@ -3,7 +3,6 @@ package com.cute.wallpaper.ringtones.presentation.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -15,7 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.cute.wallpaper.ringtones.R
 import com.cute.wallpaper.ringtones.databinding.FragmentMainBinding
 import com.cute.wallpaper.ringtones.presentation.base.BaseFragment
-import com.cute.wallpaper.ringtones.presentation.home.demo.DemoCollection
+import com.cute.wallpaper.ringtones.presentation.home.WallpaperCollection
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +24,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     private val viewModel: MainViewModel by viewModels()
     private var lastRenderedTab: MainTab? = null
     private var bottomNavBehavior: HideBottomViewOnScrollBehavior<BottomMainNavigationView>? = null
-    private var shellDialog: AlertDialog? = null
     private var appBarOffset = 0
 
     // The app bar consumes the first part of a drag, before the feed scrolls.
@@ -84,33 +82,20 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     override fun initListener() {
         binding.bottomNav.setOnTabSelectedListener(viewModel::selectTab)
         binding.header.btnVideo.setOnClickListener { viewModel.selectTab(MainTab.VIDEO_WALLPAPERS) }
-        binding.header.btnFilter.setOnClickListener {
-            val collections = DemoCollection.pages
-            shellDialog?.dismiss()
-            shellDialog = AlertDialog.Builder(requireContext()).setTitle(R.string.home_filter)
-                .setSingleChoiceItems(collections.map { getString(collectionTitle(it)) }.toTypedArray(),
-                    collections.indexOf(
-                        viewModel.selectedCollection.value ?: DemoCollection.WALLPAPER
-                    )) { dialog, index ->
-                    viewModel.selectCollection(collections[index])
-                    dialog.dismiss()
-                }.show()
-        }
         binding.collections.categoryWallpaper.setOnClickListener {
-            viewModel.selectCollection(DemoCollection.WALLPAPER)
+            viewModel.selectCollection(WallpaperCollection.WALLPAPER)
         }
         binding.collections.categoryDualWallpapers.setOnClickListener {
-            viewModel.selectCollection(DemoCollection.DUAL_WALLPAPERS)
+            viewModel.selectCollection(WallpaperCollection.DUAL_WALLPAPERS)
         }
         binding.collections.categoryBest.setOnClickListener {
-            viewModel.selectCollection(DemoCollection.BEST)
+            viewModel.selectCollection(WallpaperCollection.BEST)
         }
     }
 
     override fun observeData() {
         viewModel.selectedTab.observe(viewLifecycleOwner) { tab ->
             binding.header.tvTitle.setText(tab.titleRes)
-            binding.header.btnFilter.isVisible = tab.hasCollections
             binding.collections.root.isVisible = tab.hasCollections
             binding.bottomNav.setSelectedTab(tab)
             if (binding.contentPager.currentItem != tab.ordinal) binding.contentPager.setCurrentItem(tab.ordinal, false)
@@ -124,17 +109,17 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
                 Triple(
                     binding.collections.categoryWallpaper,
                     binding.collections.categoryWallpaperLabel,
-                    DemoCollection.WALLPAPER
+                    WallpaperCollection.WALLPAPER
                 ),
                 Triple(
                     binding.collections.categoryDualWallpapers,
                     binding.collections.categoryDualWallpapersLabel,
-                    DemoCollection.DUAL_WALLPAPERS
+                    WallpaperCollection.DUAL_WALLPAPERS
                 ),
                 Triple(
                     binding.collections.categoryBest,
                     binding.collections.categoryBestLabel,
-                    DemoCollection.BEST
+                    WallpaperCollection.BEST
                 )
             )
             items.forEach { (item, label, value) ->
@@ -146,21 +131,12 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         }
     }
 
-    private fun collectionTitle(collection: DemoCollection) = when (collection) {
-        DemoCollection.WALLPAPER, DemoCollection.ALL -> R.string.home_wallpaper_category
-        DemoCollection.DUAL_WALLPAPERS, DemoCollection.FANTASY ->
-            R.string.home_dual_wallpapers_category
-        DemoCollection.BEST, DemoCollection.BUTTERFLY -> R.string.home_best_category
-    }
-
     fun revealChrome(animate: Boolean = true) {
         binding.appBar.setExpanded(true, animate)
         bottomNavBehavior?.slideUp(binding.bottomNav, animate)
     }
 
     override fun onDestroyView() {
-        shellDialog?.dismiss()
-        shellDialog = null
         binding.contentPager.unregisterOnPageChangeCallback(pagerCallback)
         binding.contentPager.adapter = null
         binding.appBar.removeOnOffsetChangedListener(appBarOffsetListener)
