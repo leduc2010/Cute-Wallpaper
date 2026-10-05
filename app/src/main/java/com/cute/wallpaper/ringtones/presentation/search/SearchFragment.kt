@@ -6,8 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +33,7 @@ import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneActionEvent
 import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.card.MaterialCardView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -181,17 +180,14 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     }
 
     private fun createCategoryTab(page: SearchPageUiModel): TextView {
-        return TextView(requireContext()).apply {
-            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp(36))
-            minWidth = dp(72)
-            gravity = Gravity.CENTER
-            setPadding(dp(12), 0, dp(12), 0)
-            setTextAppearance(R.style.Body14R)
+        return (layoutInflater.inflate(
+            R.layout.item_search_category_tab,
+            binding.filterTabs,
+            false
+        ) as TextView).apply {
             text = listOf(page.emoji, page.label)
                 .filter(String::isNotBlank)
                 .joinToString(" ")
-            isClickable = false
-            isFocusable = false
             updateCategoryTab(this, false)
         }
     }
@@ -199,26 +195,25 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     private fun createColorTab(page: SearchPageUiModel): FrameLayout {
         val fillColor = runCatching { Color.parseColor(page.colorHex) }
             .getOrDefault(ContextCompat.getColor(requireContext(), R.color.primary_100))
-        return FrameLayout(requireContext()).apply {
-            layoutParams = ViewGroup.LayoutParams(dp(44), dp(44))
-            isClickable = false
-            isFocusable = false
-
-            addView(View(context).apply {
-                background = colorCircleDrawable(page, fillColor, false)
-            }, FrameLayout.LayoutParams(dp(36), dp(36), Gravity.CENTER))
-
-            addView(ImageView(context).apply {
-                setImageResource(R.drawable.ic_search_color_check)
+        return (layoutInflater.inflate(
+            R.layout.item_search_color_tab,
+            binding.filterTabs,
+            false
+        ) as FrameLayout).apply {
+            updateColorSwatch(
+                findViewById(R.id.colorSwatch),
+                page,
+                fillColor,
+                false
+            )
+            findViewById<ImageView>(R.id.selectedIcon).apply {
                 setColorFilter(
                     ContextCompat.getColor(
                         context,
                         if (page.id == "white") R.color.primary_500 else R.color.neutral_0
                     )
                 )
-                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
-                visibility = View.GONE
-            }, FrameLayout.LayoutParams(dp(18), dp(18), Gravity.CENTER))
+            }
         }
     }
 
@@ -231,50 +226,39 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     }
 
     private fun updateCategoryTab(view: TextView, selected: Boolean) {
-        view.setTextColor(
-            ContextCompat.getColor(
-                requireContext(),
-                if (selected) R.color.primary_500 else R.color.neutral_900
-            )
-        )
+        view.isSelected = selected
         view.typeface = ResourcesCompat.getFont(
             requireContext(),
             if (selected) R.font.poppins_medium else R.font.poppins_regular
         )
-        view.background = GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            cornerRadius = dp(18).toFloat()
-            setColor(ContextCompat.getColor(requireContext(), R.color.neutral_0))
-            setStroke(
-                dp(1),
-                ContextCompat.getColor(
-                    requireContext(),
-                    if (selected) R.color.primary_500 else R.color.primary_100
-                )
-            )
-        }
     }
 
     private fun updateColorTab(container: FrameLayout, page: SearchPageUiModel, selected: Boolean) {
         val fillColor = runCatching { Color.parseColor(page.colorHex) }
             .getOrDefault(ContextCompat.getColor(requireContext(), R.color.primary_100))
-        container.getChildAt(0).background = colorCircleDrawable(page, fillColor, selected)
-        container.getChildAt(1).isVisible = selected
+        container.isSelected = selected
+        updateColorSwatch(
+            container.findViewById(R.id.colorSwatch),
+            page,
+            fillColor,
+            selected
+        )
+        container.findViewById<ImageView>(R.id.selectedIcon).isVisible = selected
     }
 
-    private fun colorCircleDrawable(
+    private fun updateColorSwatch(
+        swatch: MaterialCardView,
         page: SearchPageUiModel,
         fillColor: Int,
         selected: Boolean
-    ) = GradientDrawable().apply {
-        shape = GradientDrawable.OVAL
-        setColor(fillColor)
+    ) {
+        swatch.setCardBackgroundColor(fillColor)
         val strokeColor = when {
             selected -> ContextCompat.getColor(requireContext(), R.color.neutral_0)
             page.id == "white" -> ContextCompat.getColor(requireContext(), R.color.neutral_200)
             else -> Color.TRANSPARENT
         }
-        setStroke(if (selected || page.id == "white") dp(2) else 0, strokeColor)
+        swatch.strokeColor = strokeColor
     }
 
     override fun onPause() {

@@ -22,7 +22,7 @@
         android:background="@drawable/bg_home_heart"
         android:importantForAccessibility="no"
         android:padding="9dp"
-        android:src="@drawable/ic_home_play"
+        android:src="@drawable/ic_play"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/artwork"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,7 @@
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:padding="6dp"
-        android:src="@drawable/ic_home_heart_outline"
+        android:src="@drawable/ic_heart_outline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

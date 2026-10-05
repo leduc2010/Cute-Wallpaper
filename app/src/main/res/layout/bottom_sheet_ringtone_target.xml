@@ -27,7 +27,8 @@
         android:background="@android:color/transparent"
         android:contentDescription="@string/wallpaper_set_close"
         android:padding="11dp"
-        android:src="@drawable/ic_detail_close"
+        android:src="@drawable/ic_close"
+        android:tint="@color/primary_500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

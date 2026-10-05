@@ -43,15 +43,31 @@ data class SoundDto(
     val tag: String? = null
 )
 
+data class QuoteDataDto(
+    @SerializedName("categories")
+    val categories: List<QuoteCategoryDto> = emptyList(),
+    @SerializedName("quotes")
+    val quotes: List<QuoteDto> = emptyList()
+)
+
+data class QuoteCategoryDto(
+    @SerializedName("id")
+    val id: Int = 0,
+    @SerializedName("name")
+    val name: String = "",
+    @SerializedName("thumb")
+    val thumb: String = ""
+)
+
 data class QuoteDto(
     @SerializedName("id")
     val id: Int = 0,
-    @SerializedName("category")
-    val category: String = "",
+    @SerializedName("category_id")
+    val categoryId: Int = 0,
     @SerializedName("content")
     val content: String = "",
     @SerializedName("rank")
     val rank: Int = 0,
-    @SerializedName("tag")
-    val tag: String? = null
+    @SerializedName("thumb")
+    val thumb: String = ""
 )

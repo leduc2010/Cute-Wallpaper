@@ -25,7 +25,7 @@ enum class MainTab(
         ContentType.RINGTONE
     ),
     PROFILE_PICTURES(
-        R.string.profile_pictures,
+        R.string.profile_picture_title,
         R.string.search_profile_pictures,
         ContentType.PROFILE_PICTURE
     ),

@@ -23,6 +23,7 @@
         android:background="@color/primary_50" />
 
     <LinearLayout
+        android:id="@+id/headerTitleContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -75,7 +76,7 @@
         android:contentDescription="@string/home_video_shortcut"
         android:elevation="2dp"
         android:padding="7dp"
-        android:src="@drawable/ic_home_play_figma" />
+        android:src="@drawable/ic_play" />
 
     <ImageButton
         android:id="@+id/btnSettings"

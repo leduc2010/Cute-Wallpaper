@@ -72,8 +72,8 @@ class ContentAdapter(
     private fun bindFavorite(button: ImageView, card: ContentCard) {
         button.isSelected = card.isFavorite
         button.setImageResource(
-            if (card.isFavorite) R.drawable.ic_home_heart_filled
-            else R.drawable.ic_home_heart_outline
+            if (card.isFavorite) R.drawable.ic_heart_filled
+            else R.drawable.ic_heart_outline
         )
         button.contentDescription = button.context.getString(
             if (card.isFavorite) R.string.home_remove_favorite
@@ -132,7 +132,7 @@ class ContentAdapter(
             binding.playButton.isVisible = !card.isPreparing
             binding.playButton.setImageResource(
                 if (card.isPlaying) R.drawable.ic_ringtone_pause
-                else R.drawable.ic_home_play_figma
+                else R.drawable.ic_play
             )
             binding.playButton.contentDescription = binding.root.context.getString(
                 if (card.isPlaying) R.string.ringtone_action_pause

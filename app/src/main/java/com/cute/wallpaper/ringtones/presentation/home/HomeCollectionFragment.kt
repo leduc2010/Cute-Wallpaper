@@ -19,6 +19,7 @@ import com.cute.wallpaper.ringtones.presentation.detail.VideoWallpaperDetailView
 import com.cute.wallpaper.ringtones.presentation.detail.WallpaperDetailViewModel
 import com.cute.wallpaper.ringtones.presentation.main.MainTab
 import com.cute.wallpaper.ringtones.presentation.main.hasCollections
+import com.cute.wallpaper.ringtones.presentation.profile.ProfilePictureDetailViewModel
 import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneTargetBottomSheet
 import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -150,6 +151,12 @@ class HomeCollectionFragment : BaseFragment<FragmentHomeCollectionBinding>() {
                 }
             )
 
+            ContentType.PROFILE_PICTURE -> navViewModel.navigate(
+                R.id.profilePictureDetailFragment,
+                Bundle().apply {
+                    putString(ProfilePictureDetailViewModel.ARG_CONTENT_ID, content.id)
+                }
+            )
             ContentType.RINGTONE -> ringtoneViewModel.togglePreview(content.id)
             else -> Unit
         }

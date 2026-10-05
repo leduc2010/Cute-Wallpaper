@@ -21,6 +21,7 @@ import com.cute.wallpaper.ringtones.presentation.home.HomeContentUiModel
 import com.cute.wallpaper.ringtones.presentation.home.ContentAdapter
 import com.cute.wallpaper.ringtones.presentation.home.ContentCard
 import com.cute.wallpaper.ringtones.presentation.main.MainTab
+import com.cute.wallpaper.ringtones.presentation.profile.ProfilePictureDetailViewModel
 import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneTargetBottomSheet
 import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -129,6 +130,12 @@ class SearchResultFragment : BaseFragment<FragmentSearchResultBinding>() {
                 }
             )
 
+            ContentType.PROFILE_PICTURE -> navViewModel.navigate(
+                R.id.profilePictureDetailFragment,
+                Bundle().apply {
+                    putString(ProfilePictureDetailViewModel.ARG_CONTENT_ID, content.id)
+                }
+            )
             ContentType.RINGTONE -> ringtoneViewModel.togglePreview(content.id)
             else -> Unit
         }

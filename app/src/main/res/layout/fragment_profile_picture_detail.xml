@@ -1,0 +1,268 @@
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_50"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:focusableInTouchMode="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="24dp">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_home_action"
+            android:contentDescription="@string/search_back"
+            android:padding="5dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/previewContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="36dp"
+            android:layout_marginTop="44dp"
+            android:background="@drawable/profile_editor_preview_background"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnBack"
+            app:layout_constraintWidth_max="340dp">
+
+            <com.cute.wallpaper.ringtones.presentation.profile.ProfilePhotoView
+                android:id="@+id/photoPreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/profile_pictures" />
+
+            <ImageView
+                android:id="@+id/ivSparkle24"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="top|start"
+                android:layout_marginStart="59dp"
+                android:layout_marginTop="14dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_sparkle" />
+
+            <ImageView
+                android:id="@+id/ivSparkle32"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="top|end"
+                android:layout_marginEnd="39dp"
+                android:layout_marginTop="79dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_sparkle" />
+
+            <ImageView
+                android:id="@+id/ivSparkle20"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="19dp"
+                android:layout_marginBottom="99dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_sparkle" />
+
+            <ImageView
+                android:id="@+id/ivSparkle16"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginEnd="19dp"
+                android:layout_marginBottom="119dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_sparkle" />
+
+            <EditText
+                android:id="@+id/nameInput"
+                style="@style/Body16S"
+                android:layout_width="194dp"
+                android:layout_height="42dp"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="18dp"
+                android:background="@drawable/profile_editor_name_background"
+                android:drawableStart="@drawable/ic_sparkles"
+                android:drawableEnd="@drawable/ic_sparkles"
+                android:drawablePadding="8dp"
+                android:drawableTint="@color/white"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:gravity="center"
+                android:hint="@string/profile_editor_name"
+                android:imeOptions="actionDone"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                android:maxWidth="280dp"
+                android:maxLength="40"
+                android:paddingHorizontal="24dp"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/loading"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/primary_500" />
+
+            <TextView
+                android:id="@+id/loadError"
+                style="@style/Body14R"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/primary_100"
+                android:gravity="center"
+                android:padding="24dp"
+                android:text="@string/profile_editor_load_failed"
+                android:textColor="@color/tertiary_900"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/btnPrevious"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/profile_editor_navigation_background"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="4dp"
+            android:src="@drawable/ic_back"
+            android:translationX="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/previewContainer"
+            app:layout_constraintEnd_toStartOf="@id/previewContainer"
+            app:layout_constraintTop_toTopOf="@id/previewContainer" />
+
+        <ImageView
+            android:id="@+id/btnNext"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/profile_editor_navigation_background"
+            android:clickable="true"
+            android:contentDescription="@string/profile_editor_next"
+            android:focusable="true"
+            android:padding="4dp"
+            android:scaleX="-1"
+            android:src="@drawable/ic_back"
+            android:translationX="-10dp"
+            app:layout_constraintBottom_toBottomOf="@id/previewContainer"
+            app:layout_constraintStart_toEndOf="@id/previewContainer"
+            app:layout_constraintTop_toTopOf="@id/previewContainer" />
+
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/previewContainer">
+
+            <ImageView
+                android:id="@+id/btnPhoto"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="7dp"
+                android:background="@drawable/profile_editor_tool_photo_background"
+                android:clickable="true"
+                android:contentDescription="@string/profile_editor_photo"
+                android:focusable="true"
+                android:padding="12dp"
+                android:src="@drawable/ic_camera" />
+
+            <TextView
+                android:id="@+id/btnText"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="7dp"
+                android:background="@drawable/profile_editor_tool_text_background"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:gravity="center"
+                android:text="T"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/btnDownload"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="7dp"
+                android:background="@drawable/profile_editor_tool_download_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="12dp"
+                android:src="@drawable/ic_download" />
+
+            <ImageView
+                android:id="@+id/btnAdjust"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="7dp"
+                android:background="@drawable/profile_editor_tool_adjust_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="12dp"
+                android:src="@drawable/ic_adjust" />
+
+            <ImageView
+                android:id="@+id/btnFrame"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="7dp"
+                android:background="@drawable/profile_editor_tool_frame_background"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="12dp"
+                android:src="@drawable/ic_frame" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/positionHint"
+            style="@style/Label12R"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/profile_editor_position"
+            android:textColor="@color/tertiary_500"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+        <HorizontalScrollView
+            android:id="@+id/presetScroll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:clipToPadding="false"
+            android:paddingHorizontal="20dp"
+            android:scrollbars="none"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <LinearLayout
+                android:id="@+id/presets"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

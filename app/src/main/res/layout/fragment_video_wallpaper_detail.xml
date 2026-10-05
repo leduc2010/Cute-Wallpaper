@@ -8,16 +8,18 @@
     android:clipChildren="false"
     android:clipToPadding="false">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/btnBack"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="20dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/bg_home_action"
         android:contentDescription="@string/search_back"
-        android:padding="14dp"
-        android:src="@drawable/ic_search_back"
+        android:padding="5dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,7 +46,7 @@
         android:layout_marginBottom="26dp"
         android:background="@drawable/bg_detail_secondary_action"
         android:padding="11dp"
-        android:src="@drawable/ic_home_heart_outline"
+        android:src="@drawable/ic_heart_outline"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -57,7 +59,7 @@
         android:background="@drawable/bg_detail_secondary_action"
         android:contentDescription="@string/live_wallpaper_info"
         android:padding="11dp"
-        android:src="@drawable/ic_detail_info"
+        android:src="@drawable/ic_info"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

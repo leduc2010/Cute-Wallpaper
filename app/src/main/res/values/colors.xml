@@ -113,4 +113,8 @@
     <color name="bottom_nav_selected">@color/primary_500</color>
     <color name="bottom_nav_selected_background">@color/primary_50</color>
     <color name="bottom_nav_unselected">@color/tertiary_500</color>
+
+    <color name="profile_editor_preview_background">#E1CAEA</color>
+    <color name="profile_editor_download_button">#D05F34</color>
+    <color name="profile_editor_adjust_button">#466C00</color>
 </resources>

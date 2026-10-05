@@ -32,7 +32,7 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/ringtone_action_play"
                 android:padding="12dp"
-                android:src="@drawable/ic_home_play_figma" />
+                android:src="@drawable/ic_play" />
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/playLoading"
@@ -102,7 +102,7 @@
             android:background="@drawable/bg_favorite_button"
             android:contentDescription="@string/favorites"
             android:padding="8dp"
-            android:src="@drawable/ic_home_heart_outline"
+            android:src="@drawable/ic_heart_outline"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -113,7 +113,7 @@
             android:background="@drawable/bg_favorite_button"
             android:contentDescription="@string/ringtone_action_set"
             android:padding="8dp"
-            android:src="@drawable/ic_detail_phone"
+            android:src="@drawable/ic_phone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

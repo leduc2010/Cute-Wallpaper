@@ -39,7 +39,7 @@
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_home_heart_outline" />
+            android:src="@drawable/ic_heart_outline" />
 
         <TextView
             android:id="@+id/emptyTitle"

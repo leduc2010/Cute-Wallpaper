@@ -12,7 +12,7 @@
     app:chipBackgroundColor="@color/search_genre_chip_background"
     app:chipCornerRadius="20dp"
     app:chipEndPadding="16dp"
-    app:chipIcon="@drawable/ic_search_genre_sparkle"
+    app:chipIcon="@drawable/ic_sparkles"
     app:chipIconSize="16dp"
     app:chipIconTint="@color/primary_500"
     app:chipIconVisible="true"

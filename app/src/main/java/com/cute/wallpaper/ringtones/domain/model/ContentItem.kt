@@ -9,6 +9,7 @@ data class ContentItem(
     val contentUrl: String? = null,
     val secondaryContentUrl: String? = null,
     val quote: String? = null,
+    val quoteCategoryId: Int? = null,
     val color: String? = null,
     val tags: Set<String> = emptySet(),
     val rank: Int = 0,

@@ -152,7 +152,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:singleLine="true"
-                    android:text="@string/profile_pictures"
+                    android:text="@string/profile_editor_navigation_pictures"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -206,7 +206,8 @@
                     android:layout_height="24dp"
                     android:duplicateParentState="true"
                     android:importantForAccessibility="no"
-                    android:src="@drawable/ic_nav_favorite" />
+                    android:src="@drawable/ic_favorite"
+                    android:tint="@color/bottom_nav_icon_tint" />
 
                 <TextView
                     android:id="@+id/labelFavorites"

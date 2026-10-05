@@ -72,4 +72,18 @@
             app:argType="string"
             android:defaultValue="BOTH" />
     </fragment>
+    <fragment
+        android:id="@+id/profilePictureDetailFragment"
+        android:name="com.cute.wallpaper.ringtones.presentation.profile.ProfilePictureDetailFragment"
+        android:label="@string/profile_pictures">
+        <argument
+            android:name="profile_content_id"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/quoteDetailFragment"
+        android:name="com.cute.wallpaper.ringtones.presentation.quotes.QuoteDetailFragment"
+        android:label="@string/quotes">
+        <argument android:name="quote_content_id" app:argType="string" />
+    </fragment>
 </navigation>

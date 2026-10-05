@@ -63,7 +63,7 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/search_no_results_title"
                     android:padding="10dp"
-                    android:src="@drawable/ic_home_search" />
+                    android:src="@drawable/ic_search" />
             </com.google.android.material.card.MaterialCardView>
 
             <TextView

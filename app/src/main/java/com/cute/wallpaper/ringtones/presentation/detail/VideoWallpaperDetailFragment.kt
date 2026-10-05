@@ -134,8 +134,8 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
         binding.btnFavorite.isEnabled = item != null
         val favorite = item?.ref?.toFavoriteKey() in viewModel.favoriteKeys.value.orEmpty()
         binding.btnFavorite.setImageResource(
-            if (favorite) R.drawable.ic_home_heart_filled
-            else R.drawable.ic_home_heart_outline
+            if (favorite) R.drawable.ic_heart_filled
+            else R.drawable.ic_heart_outline
         )
         item?.let {
             binding.btnFavorite.contentDescription = getString(

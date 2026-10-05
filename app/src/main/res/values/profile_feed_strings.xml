@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_picture_title">Picture</string>
+    <string name="profile_featured">Featured</string>
+    <string name="profile_use_picture">Use Picture</string>
+    <string name="profile_banner_title">Be yourself, cutely!</string>
+    <string name="profile_banner_subtitle">Find a vibe that matches your mood ✨</string>
+    <string name="profile_surprise_me">Surprise Me</string>
+    <string name="profile_search_no_results">Try another profile picture keyword.</string>
+    <string name="profile_feed_empty">No profile pictures available yet.</string>
+    <string name="profile_color_pink">Pink</string>
+    <string name="profile_color_green">Green</string>
+    <string name="profile_color_blue">Blue</string>
+    <string name="profile_color_black">Black</string>
+    <string name="profile_color_purple">Purple</string>
+    <string name="profile_color_white">White</string>
+    <string name="profile_color_red">Red</string>
+    <string name="profile_color_orange">Orange</string>
+    <string name="profile_color_cyan">Cyan</string>
+    <string name="profile_color_yellow">Yellow</string>
+</resources>

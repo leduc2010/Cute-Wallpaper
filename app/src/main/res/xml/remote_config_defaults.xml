@@ -12,5 +12,5 @@
     <entry><key>inter_splash_timeout</key><value>20000</value></entry>
     <entry><key>wallpaper_data</key><value>[]</value></entry>
     <entry><key>sound_data</key><value>[]</value></entry>
-    <entry><key>quote_data</key><value>[]</value></entry>
+    <entry><key>quote_data</key><value>{"categories":[],"quotes":[]}</value></entry>
 </defaults>

@@ -73,9 +73,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
         }
         binding.appBar.addOnOffsetChangedListener(appBarOffsetListener)
         binding.bottomNav.addOnLayoutChangeListener(bottomLayoutListener)
-        binding.collections.categoryWallpaperImage.setImageResource(R.drawable.ic_collection_wallpaper_generated_v1)
-        binding.collections.categoryDualWallpapersImage.setImageResource(R.drawable.ic_collection_dual_wallpapers_generated_v1)
-        binding.collections.categoryBestImage.setImageResource(R.drawable.ic_collection_best_generated_v1)
+        binding.collections.categoryWallpaperImage.setImageResource(R.drawable.img_collection_wallpaper)
+        binding.collections.categoryDualWallpapersImage.setImageResource(R.drawable.img_collection_dual_wallpapers)
+        binding.collections.categoryBestImage.setImageResource(R.drawable.img_collection_best)
         ViewCompat.requestApplyInsets(binding.root)
     }
 
@@ -96,6 +96,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     override fun observeData() {
         viewModel.selectedTab.observe(viewLifecycleOwner) { tab ->
             binding.header.tvTitle.setText(tab.titleRes)
+            binding.header.headerTitleContainer.visibility =
+                if (tab == MainTab.FAVORITES) View.INVISIBLE else View.VISIBLE
             binding.collections.root.isVisible = tab.hasCollections
             binding.bottomNav.setSelectedTab(tab)
             if (binding.contentPager.currentItem != tab.ordinal) binding.contentPager.setCurrentItem(tab.ordinal, false)

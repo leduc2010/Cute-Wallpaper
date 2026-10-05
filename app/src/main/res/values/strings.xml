@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cute Wallpaper</string>
+    <string name="app_name" translatable="false">Cute Wallpaper</string>
     <string name="app_admob_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
     <string name="home_title">Cute Wallpaper</string>
     <string name="wallpapers">Wallpapers</string>
@@ -75,6 +75,8 @@
     <string name="wallpaper_success_lock">Wallpaper set on lock screen.</string>
     <string name="wallpaper_success_both">Home and lock wallpapers set successfully.</string>
     <string name="wallpaper_back_home">Back to home</string>
+    <string name="wallpaper_tags_title">Tags</string>
+    <string name="wallpaper_tags_close">Close</string>
 
     <!-- Live wallpaper -->
     <string name="live_wallpaper_set">Set live wallpaper</string>

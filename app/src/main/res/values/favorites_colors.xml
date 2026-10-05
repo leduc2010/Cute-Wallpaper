@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="favorites_ringtone_pink_start">#FF6D98</color>
+    <color name="favorites_ringtone_pink_end">#FF92AE</color>
+    <color name="favorites_ringtone_blue_start">#8B86FF</color>
+    <color name="favorites_ringtone_blue_end">#B2AEFF</color>
+    <color name="favorites_ringtone_orange_start">#FF7360</color>
+    <color name="favorites_ringtone_orange_end">#FFAE85</color>
+    <color name="favorites_ringtone_purple_start">#A262FF</color>
+    <color name="favorites_ringtone_purple_end">#D0A6FF</color>
+</resources>

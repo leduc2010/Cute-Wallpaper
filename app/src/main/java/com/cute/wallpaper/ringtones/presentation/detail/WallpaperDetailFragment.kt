@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavOptions
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -28,6 +29,9 @@ import com.cute.wallpaper.ringtones.databinding.FragmentWallpaperDetailBinding
 import com.cute.wallpaper.ringtones.domain.model.WallpaperTarget
 import com.cute.wallpaper.ringtones.presentation.base.BaseFragment
 import com.cute.wallpaper.ringtones.presentation.home.HomeContentUiModel
+import com.cute.wallpaper.ringtones.presentation.main.MainTab
+import com.cute.wallpaper.ringtones.presentation.search.SearchMode
+import com.cute.wallpaper.ringtones.presentation.search.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.absoluteValue
 
@@ -67,6 +71,23 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
     }
 
     override fun initView() {
+        childFragmentManager.setFragmentResultListener(
+            WallpaperTagsDialogFragment.REQUEST_KEY,
+            viewLifecycleOwner
+        ) { _, result ->
+            val tag = result.getString(WallpaperTagsDialogFragment.RESULT_TAG)
+                ?.takeIf(String::isNotBlank) ?: return@setFragmentResultListener
+            navViewModel.navigate(
+                R.id.searchFragment,
+                Bundle().apply {
+                    putString(SearchViewModel.ARG_MODE, SearchMode.GENRE.name)
+                    putString(SearchViewModel.ARG_MAIN_TAB, MainTab.WALLPAPERS.name)
+                    putString(SearchViewModel.ARG_QUERY, tag)
+                    putString(SearchViewModel.ARG_GENRE_ID, tag)
+                },
+                NavOptions.Builder().setPopUpTo(R.id.wallpaperDetailFragment, true).build()
+            )
+        }
         WindowCompat.getInsetsController(requireActivity().window, binding.root)
             .isAppearanceLightStatusBars = true
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
@@ -100,23 +121,13 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
                 overScrollMode = View.OVER_SCROLL_NEVER
             }
         }
-        childFragmentManager.setFragmentResultListener(
-            WallpaperTargetBottomSheet.REQUEST_KEY,
-            viewLifecycleOwner
-        ) { _, result ->
-            val target = runCatching {
-                WallpaperTarget.valueOf(
-                    result.getString(WallpaperTargetBottomSheet.RESULT_TARGET).orEmpty()
-                )
-            }.getOrNull() ?: return@setFragmentResultListener
-            viewModel.setWallpaper(target)
-        }
         renderItemActions()
         ViewCompat.requestApplyInsets(binding.root)
     }
 
     override fun initListener() {
         binding.btnBack.setOnClickListener { navViewModel.back() }
+        binding.primaryActionContainer.setOnClickListener { viewModel.toggleActions() }
         binding.btnPrimaryAction.setOnClickListener { viewModel.toggleActions() }
         binding.btnFavorite.setOnClickListener {
             val item = currentItem() ?: return@setOnClickListener
@@ -124,7 +135,9 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
             viewModel.setFavorite(item.ref, !favorite)
         }
         binding.btnInfo.setOnClickListener { showCurrentTags() }
-        binding.actionSetWallpaper.setOnClickListener { showWallpaperTargetSheet() }
+        binding.actionSetWallpaper.setOnClickListener { viewModel.setWallpaper(WallpaperTarget.HOME) }
+        binding.actionSetLock.setOnClickListener { viewModel.setWallpaper(WallpaperTarget.LOCK) }
+        binding.actionSetBoth.setOnClickListener { viewModel.setWallpaper(WallpaperTarget.BOTH) }
         binding.actionDownload.setOnClickListener { downloadCurrentWallpaper() }
         binding.actionShare.setOnClickListener { viewModel.shareWallpaper() }
     }
@@ -141,19 +154,24 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
 
     private fun renderItemActions() {
         val item = currentItem()
-        binding.actionDownload.isVisible = item?.downloadEnabled == true
-        binding.btnInfo.isVisible = item?.tags?.isNotEmpty() == true
+        binding.actionDownload.alpha = if (item?.downloadEnabled == true) 1f else 0.5f
+        binding.actionDownload.isEnabled = item?.downloadEnabled == true &&
+            viewModel.actionState.value != DetailActionState.LOADING
+        binding.btnInfo.alpha = if (item?.tags?.isNotEmpty() == true) 1f else 0.5f
+        binding.btnInfo.isEnabled = item?.tags?.isNotEmpty() == true &&
+            viewModel.actionState.value != DetailActionState.LOADING
     }
 
     private fun renderFavorite() {
         val item = currentItem()
-        binding.btnFavorite.isEnabled = item != null
+        binding.btnFavorite.isEnabled = item != null &&
+            viewModel.actionState.value != DetailActionState.LOADING
         val favorite = item?.let {
             it.ref.toFavoriteKey() in viewModel.favoriteKeys.value.orEmpty()
         } == true
         binding.btnFavorite.setImageResource(
-            if (favorite) R.drawable.ic_home_heart_filled
-            else R.drawable.ic_home_heart_outline
+            if (favorite) R.drawable.ic_heart_filled
+            else R.drawable.ic_heart_outline
         )
     }
 
@@ -167,12 +185,19 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
         listOf(
             binding.btnFavorite,
             binding.actionSetWallpaper,
-            binding.actionDownload,
+            binding.actionSetLock,
+            binding.actionSetBoth,
+            binding.btnInfo,
             binding.actionShare
         ).forEach { it.isEnabled = !loading }
+        binding.primaryActionContainer.isEnabled = !loading
+        renderItemActions()
         if (!loading) {
             binding.btnPrimaryAction.setImageResource(
-                if (expanded) R.drawable.ic_detail_close else R.drawable.ic_detail_magic
+                if (expanded) R.drawable.ic_close_circle else R.drawable.ic_set_wallpaper
+            )
+            binding.btnPrimaryAction.contentDescription = getString(
+                if (expanded) R.string.wallpaper_set_close else R.string.wallpaper_action_set
             )
         }
     }
@@ -200,11 +225,13 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
     private fun showCurrentTags() {
         val tags = currentItem()?.tags.orEmpty()
         if (tags.isEmpty()) return
-        Toast.makeText(
-            requireContext(),
-            tags.joinToString(separator = " · "),
-            Toast.LENGTH_SHORT
-        ).show()
+        if (childFragmentManager.findFragmentByTag(WallpaperTagsDialogFragment.TAG) != null) {
+            return
+        }
+        WallpaperTagsDialogFragment.newInstance(tags).show(
+            childFragmentManager,
+            WallpaperTagsDialogFragment.TAG
+        )
     }
 
     private fun downloadCurrentWallpaper() {
@@ -219,15 +246,6 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
             return
         }
         viewModel.downloadWallpaper()
-    }
-
-    private fun showWallpaperTargetSheet() {
-        viewModel.collapseActions()
-        if (childFragmentManager.findFragmentByTag(WallpaperTargetBottomSheet.TAG) != null) return
-        WallpaperTargetBottomSheet().show(
-            childFragmentManager,
-            WallpaperTargetBottomSheet.TAG
-        )
     }
 
     private fun shareWallpaper(uri: Uri) {

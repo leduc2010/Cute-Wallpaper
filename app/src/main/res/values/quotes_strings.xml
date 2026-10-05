@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="quotes_new">New Quotes</string>
+    <string name="quotes_popular">Popular Quotes</string>
+    <string name="quotes_categories">Quote Categories</string>
+    <string name="quotes_featured">Featured</string>
+    <string name="quotes_explore_category">Explore %1$s</string>
+    <string name="quotes_empty">No quotes available</string>
+    <string name="quotes_search_empty">Try another quote keyword.</string>
+    <string name="quotes_copied">Quote copied</string>
+    <string name="quotes_copy">Copy quote</string>
+    <string name="quotes_preview">Preview quote image</string>
+    <string name="quotes_share">Share quote</string>
+    <string name="quotes_download">Download quote image</string>
+    <string name="quotes_saved">Image saved</string>
+    <string name="quotes_export_failed">Unable to save or share this quote. Please try again.</string>
+    <string name="quotes_permission_denied">Allow storage access to save this image.</string>
+    <string name="quotes_close">Close quote preview</string>
+    <string name="quotes_mark" translatable="false">“</string>
+    <string name="quotes_unknown_author">Unknown</string>
+</resources>
