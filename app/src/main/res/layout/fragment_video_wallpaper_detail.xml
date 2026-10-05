@@ -15,10 +15,10 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/bg_home_action"
-        android:contentDescription="@string/search_back"
-        android:padding="5dp"
         android:clickable="true"
+        android:contentDescription="@string/search_back"
         android:focusable="true"
+        android:padding="5dp"
         android:src="@drawable/ic_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,7 +28,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="18dp"
-        android:layout_marginBottom="104dp"
+        android:layout_marginBottom="98dp"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:overScrollMode="never"
@@ -38,65 +38,168 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnBack" />
 
-    <ImageButton
-        android:id="@+id/btnFavorite"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginBottom="26dp"
+    <VideoView
+        android:id="@+id/videoPreview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="28dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/wallpaperPager"
+        app:layout_constraintEnd_toEndOf="@id/wallpaperPager"
+        app:layout_constraintStart_toStartOf="@id/wallpaperPager"
+        app:layout_constraintTop_toTopOf="@id/wallpaperPager" />
+
+    <ImageView
+        android:id="@+id/btnPlay"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:background="@drawable/bg_detail_secondary_action"
-        android:padding="11dp"
+        android:clickable="true"
+        android:contentDescription="@string/ringtone_action_play"
+        android:elevation="3dp"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="22dp"
+        android:src="@drawable/ic_play"
+        app:layout_constraintBottom_toBottomOf="@id/wallpaperPager"
+        app:layout_constraintEnd_toEndOf="@id/wallpaperPager"
+        app:layout_constraintStart_toStartOf="@id/wallpaperPager"
+        app:layout_constraintTop_toTopOf="@id/wallpaperPager" />
+
+    <ImageView
+        android:id="@+id/btnFavorite"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_detail_secondary_action"
+        android:clickable="true"
+        android:elevation="3dp"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="13dp"
         android:src="@drawable/ic_heart_outline"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/wallpaperPager"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageButton
-        android:id="@+id/btnInfo"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="26dp"
-        android:background="@drawable/bg_detail_secondary_action"
-        android:contentDescription="@string/live_wallpaper_info"
-        android:padding="11dp"
-        android:src="@drawable/ic_info"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <TextView
+        android:id="@+id/resultMessage"
+        style="@style/Label12R"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginBottom="18dp"
+        android:background="@drawable/bg_detail_result_message"
+        android:drawableStart="@drawable/ic_sparkles"
+        android:drawablePadding="8dp"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/tertiary_700"
+        android:visibility="gone"
+        app:drawableTint="@color/primary_500"
+        app:layout_constraintBottom_toTopOf="@id/primaryActionContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Wallpaper set on home screen"
+        tools:visibility="visible" />
 
     <FrameLayout
-        android:id="@+id/setLiveContainer"
-        android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="88dp"
-        android:layout_marginEnd="88dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/primaryActionContainer"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="11dp"
+        android:background="@drawable/bg_wallpaper_action"
+        android:elevation="3dp"
+        app:layout_constraintBottom_toBottomOf="@id/wallpaperPager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSetLiveWallpaper"
+        <ImageView
+            android:id="@+id/btnPrimaryAction"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/live_wallpaper_set"
-            android:textAppearance="@style/Button14S"
-            android:textColor="@color/neutral_0"
-            app:backgroundTint="@color/primary_500"
-            app:cornerRadius="26dp"
-            app:rippleColor="@color/alpha_light_20" />
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:contentDescription="@string/live_wallpaper_set"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:padding="18dp"
+            android:src="@drawable/ic_set_wallpaper" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/actionProgress"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical|end"
-            android:layout_marginEnd="12dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:indeterminate="true"
             android:visibility="gone"
             app:indicatorColor="@color/neutral_0"
-            app:indicatorSize="24dp"
+            app:indicatorSize="32dp"
             app:trackColor="@android:color/transparent"
             app:trackThickness="2dp"
             tools:visibility="visible" />
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/btnInfo"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_detail_secondary_action"
+        android:clickable="true"
+        android:contentDescription="@string/live_wallpaper_info"
+        android:elevation="3dp"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="13dp"
+        android:src="@drawable/ic_info"
+        app:layout_constraintBottom_toBottomOf="@id/wallpaperPager"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/actionMenu"
+        android:layout_width="128dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="24dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/primaryActionContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/actionShare"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/bg_wallpaper_action"
+            android:clickable="true"
+            android:contentDescription="@string/video_wallpaper_share"
+            android:elevation="3dp"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:padding="16dp"
+            android:src="@drawable/ic_share"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/actionSetLiveWallpaper"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="72dp"
+            android:background="@drawable/bg_wallpaper_action"
+            android:clickable="true"
+            android:contentDescription="@string/live_wallpaper_set"
+            android:elevation="3dp"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:padding="16dp"
+            android:src="@drawable/ic_phone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

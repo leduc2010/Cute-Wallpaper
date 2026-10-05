@@ -3,6 +3,7 @@ package com.cute.wallpaper.ringtones.presentation.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
@@ -126,8 +127,16 @@ class ContentAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(card: ContentCard) {
             val item = card.content
+            binding.root.setBackgroundResource(
+                ringtoneBackgrounds[bindingAdapterPosition.coerceAtLeast(0) % ringtoneBackgrounds.size]
+            )
+            binding.root.foreground = if (card.isPlaying) {
+                AppCompatResources.getDrawable(binding.root.context, R.drawable.bg_ringtone_playing_stroke)
+            } else {
+                null
+            }
             binding.contentTitle.text = item.title
-            binding.contentSubtitle.text = item.category.replaceFirstChar(Char::titlecase)
+            binding.newBadge.isVisible = item.tags.any { it.equals("new", ignoreCase = true) }
             binding.playLoading.isVisible = card.isPreparing
             binding.playButton.isVisible = !card.isPreparing
             binding.playButton.setImageResource(
@@ -184,5 +193,11 @@ class ContentAdapter(
         const val VIEW_TYPE_TEXT = 1
         const val VIEW_TYPE_COMPACT_ARTWORK = 2
         const val VIEW_TYPE_RINGTONE = 3
+        val ringtoneBackgrounds = intArrayOf(
+            R.drawable.bg_favorites_ringtone_pink,
+            R.drawable.bg_favorites_ringtone_blue,
+            R.drawable.bg_favorites_ringtone_orange,
+            R.drawable.bg_favorites_ringtone_purple
+        )
     }
 }

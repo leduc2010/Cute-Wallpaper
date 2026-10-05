@@ -96,8 +96,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
     override fun observeData() {
         viewModel.selectedTab.observe(viewLifecycleOwner) { tab ->
             binding.header.tvTitle.setText(tab.titleRes)
-            binding.header.headerTitleContainer.visibility =
-                if (tab == MainTab.FAVORITES) View.INVISIBLE else View.VISIBLE
+            val showBrand = tab != MainTab.FAVORITES
+            binding.header.brandImage.isVisible = showBrand
+            binding.header.brandDivider.isVisible = showBrand
+            binding.header.headerTitleContainer.isVisible = showBrand
+            binding.header.favoritesHeaderSpacer.isVisible = !showBrand
             binding.collections.root.isVisible = tab.hasCollections
             binding.bottomNav.setSelectedTab(tab)
             if (binding.contentPager.currentItem != tab.ordinal) binding.contentPager.setCurrentItem(tab.ordinal, false)

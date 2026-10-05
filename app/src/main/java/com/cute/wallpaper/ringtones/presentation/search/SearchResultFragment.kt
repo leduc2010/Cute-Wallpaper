@@ -82,7 +82,8 @@ class SearchResultFragment : BaseFragment<FragmentSearchResultBinding>() {
             adapter = contentAdapter
             itemAnimator = null
             updatePadding(bottom = dp(24))
-            addItemDecoration(GridSpacing(dp(12), if (viewModel.tab == MainTab.RINGTONES) 1 else SEARCH_COLUMN_COUNT))
+            val spacing = if (viewModel.tab == MainTab.RINGTONES) 0 else dp(12)
+            addItemDecoration(GridSpacing(spacing, if (viewModel.tab == MainTab.RINGTONES) 1 else SEARCH_COLUMN_COUNT))
         }
     }
 

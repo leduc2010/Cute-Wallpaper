@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.WallpaperManager
 import android.content.ComponentName
 import android.content.Intent
-import android.os.Bundle
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,27 +32,25 @@ import kotlin.math.absoluteValue
 class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBinding>() {
     private val viewModel: VideoWallpaperDetailViewModel by viewModels()
     private var currentPosition = 0
-    private var pendingPreviewUrl: String? = null
+    private var isActionMenuExpanded = false
+    private var loadedVideoUrl: String? = null
+    private var resultMessageHideAction: Runnable? = null
 
     private val liveWallpaperLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            val previewUrl = pendingPreviewUrl ?: currentItem()?.contentUrl ?: return@registerForActivityResult
-            navViewModel.navigate(
-                R.id.liveWallpaperSuccessFragment,
-                Bundle().apply {
-                    putString(LiveWallpaperSuccessFragment.ARG_PREVIEW_URL, previewUrl)
-                }
-            )
+            showResultMessage(R.string.wallpaper_success_home)
         }
-        pendingPreviewUrl = null
     }
 
     private val pageCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             currentPosition = position
             viewModel.selectPage(position)
+            stopVideoPreview()
+            setActionMenuExpanded(false, animate = false)
+            hideResultMessage()
             renderFavorite()
             renderInfo()
         }
@@ -99,6 +97,15 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
                 overScrollMode = View.OVER_SCROLL_NEVER
             }
         }
+        binding.videoPreview.setOnCompletionListener {
+            binding.btnPlay.setImageResource(R.drawable.ic_play)
+            binding.btnPlay.isVisible = true
+        }
+        binding.videoPreview.setOnErrorListener { _, _, _ ->
+            stopVideoPreview()
+            showToast(R.string.live_wallpaper_preview_failed)
+            true
+        }
         renderFavorite()
         renderInfo()
         ViewCompat.requestApplyInsets(binding.root)
@@ -106,13 +113,28 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
 
     override fun initListener() {
         binding.btnBack.setOnClickListener { navViewModel.back() }
+        binding.btnPlay.setOnClickListener { toggleVideoPreview() }
+        binding.videoPreview.setOnClickListener { toggleVideoPreview() }
         binding.btnFavorite.setOnClickListener {
             val item = currentItem() ?: return@setOnClickListener
             val favorite = item.ref.toFavoriteKey() in viewModel.favoriteKeys.value.orEmpty()
             viewModel.setFavorite(item.ref, !favorite)
         }
         binding.btnInfo.setOnClickListener { showCurrentTags() }
-        binding.btnSetLiveWallpaper.setOnClickListener { viewModel.prepareLiveWallpaper() }
+        binding.primaryActionContainer.setOnClickListener {
+            setActionMenuExpanded(!isActionMenuExpanded)
+        }
+        binding.btnPrimaryAction.setOnClickListener {
+            setActionMenuExpanded(!isActionMenuExpanded)
+        }
+        binding.actionSetLiveWallpaper.setOnClickListener {
+            setActionMenuExpanded(false)
+            viewModel.prepareLiveWallpaper()
+        }
+        binding.actionShare.setOnClickListener {
+            setActionMenuExpanded(false)
+            shareCurrentVideo()
+        }
     }
 
     override fun observeData() {
@@ -150,12 +172,141 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
     }
 
     private fun renderPreparing(preparing: Boolean) {
-        binding.btnSetLiveWallpaper.isEnabled = !preparing
         binding.wallpaperPager.isUserInputEnabled = !preparing
+        binding.btnFavorite.isEnabled = !preparing
+        binding.btnInfo.isEnabled = !preparing
+        binding.btnPlay.isEnabled = !preparing
+        binding.actionShare.isEnabled = !preparing
+        binding.actionSetLiveWallpaper.isEnabled = !preparing
+        binding.primaryActionContainer.isEnabled = !preparing
+        binding.btnPrimaryAction.isVisible = !preparing
         binding.actionProgress.isVisible = preparing
-        binding.btnSetLiveWallpaper.text = getString(
-            if (preparing) R.string.live_wallpaper_preparing else R.string.live_wallpaper_set
+        if (preparing) {
+            setActionMenuExpanded(false)
+            stopVideoPreview()
+        }
+    }
+
+    private fun toggleVideoPreview() {
+        val url = currentItem()?.contentUrl?.takeIf(String::isNotBlank) ?: return
+        if (binding.videoPreview.isPlaying) {
+            binding.videoPreview.pause()
+            binding.btnPlay.setImageResource(R.drawable.ic_play)
+            binding.btnPlay.isVisible = true
+            return
+        }
+        binding.videoPreview.isVisible = true
+        if (loadedVideoUrl != url) {
+            loadedVideoUrl = url
+            binding.videoPreview.setVideoURI(Uri.parse(url))
+            binding.videoPreview.setOnPreparedListener { player ->
+                player.isLooping = true
+                binding.videoPreview.start()
+                binding.btnPlay.isVisible = false
+            }
+        } else {
+            binding.videoPreview.start()
+            binding.btnPlay.isVisible = false
+        }
+    }
+
+    private fun stopVideoPreview() {
+        runCatching { binding.videoPreview.stopPlayback() }
+        loadedVideoUrl = null
+        binding.videoPreview.isVisible = false
+        binding.btnPlay.setImageResource(R.drawable.ic_play)
+        binding.btnPlay.isVisible = true
+    }
+
+    private fun setActionMenuExpanded(expanded: Boolean, animate: Boolean = true) {
+        isActionMenuExpanded = expanded
+        binding.btnPrimaryAction.setImageResource(
+            if (expanded) R.drawable.ic_close_circle else R.drawable.ic_set_wallpaper
         )
+        val menu = binding.actionMenu
+        menu.animate().cancel()
+        if (!animate) {
+            menu.isVisible = expanded
+            menu.alpha = 1f
+            menu.scaleX = 1f
+            menu.scaleY = 1f
+            return
+        }
+        if (expanded) {
+            menu.isVisible = true
+            menu.alpha = 0f
+            menu.scaleX = 0.86f
+            menu.scaleY = 0.86f
+            menu.animate()
+                .alpha(1f)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(ACTION_ANIMATION_DURATION)
+                .start()
+        } else if (menu.isVisible) {
+            menu.animate()
+                .alpha(0f)
+                .scaleX(0.86f)
+                .scaleY(0.86f)
+                .setDuration(ACTION_ANIMATION_DURATION)
+                .withEndAction {
+                    if (!isActionMenuExpanded) {
+                        menu.isVisible = false
+                        menu.alpha = 1f
+                        menu.scaleX = 1f
+                        menu.scaleY = 1f
+                    }
+                }
+                .start()
+        }
+    }
+
+    private fun shareCurrentVideo() {
+        val url = currentItem()?.contentUrl?.takeIf(String::isNotBlank) ?: return
+        startActivity(
+            Intent.createChooser(
+                Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, url)
+                },
+                getString(R.string.video_wallpaper_share_chooser)
+            )
+        )
+    }
+
+    private fun showResultMessage(messageRes: Int) {
+        val messageView = binding.resultMessage
+        resultMessageHideAction?.let(messageView::removeCallbacks)
+        messageView.animate().cancel()
+        messageView.setText(messageRes)
+        messageView.alpha = 0f
+        messageView.translationY = dp(8).toFloat()
+        messageView.isVisible = true
+        messageView.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(160L)
+            .start()
+        val hideAction = Runnable {
+            messageView.animate()
+                .alpha(0f)
+                .translationY(dp(8).toFloat())
+                .setDuration(140L)
+                .withEndAction { messageView.isVisible = false }
+                .start()
+        }
+        resultMessageHideAction = hideAction
+        messageView.postDelayed(hideAction, RESULT_MESSAGE_DURATION)
+    }
+
+    private fun hideResultMessage() {
+        val messageView = binding.resultMessage
+        resultMessageHideAction?.let(messageView::removeCallbacks)
+        resultMessageHideAction = null
+        messageView.animate().cancel()
+        messageView.isVisible = false
+        messageView.alpha = 1f
+        messageView.translationY = 0f
     }
 
     private fun openLiveWallpaperPreview(url: String) {
@@ -169,10 +320,8 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
             showToast(R.string.live_wallpaper_not_supported)
             return
         }
-        pendingPreviewUrl = url
         runCatching { liveWallpaperLauncher.launch(intent) }
             .onFailure {
-                pendingPreviewUrl = null
                 showToast(R.string.live_wallpaper_preview_failed)
             }
     }
@@ -187,11 +336,26 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
         Toast.makeText(requireContext(), messageRes, Toast.LENGTH_SHORT).show()
     }
 
+    override fun onPause() {
+        stopVideoPreview()
+        super.onPause()
+    }
+
     override fun onDestroyView() {
+        resultMessageHideAction?.let(binding.resultMessage::removeCallbacks)
+        resultMessageHideAction = null
+        binding.resultMessage.animate().cancel()
+        binding.actionMenu.animate().cancel()
+        stopVideoPreview()
         binding.wallpaperPager.unregisterOnPageChangeCallback(pageCallback)
         binding.wallpaperPager.adapter = null
         super.onDestroyView()
     }
 
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
+
+    private companion object {
+        const val ACTION_ANIMATION_DURATION = 180L
+        const val RESULT_MESSAGE_DURATION = 1800L
+    }
 }

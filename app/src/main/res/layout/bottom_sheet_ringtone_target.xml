@@ -32,50 +32,50 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
+    <TextView
         android:id="@+id/btnRingtone"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/Button16S"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginTop="20dp"
+        android:background="@drawable/bg_cta_outline"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
         android:text="@string/ringtone_set_ringtone"
-        android:textAppearance="@style/Button16S"
         android:textColor="@color/primary_500"
-        app:backgroundTint="@color/neutral_0"
-        app:cornerRadius="22dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        app:strokeColor="@color/primary_200"
-        app:strokeWidth="1dp" />
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
-    <com.google.android.material.button.MaterialButton
+    <TextView
         android:id="@+id/btnNotification"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/Button16S"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginTop="12dp"
+        android:background="@drawable/bg_cta_outline"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
         android:text="@string/ringtone_set_notification"
-        android:textAppearance="@style/Button16S"
         android:textColor="@color/primary_500"
-        app:backgroundTint="@color/neutral_0"
-        app:cornerRadius="22dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnRingtone"
-        app:strokeColor="@color/primary_200"
-        app:strokeWidth="1dp" />
+        app:layout_constraintTop_toBottomOf="@id/btnRingtone" />
 
-    <com.google.android.material.button.MaterialButton
+    <TextView
         android:id="@+id/btnAlarm"
+        style="@style/Button16S"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginTop="12dp"
+        android:background="@drawable/bg_cta_primary"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
         android:text="@string/ringtone_set_alarm"
-        android:textAppearance="@style/Button16S"
         android:textColor="@color/neutral_0"
-        app:backgroundTint="@color/primary_500"
-        app:cornerRadius="22dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

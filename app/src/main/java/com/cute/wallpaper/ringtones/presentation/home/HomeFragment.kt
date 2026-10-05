@@ -5,10 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import android.widget.TextView
 import android.widget.Toast
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +37,7 @@ import com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneViewModel
 import com.cute.wallpaper.ringtones.presentation.search.SearchMode
 import com.cute.wallpaper.ringtones.presentation.search.SearchViewModel
 import com.google.android.material.chip.Chip
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.transition.MaterialSharedAxis
 import com.google.android.material.transition.SlideDistanceProvider
@@ -53,6 +56,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private var updatingFilterSelection = false
     private var ringtoneTabMediator: TabLayoutMediator? = null
     private var hasRenderedSearchFilterVisibility = false
+
+    private val ringtoneTabSelectionListener = object : TabLayout.OnTabSelectedListener {
+        override fun onTabSelected(tab: TabLayout.Tab) {
+            renderRingtoneTabs(tab.position)
+        }
+
+        override fun onTabUnselected(tab: TabLayout.Tab) = Unit
+        override fun onTabReselected(tab: TabLayout.Tab) = Unit
+    }
 
     private val writeSettingsLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -119,8 +131,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 binding.ringtoneTabs,
                 binding.collectionPager
             ) { ringtoneTab, position ->
-                ringtoneTab.text = getString(RingtoneCategory.pages[position].titleRes)
+                ringtoneTab.customView = createRingtoneTabView(RingtoneCategory.pages[position])
             }.also { it.attach() }
+            binding.ringtoneTabs.addOnTabSelectedListener(ringtoneTabSelectionListener)
+            renderRingtoneTabs(binding.collectionPager.currentItem)
         }
     }
 
@@ -161,6 +175,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 if (page >= 0 && binding.collectionPager.currentItem != page) {
                     binding.collectionPager.setCurrentItem(page, true)
                 }
+                if (page >= 0) renderRingtoneTabs(page)
             }
         }
         mainViewModel.bottomContentPadding.observe(viewLifecycleOwner) {
@@ -171,6 +186,34 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 event.getContentIfNotHandled()?.let(::handleRingtoneAction)
             }
         }
+    }
+
+    private fun createRingtoneTabView(category: RingtoneCategory): TextView {
+        return TextView(requireContext()).apply {
+            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp(36))
+            minWidth = dp(40)
+            gravity = Gravity.CENTER
+            setPadding(dp(12), 0, dp(12), 0)
+            setTextAppearance(R.style.Body14M)
+            setTextColor(ContextCompat.getColor(context, R.color.tertiary_600))
+            setBackgroundResource(R.drawable.bg_ringtone_category_item)
+            contentDescription = getString(category.titleRes)
+        }
+    }
+
+    private fun renderRingtoneTabs(selectedPosition: Int) {
+        if (tab != MainTab.RINGTONES) return
+        RingtoneCategory.pages.forEachIndexed { index, category ->
+            val tabView = binding.ringtoneTabs.getTabAt(index)?.customView as? TextView
+                ?: return@forEachIndexed
+            val selected = index == selectedPosition
+            tabView.isSelected = selected
+            tabView.text = if (selected) getString(category.titleRes) else ""
+            val horizontalPadding = if (selected) dp(20) else 0
+            tabView.setPadding(horizontalPadding, 0, horizontalPadding, 0)
+            tabView.elevation = if (selected) dp(2).toFloat() else 0f
+        }
+        binding.ringtoneTabs.requestLayout()
     }
 
     private fun renderSearchFilterVisibility(isVisible: Boolean) {
@@ -349,6 +392,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     override fun onDestroyView() {
+        binding.ringtoneTabs.removeOnTabSelectedListener(ringtoneTabSelectionListener)
         ringtoneTabMediator?.detach()
         ringtoneTabMediator = null
         binding.collectionPager.unregisterOnPageChangeCallback(collectionPagerCallback)

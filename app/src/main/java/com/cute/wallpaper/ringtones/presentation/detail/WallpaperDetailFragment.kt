@@ -39,6 +39,7 @@ import kotlin.math.absoluteValue
 class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
     private val viewModel: WallpaperDetailViewModel by viewModels()
     private var currentPosition = 0
+    private var resultMessageHideAction: Runnable? = null
 
     private val downloadPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -58,6 +59,7 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
         override fun onPageSelected(position: Int) {
             currentPosition = position
             viewModel.selectPage(position)
+            hideResultMessage()
             renderFavorite()
             renderItemActions()
         }
@@ -204,15 +206,7 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
 
     private fun showActionResult(result: DetailActionResult) {
         when (result) {
-            is DetailActionResult.SetSuccess -> {
-                navViewModel.navigate(
-                    R.id.wallpaperSuccessFragment,
-                    Bundle().apply {
-                        putString(WallpaperSuccessFragment.ARG_PREVIEW_URL, result.previewUrl)
-                        putString(WallpaperSuccessFragment.ARG_TARGET, result.target.name)
-                    }
-                )
-            }
+            is DetailActionResult.SetSuccess -> showSetSuccess(result.target)
 
             DetailActionResult.SetFailed -> showToast(R.string.wallpaper_set_failed)
             DetailActionResult.DownloadSuccess -> showToast(R.string.wallpaper_download_success)
@@ -220,6 +214,47 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
             is DetailActionResult.ShareReady -> shareWallpaper(Uri.parse(result.uri))
             DetailActionResult.ShareFailed -> showToast(R.string.wallpaper_share_failed)
         }
+    }
+
+    private fun showSetSuccess(target: WallpaperTarget) {
+        val messageRes = when (target) {
+            WallpaperTarget.HOME -> R.string.wallpaper_success_home
+            WallpaperTarget.LOCK -> R.string.wallpaper_success_lock
+            WallpaperTarget.BOTH -> R.string.wallpaper_success_both
+        }
+        val messageView = binding.resultMessage
+        resultMessageHideAction?.let(messageView::removeCallbacks)
+        messageView.animate().cancel()
+        messageView.setText(messageRes)
+        messageView.alpha = 0f
+        messageView.translationY = dp(8).toFloat()
+        messageView.isVisible = true
+        messageView.animate()
+            .alpha(1f)
+            .translationY(0f)
+            .setDuration(160L)
+            .start()
+
+        val hideAction = Runnable {
+            messageView.animate()
+                .alpha(0f)
+                .translationY(dp(8).toFloat())
+                .setDuration(140L)
+                .withEndAction { messageView.isVisible = false }
+                .start()
+        }
+        resultMessageHideAction = hideAction
+        messageView.postDelayed(hideAction, RESULT_MESSAGE_DURATION)
+    }
+
+    private fun hideResultMessage() {
+        val messageView = binding.resultMessage
+        resultMessageHideAction?.let(messageView::removeCallbacks)
+        resultMessageHideAction = null
+        messageView.animate().cancel()
+        messageView.isVisible = false
+        messageView.alpha = 1f
+        messageView.translationY = 0f
     }
 
     private fun showCurrentTags() {
@@ -295,6 +330,9 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
     }
 
     override fun onDestroyView() {
+        resultMessageHideAction?.let(binding.resultMessage::removeCallbacks)
+        resultMessageHideAction = null
+        binding.resultMessage.animate().cancel()
         binding.actionMenu.animate().cancel()
         binding.wallpaperPager.unregisterOnPageChangeCallback(pageCallback)
         binding.wallpaperPager.adapter = null
@@ -305,5 +343,6 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
 
     private companion object {
         const val ACTION_ANIMATION_DURATION = 180L
+        const val RESULT_MESSAGE_DURATION = 1800L
     }
 }

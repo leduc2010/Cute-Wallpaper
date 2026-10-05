@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cute.wallpaper.ringtones.R
 import com.cute.wallpaper.ringtones.domain.model.ContentType
@@ -42,6 +43,7 @@ class HomeCollectionFragment : BaseFragment<FragmentHomeCollectionBinding>() {
         } ?: RingtoneCategory.RINGTONES
     }
     private var contentAdapter: ContentAdapter? = null
+    private var ringtoneFeedAdapter: RingtoneFeedAdapter? = null
 
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -62,21 +64,37 @@ class HomeCollectionFragment : BaseFragment<FragmentHomeCollectionBinding>() {
             ringtoneViewModel.requestSet(contentId, target)
         }
 
-        contentAdapter = ContentAdapter(
-            onFavorite = { content, favorite ->
-                viewModel.setFavorite(content.ref, favorite)
-            },
-            onPreview = ::openDetail,
-            onRingtoneSet = ::showRingtoneTarget
-        ).apply {
-            stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        }
-        binding.rvContent.apply {
-            val columns = if (tab == MainTab.RINGTONES) 1 else 2
-            layoutManager = GridLayoutManager(requireContext(), columns)
-            adapter = contentAdapter
-            itemAnimator = null
-            addItemDecoration(GridSpacing(dp(16), if (tab == MainTab.RINGTONES) 1 else 2))
+        if (tab == MainTab.RINGTONES) {
+            ringtoneFeedAdapter = RingtoneFeedAdapter(
+                onFavorite = { content, favorite ->
+                    viewModel.setFavorite(content.ref, favorite)
+                },
+                onPreview = { ringtoneViewModel.togglePreview(it.id) },
+                onSet = ::showRingtoneTarget
+            ).apply {
+                stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            }
+            binding.rvContent.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = ringtoneFeedAdapter
+                itemAnimator = null
+            }
+        } else {
+            contentAdapter = ContentAdapter(
+                onFavorite = { content, favorite ->
+                    viewModel.setFavorite(content.ref, favorite)
+                },
+                onPreview = ::openDetail,
+                onRingtoneSet = ::showRingtoneTarget
+            ).apply {
+                stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            }
+            binding.rvContent.apply {
+                layoutManager = GridLayoutManager(requireContext(), 2)
+                adapter = contentAdapter
+                itemAnimator = null
+                addItemDecoration(GridSpacing(dp(16), 2))
+            }
         }
     }
 
@@ -116,7 +134,11 @@ class HomeCollectionFragment : BaseFragment<FragmentHomeCollectionBinding>() {
             )
         }
 
-        contentAdapter?.submitList(cards)
+        if (tab == MainTab.RINGTONES) {
+            ringtoneFeedAdapter?.submitCards(cards)
+        } else {
+            contentAdapter?.submitList(cards)
+        }
         val empty = cards.isEmpty()
         binding.rvContent.isVisible = !empty
         binding.favoriteEmptyState.isVisible = empty
@@ -174,6 +196,7 @@ class HomeCollectionFragment : BaseFragment<FragmentHomeCollectionBinding>() {
     override fun onDestroyView() {
         binding.rvContent.adapter = null
         contentAdapter = null
+        ringtoneFeedAdapter = null
         super.onDestroyView()
     }
 

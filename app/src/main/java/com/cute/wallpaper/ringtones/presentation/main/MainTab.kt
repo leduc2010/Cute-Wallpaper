@@ -20,7 +20,7 @@ enum class MainTab(
         ContentType.VIDEO_WALLPAPER
     ),
     RINGTONES(
-        R.string.ringtones,
+        R.string.ringtone_title,
         R.string.search_ringtones,
         ContentType.RINGTONE
     ),

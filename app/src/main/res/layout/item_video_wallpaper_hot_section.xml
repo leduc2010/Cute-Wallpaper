@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="260dp"
+    android:layout_marginBottom="16dp"
+    android:baselineAligned="false"
+    android:orientation="horizontal">
+
+    <FrameLayout
+        android:id="@+id/hotLeft"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/hotLeftImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.SearchArtwork" />
+
+        <TextView
+            style="@style/Label10B"
+            android:layout_width="34dp"
+            android:layout_height="22dp"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_video_hot_badge"
+            android:gravity="center"
+            android:text="@string/video_hot"
+            android:textColor="@color/neutral_0" />
+
+        <ImageView
+            android:id="@+id/hotLeftFavorite"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_home_action"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:contentDescription="@string/favorites"
+            android:src="@drawable/ic_heart_outline" />
+
+        <ImageView
+            android:id="@+id/hotLeftPlay"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_home_action"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="4dp"
+            android:contentDescription="@string/ringtone_action_play"
+            android:src="@drawable/ic_play" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="10dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/hotMiddleTop"
+            android:layout_width="match_parent"
+            android:layout_height="125dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/hotMiddleTopImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.SearchArtwork" />
+
+            <TextView
+                style="@style/Label10B"
+                android:layout_width="34dp"
+                android:layout_height="22dp"
+                android:layout_gravity="top|start"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_video_hot_badge"
+                android:gravity="center"
+                android:text="@string/video_hot"
+                android:textColor="@color/neutral_0" />
+
+            <ImageView
+                android:id="@+id/hotMiddleTopFavorite"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_home_action"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:contentDescription="@string/favorites"
+            android:src="@drawable/ic_heart_outline" />
+
+            <ImageView
+                android:id="@+id/hotMiddleTopPlay"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/bg_home_action"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="4dp"
+                android:contentDescription="@string/ringtone_action_play"
+            android:src="@drawable/ic_play" />
+        </FrameLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <FrameLayout
+            android:id="@+id/hotMiddleBottom"
+            android:layout_width="match_parent"
+            android:layout_height="125dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/hotMiddleBottomImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.SearchArtwork" />
+
+            <TextView
+                style="@style/Label10B"
+                android:layout_width="34dp"
+                android:layout_height="22dp"
+                android:layout_gravity="top|start"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_video_hot_badge"
+                android:gravity="center"
+                android:text="@string/video_hot"
+                android:textColor="@color/neutral_0" />
+
+            <ImageView
+                android:id="@+id/hotMiddleBottomFavorite"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_home_action"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:contentDescription="@string/favorites"
+            android:src="@drawable/ic_heart_outline" />
+
+            <ImageView
+                android:id="@+id/hotMiddleBottomPlay"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/bg_home_action"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="4dp"
+                android:contentDescription="@string/ringtone_action_play"
+            android:src="@drawable/ic_play" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/hotRight"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/hotRightImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.SearchArtwork" />
+
+        <TextView
+            style="@style/Label10B"
+            android:layout_width="34dp"
+            android:layout_height="22dp"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_video_hot_badge"
+            android:gravity="center"
+            android:text="@string/video_hot"
+            android:textColor="@color/neutral_0" />
+
+        <ImageView
+            android:id="@+id/hotRightFavorite"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_home_action"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:contentDescription="@string/favorites"
+            android:src="@drawable/ic_heart_outline" />
+
+        <ImageView
+            android:id="@+id/hotRightPlay"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_home_action"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="4dp"
+            android:contentDescription="@string/ringtone_action_play"
+            android:src="@drawable/ic_play" />
+    </FrameLayout>
+
+</LinearLayout>

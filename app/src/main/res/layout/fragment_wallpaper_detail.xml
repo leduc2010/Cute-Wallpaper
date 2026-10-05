@@ -54,6 +54,27 @@
         app:layout_constraintBottom_toBottomOf="@id/wallpaperPager"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/resultMessage"
+        style="@style/Label12R"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginBottom="18dp"
+        android:background="@drawable/bg_detail_result_message"
+        android:drawableStart="@drawable/ic_sparkles"
+        android:drawablePadding="8dp"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="@color/tertiary_700"
+        android:visibility="gone"
+        app:drawableTint="@color/primary_500"
+        app:layout_constraintBottom_toTopOf="@id/primaryActionContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Wallpaper set on home screen"
+        tools:visibility="visible" />
+
     <FrameLayout
         android:id="@+id/primaryActionContainer"
         android:layout_width="64dp"
