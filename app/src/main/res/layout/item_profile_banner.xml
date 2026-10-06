@@ -2,7 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="51dp"
     app:cardBackgroundColor="@color/secondary_100"
     app:cardCornerRadius="20dp"
     app:cardElevation="0dp"
@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="16dp"
@@ -49,8 +49,8 @@
         <TextView
             android:id="@+id/surpriseButton"
             style="@style/Label10B"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="101dp"
+            android:layout_height="28dp"
             android:background="@drawable/profile_feed_surprise_button"
             android:drawablePadding="4dp"
             android:gravity="center"

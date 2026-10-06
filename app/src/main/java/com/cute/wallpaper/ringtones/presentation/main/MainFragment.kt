@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.cute.wallpaper.ringtones.databinding.FragmentMainBinding
 import com.cute.wallpaper.ringtones.R
+import com.cute.wallpaper.ringtones.presentation.autochangewallpaper.AutoChangeWallpaperDialogFragment
 import com.cute.wallpaper.ringtones.presentation.base.BaseFragment
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.appbar.AppBarLayout
@@ -69,18 +70,25 @@ class MainFragment : BaseFragment<FragmentMainBinding>() {
 
     override fun initListener() {
         binding.bottomNav.setOnTabSelectedListener(viewModel::selectTab)
-        binding.header.btnVideo.setOnClickListener { viewModel.selectTab(MainTab.VIDEO_WALLPAPERS) }
+        binding.header.btnAutoChange.setOnClickListener {
+            if (childFragmentManager.findFragmentByTag(AutoChangeWallpaperDialogFragment.TAG) == null) {
+                AutoChangeWallpaperDialogFragment().show(
+                    childFragmentManager,
+                    AutoChangeWallpaperDialogFragment.TAG
+                )
+            }
+        }
         binding.header.btnSettings.setOnClickListener { navViewModel.navigate(R.id.settingsFragment) }
     }
 
     override fun observeData() {
         viewModel.selectedTab.observe(viewLifecycleOwner) { tab ->
             binding.header.tvTitle.setText(tab.titleRes)
-            val showBrand = tab != MainTab.FAVORITES
-            binding.header.brandImage.isVisible = showBrand
-            binding.header.brandDivider.isVisible = showBrand
-            binding.header.headerTitleContainer.isVisible = showBrand
-            binding.header.favoritesHeaderSpacer.isVisible = !showBrand
+            val showTitle = tab != MainTab.FAVORITES
+            binding.header.brandImage.isVisible = true
+            binding.header.brandDivider.isVisible = showTitle
+            binding.header.headerTitleContainer.isVisible = showTitle
+            binding.header.favoritesHeaderSpacer.isVisible = !showTitle
             binding.bottomNav.setSelectedTab(tab)
             if (binding.contentPager.currentItem != tab.ordinal) binding.contentPager.setCurrentItem(tab.ordinal, false)
             if (lastRenderedTab != null && lastRenderedTab != tab) {

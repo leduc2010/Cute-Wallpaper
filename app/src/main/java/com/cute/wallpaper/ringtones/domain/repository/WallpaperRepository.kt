@@ -9,7 +9,9 @@ interface WallpaperRepository {
         target: WallpaperTarget
     ): Boolean
 
-    suspend fun downloadWallpaper(url: String, fileName: String): Boolean
+    suspend fun downloadWallpaper(url: String, fileName: String): String?
+
+    suspend fun setWallpaperFromUri(uri: String, target: WallpaperTarget): Boolean
 
     suspend fun prepareShareWallpaper(url: String, fileName: String): String?
 }

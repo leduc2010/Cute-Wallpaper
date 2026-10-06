@@ -10,6 +10,7 @@ import com.cute.wallpaper.ringtones.domain.model.ContentRef
 import com.cute.wallpaper.ringtones.domain.model.ContentType
 import com.cute.wallpaper.ringtones.domain.model.WallpaperTarget
 import com.cute.wallpaper.ringtones.domain.repository.ContentRepository
+import com.cute.wallpaper.ringtones.domain.repository.DownloadedWallpaperStore
 import com.cute.wallpaper.ringtones.domain.repository.WallpaperRepository
 import com.cute.wallpaper.ringtones.data.local.preference.AppPreferences
 import com.cute.wallpaper.ringtones.presentation.home.HomeContentUiModel
@@ -38,6 +39,7 @@ sealed interface DetailActionResult {
 class WallpaperDetailViewModel @Inject constructor(
     private val appPreferences: AppPreferences,
     private val wallpaperRepository: WallpaperRepository,
+    private val downloadedWallpaperStore: DownloadedWallpaperStore,
     contentRepository: ContentRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -121,7 +123,15 @@ class WallpaperDetailViewModel @Inject constructor(
             success = DetailActionResult.DownloadSuccess,
             failure = DetailActionResult.DownloadFailed
         ) {
-            wallpaperRepository.downloadWallpaper(url, downloadFileName(item))
+            val savedUri = wallpaperRepository.downloadWallpaper(
+                url,
+                downloadFileName(item)
+            ) ?: return@runAction false
+            downloadedWallpaperStore.add(
+                key = item.ref.toFavoriteKey(),
+                uri = savedUri
+            )
+            true
         }
     }
 

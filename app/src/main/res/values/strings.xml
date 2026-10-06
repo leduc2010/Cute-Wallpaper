@@ -61,19 +61,12 @@
     <string name="wallpaper_download_permission_denied">Storage permission is required to save wallpapers on this Android version.</string>
     <string name="wallpaper_share_chooser">Share wallpaper</string>
     <string name="wallpaper_share_failed">Could not prepare wallpaper for sharing</string>
-    <string name="wallpaper_set_title">Set Wallpaper</string>
-    <string name="wallpaper_set_description">Choose where you want to apply this wallpaper.</string>
-    <string name="wallpaper_set_home">Set home screen</string>
-    <string name="wallpaper_set_lock">Set lock screen</string>
-    <string name="wallpaper_set_both">Set both</string>
     <string name="wallpaper_action_set">Set wallpaper</string>
     <string name="wallpaper_action_download">Download wallpaper</string>
     <string name="wallpaper_action_share">Share wallpaper</string>
-    <string name="wallpaper_success_title">Successfully!</string>
     <string name="wallpaper_success_home">Wallpaper set on home screen</string>
     <string name="wallpaper_success_lock">Wallpaper set on lock screen</string>
     <string name="wallpaper_success_both">Wallpaper set on home and lock screens</string>
-    <string name="wallpaper_back_home">Back to home</string>
     <string name="wallpaper_tags_title">Tags</string>
     <string name="wallpaper_tags_close">Close</string>
 
@@ -103,4 +96,23 @@
     <string name="ringtone_set_success">Sound set successfully.</string>
     <string name="ringtone_set_failed">Could not set this sound.</string>
     <string name="ringtone_preview_failed">Could not play this sound.</string>
+    <!-- Auto change wallpaper -->
+    <string name="auto_change_title">Auto change ✨</string>
+    <string name="auto_change_downloaded_count">Downloaded wallpapers: %1$d</string>
+    <string name="auto_change_minimum_hint">Download at least %1$d wallpapers to enable Auto change. Downloaded: %2$d/%3$d.</string>
+    <string name="auto_change_minimum_dialog_message">Download at least %1$d wallpapers to your library to enable Auto change.</string>
+    <string name="auto_change_apply_to">Apply to</string>
+    <string name="auto_change_home_screen">Home screen</string>
+    <string name="auto_change_lock_screen">Lock screen</string>
+    <string name="auto_change_both_screens">Both screens</string>
+    <string name="auto_change_frequency">Change wallpaper</string>
+    <string name="auto_change_every_3_hours">Every 3 hours</string>
+    <string name="auto_change_every_6_hours">Every 6 hours</string>
+    <string name="auto_change_every_12_hours">Every 12 hours</string>
+    <string name="auto_change_every_24_hours">Every 24 hours</string>
+    <string name="auto_change_enable">Enable auto change</string>
+    <string name="auto_change_save_changes">Save changes</string>
+    <string name="auto_change_stop">Stop auto change</string>
+    <string name="ok">OK</string>
+    <string name="close">Close</string>
 </resources>

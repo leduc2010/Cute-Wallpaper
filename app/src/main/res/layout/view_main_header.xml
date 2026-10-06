@@ -39,13 +39,12 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <TextView
-                style="@style/Label11R"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:layout_width="11dp"
+                android:layout_height="16dp"
                 android:layout_marginEnd="4dp"
-                android:text="💖"
-                android:textColor="@color/neutral_950" />
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_home_title_heart" />
 
             <TextView
                 android:id="@+id/tvTitle"
@@ -77,14 +76,15 @@
         android:visibility="gone" />
 
     <ImageView
-        android:id="@+id/btnVideo"
+        android:id="@+id/btnAutoChange"
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/bg_home_header_action"
         android:elevation="2dp"
         android:padding="7dp"
-        android:src="@drawable/ic_play" />
+        android:contentDescription="@string/auto_change_title"
+        android:src="@drawable/ic_auto_change_wallpaper" />
 
     <ImageView
         android:id="@+id/btnSettings"

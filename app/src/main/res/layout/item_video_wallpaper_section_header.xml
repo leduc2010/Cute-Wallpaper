@@ -4,5 +4,5 @@
     android:layout_height="36dp"
     android:gravity="center_vertical"
     android:text="@string/video_for_you"
-    android:textAppearance="@style/Heading18B"
+    android:textAppearance="@style/Body16B"
     android:textColor="@color/tertiary_900" />

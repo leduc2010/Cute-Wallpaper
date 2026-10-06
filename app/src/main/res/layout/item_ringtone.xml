@@ -48,24 +48,10 @@
         android:maxLines="1"
         android:textColor="@color/neutral_0"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/newBadge"
+        app:layout_constraintEnd_toStartOf="@id/favoriteButton"
         app:layout_constraintStart_toEndOf="@id/playContainer"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Pink Dream 💕" />
-
-    <TextView
-        android:id="@+id/newBadge"
-        style="@style/Label10B"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/ringtone_new"
-        android:textColor="@color/primary_900"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/contentTitle"
-        app:layout_constraintEnd_toStartOf="@id/favoriteButton"
-        app:layout_constraintTop_toTopOf="@id/contentTitle"
-        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/favoriteButton"

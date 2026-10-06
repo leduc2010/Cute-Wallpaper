@@ -71,11 +71,6 @@ class BottomMainNavigationView @JvmOverloads constructor(
             item.label.isVisible = isSelected
         }
 
-        post {
-            val selectedView = items.first { it.tab == selectedTab }.container
-            val targetX = selectedView.left + selectedView.width / 2 - binding.navigationScroll.width / 2
-            binding.navigationScroll.smoothScrollTo(targetX.coerceAtLeast(0), 0)
-        }
     }
 
     private data class NavItem(

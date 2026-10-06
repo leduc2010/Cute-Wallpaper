@@ -122,7 +122,6 @@ internal class RingtoneFeedAdapter(
             val item = card.content
             binding.root.setBackgroundResource(row.backgroundRes)
             binding.contentTitle.text = item.title
-            binding.newBadge.isVisible = item.tags.any { it.equals("new", ignoreCase = true) }
             binding.playLoading.isVisible = card.isPreparing
             binding.playButton.isVisible = !card.isPreparing
             binding.playContainer.setBackgroundResource(

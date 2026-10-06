@@ -85,9 +85,9 @@ class TabRingtonesFragment : BaseFragment<FragmentTabRingtonesBinding>() {
             val tabView = createRingtoneTabView(category).apply {
                 layoutParams = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
-                    dp(40)
+                    dp(36)
                 ).apply {
-                    marginStart = if (index == 0) 0 else dp(10)
+                    marginStart = if (index == 0) 0 else dp(12)
                 }
                 setOnClickListener {
                     viewModel.selectRingtoneCategory(category)

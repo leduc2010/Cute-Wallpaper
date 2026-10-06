@@ -4,6 +4,7 @@ import android.app.WallpaperManager
 import android.content.ContentValues
 import android.content.Context
 import android.media.MediaScannerConnection
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -15,6 +16,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.InputStream
 import java.net.URL
 import java.net.URLConnection
 import javax.inject.Inject
@@ -62,7 +64,7 @@ class WallpaperRepositoryImpl @Inject constructor(
         }.getOrDefault(false)
     }
 
-    override suspend fun downloadWallpaper(url: String, fileName: String): Boolean =
+    override suspend fun downloadWallpaper(url: String, fileName: String): String? =
         withContext(Dispatchers.IO) {
             runCatching {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -70,9 +72,44 @@ class WallpaperRepositoryImpl @Inject constructor(
                 } else {
                     saveLegacy(url, fileName)
                 }
-                true
-            }.getOrDefault(false)
+            }.getOrNull()
         }
+
+    override suspend fun setWallpaperFromUri(
+        uri: String,
+        target: WallpaperTarget
+    ): Boolean = withContext(Dispatchers.IO) {
+        runCatching {
+            val wallpaperManager = WallpaperManager.getInstance(context)
+            when (target) {
+                WallpaperTarget.HOME -> setWallpaperFromUri(
+                    wallpaperManager,
+                    uri,
+                    WallpaperManager.FLAG_SYSTEM
+                )
+
+                WallpaperTarget.LOCK -> setWallpaperFromUri(
+                    wallpaperManager,
+                    uri,
+                    WallpaperManager.FLAG_LOCK
+                )
+
+                WallpaperTarget.BOTH -> {
+                    setWallpaperFromUri(
+                        wallpaperManager,
+                        uri,
+                        WallpaperManager.FLAG_SYSTEM
+                    )
+                    setWallpaperFromUri(
+                        wallpaperManager,
+                        uri,
+                        WallpaperManager.FLAG_LOCK
+                    )
+                }
+            }
+            true
+        }.getOrDefault(false)
+    }
 
     override suspend fun prepareShareWallpaper(url: String, fileName: String): String? =
         withContext(Dispatchers.IO) {
@@ -100,8 +137,28 @@ class WallpaperRepositoryImpl @Inject constructor(
         }
     }
 
+    private fun setWallpaperFromUri(
+        wallpaperManager: WallpaperManager,
+        uri: String,
+        flag: Int
+    ) {
+        openDownloadedWallpaper(uri).use { input ->
+            wallpaperManager.setStream(input, null, true, flag)
+        }
+    }
+
+    private fun openDownloadedWallpaper(uri: String): InputStream {
+        val parsed = Uri.parse(uri)
+        return when (parsed.scheme) {
+            "content" -> requireNotNull(context.contentResolver.openInputStream(parsed))
+            "file" -> File(requireNotNull(parsed.path)).inputStream()
+            "http", "https" -> URL(uri).openStream()
+            else -> File(uri).inputStream()
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.Q)
-    private fun saveToMediaStore(url: String, fileName: String) {
+    private fun saveToMediaStore(url: String, fileName: String): String {
         val resolver = context.contentResolver
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
@@ -125,6 +182,7 @@ class WallpaperRepositoryImpl @Inject constructor(
                 put(MediaStore.Images.Media.IS_PENDING, 0)
             }
             resolver.update(uri, ready, null, null)
+            return uri.toString()
         } catch (throwable: Throwable) {
             resolver.delete(uri, null, null)
             throw throwable
@@ -132,7 +190,7 @@ class WallpaperRepositoryImpl @Inject constructor(
     }
 
     @Suppress("DEPRECATION")
-    private fun saveLegacy(url: String, fileName: String) {
+    private fun saveLegacy(url: String, fileName: String): String {
         val pictures = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_PICTURES
         )
@@ -147,6 +205,7 @@ class WallpaperRepositoryImpl @Inject constructor(
             arrayOf(mimeType(url)),
             null
         )
+        return Uri.fromFile(file).toString()
     }
 
     private fun mimeType(url: String): String {
