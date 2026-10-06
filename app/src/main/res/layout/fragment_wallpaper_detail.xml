@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.cute.wallpaper.ringtones.widget.SafeAreaView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,7 +16,6 @@
         android:layout_marginTop="12dp"
         android:background="@drawable/bg_home_action"
         android:padding="5dp"
-        android:contentDescription="@string/search_back"
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_back"
@@ -92,7 +91,6 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:clickable="true"
-            android:contentDescription="@string/wallpaper_action_set"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:padding="18dp"
@@ -149,7 +147,6 @@
             android:layout_marginTop="0dp"
             android:background="@drawable/bg_wallpaper_action"
             android:clickable="true"
-            android:contentDescription="@string/wallpaper_set_home"
             android:elevation="3dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -166,7 +163,6 @@
             android:layout_marginTop="0dp"
             android:background="@drawable/bg_wallpaper_action"
             android:clickable="true"
-            android:contentDescription="@string/wallpaper_set_lock"
             android:elevation="3dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -183,7 +179,6 @@
             android:layout_marginTop="0dp"
             android:background="@drawable/bg_wallpaper_action"
             android:clickable="true"
-            android:contentDescription="@string/wallpaper_set_both"
             android:elevation="3dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -200,7 +195,6 @@
             android:layout_marginTop="72dp"
             android:background="@drawable/bg_wallpaper_action"
             android:clickable="true"
-            android:contentDescription="@string/wallpaper_action_download"
             android:elevation="3dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -217,7 +211,6 @@
             android:layout_marginTop="72dp"
             android:background="@drawable/bg_wallpaper_action"
             android:clickable="true"
-            android:contentDescription="@string/wallpaper_action_share"
             android:elevation="3dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -228,4 +221,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.cute.wallpaper.ringtones.widget.SafeAreaView>

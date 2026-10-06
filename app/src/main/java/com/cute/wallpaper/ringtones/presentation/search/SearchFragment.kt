@@ -18,9 +18,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
@@ -79,13 +77,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     override fun initView() {
         WindowCompat.getInsetsController(requireActivity().window, binding.root)
             .isAppearanceLightStatusBars = true
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val safeArea = insets.getInsets(
-                WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.displayCutout()
-            )
-            view.updatePadding(top = safeArea.top, left = safeArea.left, right = safeArea.right)
-            insets
-        }
 
         binding.etSearch.apply {
             isVisible = viewModel.mode != SearchMode.COLOR
@@ -121,7 +112,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             tab.contentDescription = getString(R.string.search_filter_description, page.label)
         }.also { it.attach() }
 
-        ViewCompat.requestApplyInsets(binding.root)
     }
 
     override fun initListener() {

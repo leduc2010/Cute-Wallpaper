@@ -20,12 +20,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/btnClose"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@android:color/transparent"
-        android:contentDescription="@string/wallpaper_set_close"
         android:padding="11dp"
         android:src="@drawable/ic_close"
         android:tint="@color/primary_500"

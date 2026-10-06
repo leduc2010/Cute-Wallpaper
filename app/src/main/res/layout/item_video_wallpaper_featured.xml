@@ -48,7 +48,6 @@
         android:clickable="true"
         android:focusable="true"
         android:padding="8dp"
-        android:contentDescription="@string/favorites"
         android:src="@drawable/ic_heart_outline" />
 
     <LinearLayout
@@ -68,7 +67,6 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="4dp"
-            android:contentDescription="@string/ringtone_action_play"
             android:src="@drawable/ic_play" />
 
         <TextView

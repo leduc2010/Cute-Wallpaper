@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="80dp"
@@ -207,7 +208,7 @@
                     android:duplicateParentState="true"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_favorite"
-                    android:tint="@color/bottom_nav_icon_tint" />
+                    app:tint="@color/bottom_nav_icon_tint" />
 
                 <TextView
                     android:id="@+id/labelFavorites"

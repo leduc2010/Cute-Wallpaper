@@ -39,7 +39,6 @@ class FavoritesContentAdapter(
     private fun bindFavorite(view: ImageView, card: ContentCard) {
         view.isSelected = card.isFavorite
         view.setImageResource(if (card.isFavorite) R.drawable.ic_heart_filled else R.drawable.ic_heart_outline)
-        view.contentDescription = view.context.getString(R.string.home_remove_favorite, card.content.title)
         view.setOnClickListener { onFavorite(card.content, !card.isFavorite) }
     }
 
@@ -48,7 +47,6 @@ class FavoritesContentAdapter(
             val params = binding.artwork.layoutParams as ConstraintLayout.LayoutParams
             params.dimensionRatio = if (card.content.type == ContentType.PROFILE_PICTURE) "H,1:1" else "H,29:54"
             binding.artwork.layoutParams = params
-            binding.artwork.contentDescription = card.content.title
             Glide.with(binding.artwork).load(card.content.thumbnailUrl ?: card.content.contentUrl).centerCrop().into(binding.artwork)
             binding.artwork.setOnClickListener { onOpen(card.content) }
             binding.playBadge.isVisible = card.content.type == ContentType.VIDEO_WALLPAPER
@@ -66,7 +64,6 @@ class FavoritesContentAdapter(
             binding.playLoading.isVisible = card.isPreparing
             binding.playButton.isVisible = !card.isPreparing
             binding.playButton.setImageResource(if (card.isPlaying) R.drawable.ic_ringtone_pause else R.drawable.ic_play)
-            binding.playButton.contentDescription = binding.root.context.getString(if (card.isPlaying) R.string.ringtone_action_pause else R.string.ringtone_action_play)
             binding.playProgress.setProgressCompat(card.playbackProgress, false)
             binding.playButton.setOnClickListener { onOpen(card.content) }
             binding.root.setOnClickListener { onOpen(card.content) }

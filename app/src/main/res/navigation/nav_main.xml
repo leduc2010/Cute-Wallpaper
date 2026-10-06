@@ -86,4 +86,12 @@
         android:label="@string/quotes">
         <argument android:name="quote_content_id" app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.cute.wallpaper.ringtones.presentation.settings.SettingsFragment"
+        android:label="@string/settings_title" />
+    <fragment
+        android:id="@+id/settingsLanguageFragment"
+        android:name="com.cute.wallpaper.ringtones.presentation.settings.SettingsLanguageFragment"
+        android:label="@string/language_choose_title" />
 </navigation>

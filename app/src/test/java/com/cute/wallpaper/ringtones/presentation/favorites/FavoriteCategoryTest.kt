@@ -22,10 +22,10 @@ class FavoriteCategoryTest {
         assertFalse(FavoriteCategory.DUAL.matches(item))
     }
 
-    @Test fun profileFavoritesRetainSeparateTypeEvenWhenIdsOverlap() {
+    @Test fun profilePicturesAreNotPartOfFavoriteTabs() {
         val profile = ContentItem("same", ContentType.PROFILE_PICTURE, "profile", "Profile").toUiModel()
         val wallpaper = ContentItem("same", ContentType.WALLPAPER, "wallpaper", "Wallpaper").toUiModel()
-        assertEquals(listOf(FavoriteCategory.PROFILE), FavoriteCategory.entries.filter { it.matches(profile) })
+        assertTrue(FavoriteCategory.entries.none { it.matches(profile) })
         assertFalse(profile.ref.toFavoriteKey() == wallpaper.ref.toFavoriteKey())
     }
 }

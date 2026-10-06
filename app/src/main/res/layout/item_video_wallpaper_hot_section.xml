@@ -45,7 +45,6 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="8dp"
-            android:contentDescription="@string/favorites"
             android:src="@drawable/ic_heart_outline" />
 
         <ImageView
@@ -59,7 +58,6 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="4dp"
-            android:contentDescription="@string/ringtone_action_play"
             android:src="@drawable/ic_play" />
     </FrameLayout>
 
@@ -105,7 +103,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="8dp"
-                android:contentDescription="@string/favorites"
             android:src="@drawable/ic_heart_outline" />
 
             <ImageView
@@ -119,7 +116,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="4dp"
-                android:contentDescription="@string/ringtone_action_play"
             android:src="@drawable/ic_play" />
         </FrameLayout>
 
@@ -162,7 +158,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="8dp"
-                android:contentDescription="@string/favorites"
             android:src="@drawable/ic_heart_outline" />
 
             <ImageView
@@ -176,7 +171,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="4dp"
-                android:contentDescription="@string/ringtone_action_play"
             android:src="@drawable/ic_play" />
         </FrameLayout>
     </LinearLayout>
@@ -218,7 +212,6 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="8dp"
-            android:contentDescription="@string/favorites"
             android:src="@drawable/ic_heart_outline" />
 
         <ImageView
@@ -232,7 +225,6 @@
             android:clickable="true"
             android:focusable="true"
             android:padding="4dp"
-            android:contentDescription="@string/ringtone_action_play"
             android:src="@drawable/ic_play" />
     </FrameLayout>
 

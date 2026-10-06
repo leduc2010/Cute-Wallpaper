@@ -2,9 +2,7 @@ package com.cute.wallpaper.ringtones.presentation.detail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.bumptech.glide.Glide
 import com.cute.wallpaper.ringtones.R
@@ -32,13 +30,6 @@ class WallpaperSuccessFragment : BaseFragment<FragmentWallpaperSuccessBinding>()
     override fun initView() {
         WindowCompat.getInsetsController(requireActivity().window, binding.root)
             .isAppearanceLightStatusBars = true
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val safeArea = insets.getInsets(
-                WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.displayCutout()
-            )
-            view.updatePadding(top = safeArea.top, left = safeArea.left, right = safeArea.right)
-            insets
-        }
 
         Glide.with(binding.wallpaperPreview)
             .load(previewUrl)
@@ -51,7 +42,6 @@ class WallpaperSuccessFragment : BaseFragment<FragmentWallpaperSuccessBinding>()
                 WallpaperTarget.BOTH -> R.string.wallpaper_success_both
             }
         )
-        ViewCompat.requestApplyInsets(binding.root)
     }
 
     override fun initListener() {

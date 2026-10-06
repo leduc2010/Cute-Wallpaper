@@ -14,14 +14,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
-        <ImageButton
+        <ImageView
             android:id="@+id/playButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:padding="8dp"
-            android:src="@drawable/ic_play"
-            android:contentDescription="@string/ringtone_action_play" />
+            android:src="@drawable/ic_play" />
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/playLoading"
             android:layout_width="24dp"
@@ -59,7 +58,7 @@
         app:layout_constraintStart_toEndOf="@id/playContainer"
         app:layout_constraintEnd_toStartOf="@id/favoriteButton"
         app:layout_constraintBottom_toBottomOf="@id/playContainer" />
-    <ImageButton
+    <ImageView
         android:id="@+id/favoriteButton"
         android:layout_width="32dp"
         android:layout_height="32dp"
@@ -68,11 +67,10 @@
         android:padding="8dp"
         android:src="@drawable/ic_heart_filled"
         android:tint="@color/quotes_favorite_tint"
-        android:contentDescription="@string/favorites"
         app:layout_constraintEnd_toStartOf="@id/setButton"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
-    <ImageButton
+    <ImageView
         android:id="@+id/setButton"
         android:layout_width="32dp"
         android:layout_height="32dp"
@@ -80,7 +78,6 @@
         android:padding="8dp"
         android:src="@drawable/ic_phone"
         android:tint="@color/primary_500"
-        android:contentDescription="@string/ringtone_action_set"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />

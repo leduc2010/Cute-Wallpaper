@@ -3,7 +3,6 @@ package com.cute.wallpaper.ringtones.presentation.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -24,7 +23,7 @@ internal sealed interface RingtoneFeedRow {
         override val key = "today-picks"
     }
 
-    data class Item(val card: ContentCard, val colorIndex: Int) : RingtoneFeedRow {
+    data class Item(val card: ContentCard, val backgroundRes: Int) : RingtoneFeedRow {
         override val key = "item:${card.content.ref}"
     }
 }
@@ -41,8 +40,17 @@ internal class RingtoneFeedAdapter(
             add(RingtoneFeedRow.Featured(featured))
             if (cards.size > 1) {
                 add(RingtoneFeedRow.SectionHeader)
-                cards.drop(1).forEachIndexed { index, card ->
-                    add(RingtoneFeedRow.Item(card, index))
+                cards.drop(1).forEach { card ->
+                    val backgroundIndex = Math.floorMod(
+                        card.content.id.hashCode(),
+                        ringtoneBackgrounds.size
+                    )
+                    add(
+                        RingtoneFeedRow.Item(
+                            card = card,
+                            backgroundRes = ringtoneBackgrounds[backgroundIndex]
+                        )
+                    )
                 }
             }
         }
@@ -76,10 +84,6 @@ internal class RingtoneFeedAdapter(
         button.setImageResource(
             if (card.isFavorite) R.drawable.ic_heart_filled else R.drawable.ic_heart_outline
         )
-        button.contentDescription = button.context.getString(
-            if (card.isFavorite) R.string.home_remove_favorite else R.string.home_add_favorite,
-            card.content.title
-        )
         button.setOnClickListener { onFavorite(card.content, !card.isFavorite) }
     }
 
@@ -96,8 +100,11 @@ internal class RingtoneFeedAdapter(
                 .ifBlank { item.category.replaceFirstChar(Char::titlecase) }
             binding.playLoading.isVisible = card.isPreparing
             binding.playButton.isVisible = !card.isPreparing
+            binding.playContainer.setBackgroundResource(
+                if (card.isPlaying) R.drawable.bg_ringtone_play_active else R.drawable.bg_home_action
+            )
             binding.playButton.setImageResource(
-                if (card.isPlaying) R.drawable.ic_ringtone_pause else R.drawable.ic_play
+                if (card.isPlaying) R.drawable.ic_ringtone_pause else R.drawable.ic_ringtone_play
             )
             binding.playProgress.setProgressCompat(card.playbackProgress, false)
             binding.playButton.setOnClickListener { onPreview(item) }
@@ -113,25 +120,17 @@ internal class RingtoneFeedAdapter(
         fun bind(row: RingtoneFeedRow.Item) {
             val card = row.card
             val item = card.content
-            binding.root.setBackgroundResource(
-                ringtoneBackgrounds[row.colorIndex % ringtoneBackgrounds.size]
-            )
-            binding.root.foreground = if (card.isPlaying) {
-                AppCompatResources.getDrawable(binding.root.context, R.drawable.bg_ringtone_playing_stroke)
-            } else {
-                null
-            }
+            binding.root.setBackgroundResource(row.backgroundRes)
             binding.contentTitle.text = item.title
             binding.newBadge.isVisible = item.tags.any { it.equals("new", ignoreCase = true) }
             binding.playLoading.isVisible = card.isPreparing
             binding.playButton.isVisible = !card.isPreparing
+            binding.playContainer.setBackgroundResource(
+                if (card.isPlaying) R.drawable.bg_ringtone_play_active else R.drawable.bg_home_action
+            )
             binding.playButton.setImageResource(
-                if (card.isPlaying) R.drawable.ic_ringtone_pause else R.drawable.ic_play
+                if (card.isPlaying) R.drawable.ic_ringtone_pause else R.drawable.ic_ringtone_play
             )
-            binding.playButton.contentDescription = binding.root.context.getString(
-                if (card.isPlaying) R.string.ringtone_action_pause else R.string.ringtone_action_play
-            )
-            binding.playProgress.setProgressCompat(card.playbackProgress, false)
             binding.playButton.setOnClickListener { onPreview(item) }
             binding.root.setOnClickListener { onPreview(item) }
             binding.setButton.setOnClickListener { onSet(item) }
@@ -160,7 +159,10 @@ internal class RingtoneFeedAdapter(
             R.drawable.bg_favorites_ringtone_pink,
             R.drawable.bg_favorites_ringtone_blue,
             R.drawable.bg_favorites_ringtone_orange,
-            R.drawable.bg_favorites_ringtone_purple
+            R.drawable.bg_favorites_ringtone_purple,
+            R.drawable.bg_favorites_ringtone_rose,
+            R.drawable.bg_favorites_ringtone_lilac,
+            R.drawable.bg_favorites_ringtone_peach
         )
     }
 }

@@ -76,27 +76,23 @@
         android:layout_weight="1"
         android:visibility="gone" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/btnVideo"
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/bg_home_header_action"
-        android:contentDescription="@string/home_video_shortcut"
         android:elevation="2dp"
         android:padding="7dp"
         android:src="@drawable/ic_play" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/btnSettings"
         android:layout_width="38dp"
         android:layout_height="38dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/bg_home_header_action"
-        android:clickable="false"
         android:elevation="2dp"
-        android:focusable="false"
-        android:importantForAccessibility="no"
         android:padding="7dp"
         android:src="@drawable/ic_home_settings" />
 </LinearLayout>

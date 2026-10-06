@@ -1,11 +1,14 @@
 package com.cute.wallpaper.ringtones.presentation.quotes
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.cute.wallpaper.ringtones.R
 import com.cute.wallpaper.ringtones.data.local.preference.AppPreferences
 import com.cute.wallpaper.ringtones.domain.model.ContentType
 import com.cute.wallpaper.ringtones.domain.model.QuoteCategory
@@ -16,7 +19,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-enum class QuotesTab { NEW, POPULAR, CATEGORIES }
+enum class QuotesTab(
+    @param:StringRes val titleRes: Int,
+    @param:DrawableRes val iconRes: Int
+) {
+    NEW(R.string.quotes_new, R.drawable.ic_tab_new_quotes),
+    POPULAR(R.string.quotes_popular, R.drawable.ic_tab_popular_quotes),
+    CATEGORIES(R.string.quotes_categories, R.drawable.ic_tab_quote_categories)
+}
 
 data class QuotesState(
     val tab: QuotesTab = QuotesTab.NEW,

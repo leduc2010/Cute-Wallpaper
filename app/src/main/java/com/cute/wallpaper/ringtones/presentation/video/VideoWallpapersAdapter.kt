@@ -113,7 +113,6 @@ internal class VideoWallpapersAdapter(
     }
 
     private fun bindImage(image: ImageView, item: HomeContentUiModel) {
-        image.contentDescription = item.title
         Glide.with(image)
             .load(item.thumbnailUrl ?: item.contentUrl)
             .centerCrop()
@@ -123,11 +122,6 @@ internal class VideoWallpapersAdapter(
     private fun bindFavorite(button: ImageView, card: ContentCard) {
         button.setImageResource(
             if (card.isFavorite) R.drawable.ic_heart_filled else R.drawable.ic_heart_outline
-        )
-        button.contentDescription = button.context.getString(
-            if (card.isFavorite) R.string.home_remove_favorite
-            else R.string.home_add_favorite,
-            card.content.title
         )
         button.setOnClickListener {
             onFavorite(card.content, !card.isFavorite)

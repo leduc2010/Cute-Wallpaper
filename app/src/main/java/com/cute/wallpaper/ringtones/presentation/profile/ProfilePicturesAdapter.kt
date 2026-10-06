@@ -94,15 +94,11 @@ class ProfilePicturesAdapter(
             binding.title.text = item.title
             binding.tags.text = item.tags.joinToString(" · ")
             binding.tags.isVisible = item.tags.isNotEmpty()
-            binding.artwork.contentDescription = item.title
             Glide.with(binding.artwork).load(item.thumbnailUrl ?: item.contentUrl).circleCrop().into(binding.artwork)
             binding.root.setOnClickListener { onOpen(item) }
             binding.useButton.setStartIcon(R.drawable.ic_camera, 12)
             binding.useButton.setOnClickListener { onOpen(item) }
             binding.favoriteButton.isSelected = row.favorite
-            binding.favoriteButton.contentDescription = binding.root.context.getString(
-                if (row.favorite) R.string.home_remove_favorite else R.string.home_add_favorite, item.title
-            )
             binding.favoriteButton.setOnClickListener { onFavorite(item, !row.favorite) }
             // Figma assets are rasterized at 4x; compound drawable bounds retain the design's dp size.
             binding.featuredBadge.setStartIcon(R.drawable.ic_star, 12)
@@ -132,7 +128,6 @@ class ProfilePicturesAdapter(
             binding.avatarContainer.layoutParams = binding.avatarContainer.layoutParams.apply { width = size; height = size }
             binding.artwork.strokeWidth = if (row.caption) dp(binding.root, 2).toFloat() else 0f
             binding.artwork.strokeColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.primary_500))
-            binding.artwork.contentDescription = item.title
             Glide.with(binding.artwork).load(item.thumbnailUrl ?: item.contentUrl).circleCrop().into(binding.artwork)
             binding.title.text = item.title
             binding.tags.text = item.tags.joinToString(" · ")

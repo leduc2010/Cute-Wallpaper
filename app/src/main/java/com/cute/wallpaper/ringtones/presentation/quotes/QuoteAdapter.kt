@@ -90,8 +90,6 @@ class QuoteViewHolder private constructor(
         binding.root.contentDescription = card.content.quote
         binding.root.setOnClickListener { onOpen(card.content) }
         binding.btnFavorite.isSelected = card.favorite
-        binding.btnFavorite.contentDescription = context.getString(
-            if (card.favorite) R.string.home_remove_favorite else R.string.home_add_favorite, card.content.title)
         binding.btnFavorite.setOnClickListener { onFavorite(card.content, !card.favorite) }
         binding.btnPreview.setOnClickListener { onOpen(card.content) }
         binding.btnCopy.setOnClickListener { onCopy(card.content) }

@@ -1,11 +1,20 @@
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.cute.wallpaper.ringtones.widget.SafeAreaView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary_50"
-    android:clipToPadding="false"
-    android:fillViewport="true"
-    android:focusableInTouchMode="true">
+    android:background="@color/primary_50">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/contentScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -19,7 +28,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/bg_home_action"
-            android:contentDescription="@string/search_back"
             android:padding="5dp"
             android:clickable="true"
             android:focusable="true"
@@ -152,7 +160,6 @@
             android:layout_height="32dp"
             android:background="@drawable/profile_editor_navigation_background"
             android:clickable="true"
-            android:contentDescription="@string/profile_editor_next"
             android:focusable="true"
             android:padding="4dp"
             android:scaleX="-1"
@@ -179,7 +186,6 @@
                 android:layout_marginHorizontal="7dp"
                 android:background="@drawable/profile_editor_tool_photo_background"
                 android:clickable="true"
-                android:contentDescription="@string/profile_editor_photo"
                 android:focusable="true"
                 android:padding="12dp"
                 android:src="@drawable/ic_camera" />
@@ -265,4 +271,5 @@
                 android:orientation="horizontal" />
         </HorizontalScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+</com.cute.wallpaper.ringtones.widget.SafeAreaView>

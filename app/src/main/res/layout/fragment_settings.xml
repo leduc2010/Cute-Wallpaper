@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.cute.wallpaper.ringtones.widget.SafeAreaView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/primary_50">
+    <ImageView android:id="@+id/btnBack" android:layout_width="40dp" android:layout_height="40dp"
+        android:layout_marginStart="16dp" android:layout_marginTop="12dp" android:padding="5dp"
+        android:background="@drawable/bg_home_action" android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+    <TextView style="@style/Heading20B" android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="@string/settings_title" android:textColor="@color/primary_900"
+        app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnBack" app:layout_constraintBottom_toBottomOf="@id/btnBack" />
+    <ScrollView android:layout_width="0dp" android:layout_height="0dp" android:layout_marginTop="24dp"
+        android:fillViewport="true" android:scrollbars="none" android:clipToPadding="false"
+        app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnBack" app:layout_constraintBottom_toBottomOf="parent">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:paddingHorizontal="20dp" android:paddingBottom="24dp">
+            <TextView style="@style/Body14B" android:layout_width="match_parent" android:layout_height="37dp"
+                android:paddingStart="8dp" android:gravity="center_vertical" android:text="@string/settings_general" android:textColor="@color/primary_600" />
+            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" app:cardBackgroundColor="@color/tertiary_50" app:cardCornerRadius="24dp"
+                app:cardElevation="0dp" app:strokeWidth="1dp" app:strokeColor="@color/primary_100">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <include android:id="@+id/rowLanguage" layout="@layout/item_settings_row" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <TextView style="@style/Body14B" android:layout_width="match_parent" android:layout_height="37dp"
+                android:paddingStart="8dp" android:gravity="center_vertical" android:text="@string/settings_help_about" android:textColor="@color/primary_600" />
+            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" app:cardBackgroundColor="@color/tertiary_50" app:cardCornerRadius="24dp"
+                app:cardElevation="0dp" app:strokeWidth="1dp" app:strokeColor="@color/primary_100">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <include android:id="@+id/rowRate" layout="@layout/item_settings_row" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/primary_50" />
+                    <include android:id="@+id/rowShare" layout="@layout/item_settings_row" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <TextView style="@style/Body14B" android:layout_width="match_parent" android:layout_height="37dp"
+                android:paddingStart="8dp" android:gravity="center_vertical" android:text="@string/settings_legal" android:textColor="@color/primary_600" />
+            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" app:cardBackgroundColor="@color/tertiary_50" app:cardCornerRadius="24dp"
+                app:cardElevation="0dp" app:strokeWidth="1dp" app:strokeColor="@color/primary_100">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <include android:id="@+id/rowPrivacy" layout="@layout/item_settings_row" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/primary_50" />
+                    <include android:id="@+id/rowDisclaimer" layout="@layout/item_settings_row" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/primary_50" />
+                    <include android:id="@+id/rowDmca" layout="@layout/item_settings_row" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </ScrollView>
+</com.cute.wallpaper.ringtones.widget.SafeAreaView>

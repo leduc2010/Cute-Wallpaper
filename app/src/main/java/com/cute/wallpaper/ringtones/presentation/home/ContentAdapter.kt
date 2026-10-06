@@ -3,7 +3,6 @@ package com.cute.wallpaper.ringtones.presentation.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
@@ -76,11 +75,6 @@ class ContentAdapter(
             if (card.isFavorite) R.drawable.ic_heart_filled
             else R.drawable.ic_heart_outline
         )
-        button.contentDescription = button.context.getString(
-            if (card.isFavorite) R.string.home_remove_favorite
-            else R.string.home_add_favorite,
-            card.content.title
-        )
         button.setOnClickListener {
             onFavorite(card.content, !card.isFavorite)
         }
@@ -91,7 +85,6 @@ class ContentAdapter(
         val params = imageView.layoutParams as ConstraintLayout.LayoutParams
         params.dimensionRatio = if (item.type == ContentType.PROFILE_PICTURE) "H,1:1" else "H,9:16"
         imageView.layoutParams = params
-        imageView.contentDescription = item.title
         imageView.setOnClickListener { onPreview(item) }
 
         Glide.with(imageView)
@@ -127,27 +120,20 @@ class ContentAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(card: ContentCard) {
             val item = card.content
-            binding.root.setBackgroundResource(
-                ringtoneBackgrounds[bindingAdapterPosition.coerceAtLeast(0) % ringtoneBackgrounds.size]
-            )
-            binding.root.foreground = if (card.isPlaying) {
-                AppCompatResources.getDrawable(binding.root.context, R.drawable.bg_ringtone_playing_stroke)
-            } else {
-                null
-            }
+            val backgroundIndex = Math.floorMod(item.id.hashCode(), ringtoneBackgrounds.size)
+            binding.root.setBackgroundResource(ringtoneBackgrounds[backgroundIndex])
             binding.contentTitle.text = item.title
             binding.newBadge.isVisible = item.tags.any { it.equals("new", ignoreCase = true) }
             binding.playLoading.isVisible = card.isPreparing
             binding.playButton.isVisible = !card.isPreparing
+            binding.playContainer.setBackgroundResource(
+                if (card.isPlaying) R.drawable.bg_ringtone_play_active
+                else R.drawable.bg_home_action
+            )
             binding.playButton.setImageResource(
                 if (card.isPlaying) R.drawable.ic_ringtone_pause
-                else R.drawable.ic_play
+                else R.drawable.ic_ringtone_play
             )
-            binding.playButton.contentDescription = binding.root.context.getString(
-                if (card.isPlaying) R.string.ringtone_action_pause
-                else R.string.ringtone_action_play
-            )
-            binding.playProgress.setProgressCompat(card.playbackProgress, false)
             binding.playButton.setOnClickListener { onPreview(item) }
             binding.root.setOnClickListener { onPreview(item) }
             binding.setButton.setOnClickListener { onRingtoneSet(item) }
@@ -197,7 +183,10 @@ class ContentAdapter(
             R.drawable.bg_favorites_ringtone_pink,
             R.drawable.bg_favorites_ringtone_blue,
             R.drawable.bg_favorites_ringtone_orange,
-            R.drawable.bg_favorites_ringtone_purple
+            R.drawable.bg_favorites_ringtone_purple,
+            R.drawable.bg_favorites_ringtone_rose,
+            R.drawable.bg_favorites_ringtone_lilac,
+            R.drawable.bg_favorites_ringtone_peach
         )
     }
 }

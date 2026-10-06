@@ -8,14 +8,10 @@
     <string name="quotes_empty">No quotes available</string>
     <string name="quotes_search_empty">Try another quote keyword.</string>
     <string name="quotes_copied">Quote copied</string>
-    <string name="quotes_copy">Copy quote</string>
-    <string name="quotes_preview">Preview quote image</string>
     <string name="quotes_share">Share quote</string>
-    <string name="quotes_download">Download quote image</string>
     <string name="quotes_saved">Image saved</string>
     <string name="quotes_export_failed">Unable to save or share this quote. Please try again.</string>
     <string name="quotes_permission_denied">Allow storage access to save this image.</string>
-    <string name="quotes_close">Close quote preview</string>
     <string name="quotes_mark" translatable="false">“</string>
     <string name="quotes_unknown_author">Unknown</string>
 </resources>

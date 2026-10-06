@@ -1,0 +1,6 @@
+<resources>
+    <!-- Awaiting LS129-approved links; never substitute another application's policies. -->
+    <string name="settings_privacy_url" translatable="false"></string>
+    <string name="settings_disclaimer_url" translatable="false"></string>
+    <string name="settings_dmca_url" translatable="false"></string>
+</resources>

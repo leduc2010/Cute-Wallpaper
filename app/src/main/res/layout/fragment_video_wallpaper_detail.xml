@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.cute.wallpaper.ringtones.widget.SafeAreaView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,7 +16,6 @@
         android:layout_marginTop="12dp"
         android:background="@drawable/bg_home_action"
         android:clickable="true"
-        android:contentDescription="@string/search_back"
         android:focusable="true"
         android:padding="5dp"
         android:src="@drawable/ic_back"
@@ -37,34 +36,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnBack" />
-
-    <VideoView
-        android:id="@+id/videoPreview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="28dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/wallpaperPager"
-        app:layout_constraintEnd_toEndOf="@id/wallpaperPager"
-        app:layout_constraintStart_toStartOf="@id/wallpaperPager"
-        app:layout_constraintTop_toTopOf="@id/wallpaperPager" />
-
-    <ImageView
-        android:id="@+id/btnPlay"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:background="@drawable/bg_detail_secondary_action"
-        android:clickable="true"
-        android:contentDescription="@string/ringtone_action_play"
-        android:elevation="3dp"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:padding="22dp"
-        android:src="@drawable/ic_play"
-        app:layout_constraintBottom_toBottomOf="@id/wallpaperPager"
-        app:layout_constraintEnd_toEndOf="@id/wallpaperPager"
-        app:layout_constraintStart_toStartOf="@id/wallpaperPager"
-        app:layout_constraintTop_toTopOf="@id/wallpaperPager" />
 
     <ImageView
         android:id="@+id/btnFavorite"
@@ -92,6 +63,7 @@
         android:drawableStart="@drawable/ic_sparkles"
         android:drawablePadding="8dp"
         android:elevation="2dp"
+        android:paddingHorizontal="16dp"
         android:gravity="center"
         android:maxLines="1"
         android:textColor="@color/tertiary_700"
@@ -120,7 +92,6 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:clickable="true"
-            android:contentDescription="@string/live_wallpaper_set"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:padding="18dp"
@@ -148,7 +119,6 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/bg_detail_secondary_action"
         android:clickable="true"
-        android:contentDescription="@string/live_wallpaper_info"
         android:elevation="3dp"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -176,7 +146,6 @@
             android:layout_height="56dp"
             android:background="@drawable/bg_wallpaper_action"
             android:clickable="true"
-            android:contentDescription="@string/video_wallpaper_share"
             android:elevation="3dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -192,7 +161,6 @@
             android:layout_marginStart="72dp"
             android:background="@drawable/bg_wallpaper_action"
             android:clickable="true"
-            android:contentDescription="@string/live_wallpaper_set"
             android:elevation="3dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -202,4 +170,4 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.cute.wallpaper.ringtones.widget.SafeAreaView>

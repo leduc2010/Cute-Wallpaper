@@ -21,6 +21,7 @@
     <string name="no_favorites_yet">No favorites yet</string>
     <string name="no_favorites_description">Tap the heart on wallpapers, sounds, or quotes to save them here.</string>
     <string name="splash_loading">Loading…</string>
+    <string name="splash_ads_hint">This app may contain ads</string>
     <string name="choose_language">Choose language</string>
     <string name="next">Next</string>
     <string name="continue_label">Continue</string>
@@ -40,17 +41,12 @@
     <string name="home_wallpaper_category">Wallpaper</string>
     <string name="home_dual_wallpapers_category">Dual Wallpapers</string>
     <string name="home_best_category">Best</string>
-    <string name="home_video_shortcut">Browse video wallpapers</string>
     <string name="home_filter">Choose a collection</string>
-    <string name="home_add_favorite">Add %1$s to favorites</string>
-    <string name="home_remove_favorite">Remove %1$s from favorites</string>
     <string name="home_no_results">No matches found</string>
     <string name="home_no_results_description">Try another word or choose a different collection.</string>
-    <string name="home_filter_close">Close search filters</string>
     <string name="home_filter_color_description">Filter by %1$s</string>
 
     <!-- Search -->
-    <string name="search_back">Back</string>
     <string name="search_color_description">Show %1$s results</string>
     <string name="search_filter_description">Filter by %1$s</string>
     <string name="search_no_results_title">No wallpapers found</string>
@@ -70,7 +66,6 @@
     <string name="wallpaper_set_home">Set home screen</string>
     <string name="wallpaper_set_lock">Set lock screen</string>
     <string name="wallpaper_set_both">Set both</string>
-    <string name="wallpaper_set_close">Close</string>
     <string name="wallpaper_action_set">Set wallpaper</string>
     <string name="wallpaper_action_download">Download wallpaper</string>
     <string name="wallpaper_action_share">Share wallpaper</string>
@@ -88,7 +83,6 @@
     <string name="live_wallpaper_not_supported">This device does not support live wallpapers.</string>
     <string name="live_wallpaper_preview_failed">Could not open live wallpaper preview.</string>
     <string name="live_wallpaper_success">Live wallpaper applied successfully.</string>
-    <string name="live_wallpaper_info">Live wallpaper tags</string>
     <string name="video_wallpaper_share">Share video wallpaper</string>
     <string name="video_wallpaper_share_chooser">Share video wallpaper</string>
 
@@ -100,9 +94,6 @@
     <string name="ringtone_featured">Featured</string>
     <string name="ringtone_todays_picks">Today’s Picks</string>
     <string name="ringtone_new">★ NEW</string>
-    <string name="ringtone_action_set">Set sound</string>
-    <string name="ringtone_action_play">Play preview</string>
-    <string name="ringtone_action_pause">Pause preview</string>
     <string name="ringtone_set_title">Set as</string>
     <string name="ringtone_set_ringtone">Phone ringtone</string>
     <string name="ringtone_set_notification">Notification sound</string>

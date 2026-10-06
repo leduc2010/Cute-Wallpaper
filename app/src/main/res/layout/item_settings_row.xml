@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="68dp" android:gravity="center_vertical"
+    android:orientation="horizontal" android:paddingHorizontal="16dp" android:background="?attr/selectableItemBackground">
+    <ImageView android:id="@+id/icon" android:layout_width="40dp" android:layout_height="40dp"
+        android:background="@drawable/bg_settings_icon" android:padding="10dp" android:importantForAccessibility="no" />
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+        android:layout_marginStart="16dp" android:layout_marginEnd="12dp" android:orientation="vertical">
+        <TextView android:id="@+id/title" style="@style/Body16S" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:textColor="@color/tertiary_900" />
+        <TextView android:id="@+id/subtitle" style="@style/Label12R" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="2dp" android:visibility="gone"
+            android:textColor="@color/tertiary_500" />
+    </LinearLayout>
+    <ImageView android:layout_width="16dp" android:layout_height="16dp"
+        android:src="@drawable/ic_settings_chevron" android:importantForAccessibility="no" />
+</LinearLayout>

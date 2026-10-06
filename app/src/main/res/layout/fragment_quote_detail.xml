@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<com.cute.wallpaper.ringtones.widget.SafeAreaView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -13,7 +13,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-    <ImageButton
+    <ImageView
         android:id="@+id/btnClose"
         android:layout_width="44dp"
         android:layout_height="44dp"
@@ -22,7 +22,6 @@
         android:padding="6dp"
         android:background="@drawable/bg_home_action"
         android:src="@drawable/ic_close"
-        android:contentDescription="@string/quotes_close"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
     <LinearLayout
@@ -34,16 +33,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-        <ImageButton
+        <ImageView
             android:id="@+id/btnDownload"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:background="@drawable/bg_home_action"
             android:padding="16dp"
             android:src="@drawable/ic_download"
-            android:tint="@color/primary_500"
-            android:contentDescription="@string/quotes_download" />
-        <ImageButton
+            android:tint="@color/primary_500" />
+        <ImageView
             android:id="@+id/btnShare"
             android:layout_width="64dp"
             android:layout_height="64dp"
@@ -51,8 +49,7 @@
             android:background="@drawable/bg_home_action"
             android:padding="16dp"
             android:src="@drawable/ic_share"
-            android:tint="@color/primary_500"
-            android:contentDescription="@string/quotes_share" />
+            android:tint="@color/primary_500" />
     </LinearLayout>
     <ProgressBar
         android:id="@+id/exportProgress"
@@ -64,4 +61,4 @@
         app:layout_constraintBottom_toBottomOf="@id/actions"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.cute.wallpaper.ringtones.widget.SafeAreaView>

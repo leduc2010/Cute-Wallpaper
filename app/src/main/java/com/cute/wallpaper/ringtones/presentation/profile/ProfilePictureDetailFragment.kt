@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
@@ -56,18 +55,6 @@ class ProfilePictureDetailFragment : BaseFragment<FragmentProfilePictureDetailBi
 
     override fun initView() {
         binding.photoPreview.drawSparkles = false
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val safe = insets.getInsets(
-                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
-            )
-            view.updatePadding(
-                top = safe.top,
-                left = safe.left,
-                right = safe.right,
-                bottom = maxOf(safe.bottom, insets.getInsets(WindowInsetsCompat.Type.ime()).bottom)
-            )
-            insets
-        }
         childFragmentManager.setFragmentResultListener(
             ProfilePictureDialogFragment.REQUEST,
             viewLifecycleOwner
@@ -75,7 +62,6 @@ class ProfilePictureDetailFragment : BaseFragment<FragmentProfilePictureDetailBi
             if (result.getBoolean("photo")) openPicker() else requestSave()
         }
         binding.photoPreview.onTransformChanged = viewModel::updateTransform
-        ViewCompat.requestApplyInsets(binding.root)
     }
 
     override fun initListener() {

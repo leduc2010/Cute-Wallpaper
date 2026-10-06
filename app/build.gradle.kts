@@ -60,6 +60,8 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
@@ -71,6 +73,7 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(libs.gson)
+    implementation("com.airbnb.android:lottie:6.7.1")
 
     val glideVersion = "5.0.7"
     implementation("com.github.bumptech.glide:glide:$glideVersion")

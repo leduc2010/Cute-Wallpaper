@@ -4,10 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.core.view.updatePadding
 import com.cute.wallpaper.ringtones.databinding.ViewBottomMainNavigationBinding
 
 class BottomMainNavigationView @JvmOverloads constructor(
@@ -46,8 +43,6 @@ class BottomMainNavigationView @JvmOverloads constructor(
 
     init {
         orientation = HORIZONTAL
-        applyNavigationBarInsets()
-
         items.forEach { item ->
             item.container.setOnClickListener {
                 if (item.tab != selectedTab) {
@@ -57,17 +52,6 @@ class BottomMainNavigationView @JvmOverloads constructor(
         }
 
         renderSelection()
-    }
-
-    private fun applyNavigationBarInsets() {
-        val initialBottomPadding = binding.root.paddingBottom
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val navigationBarBottom = insets
-                .getInsets(WindowInsetsCompat.Type.navigationBars())
-                .bottom
-            view.updatePadding(bottom = initialBottomPadding + navigationBarBottom)
-            insets
-        }
     }
 
     fun setOnTabSelectedListener(listener: ((MainTab) -> Unit)?) {

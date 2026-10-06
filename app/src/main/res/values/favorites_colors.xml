@@ -8,4 +8,11 @@
     <color name="favorites_ringtone_orange_end">#FFAE85</color>
     <color name="favorites_ringtone_purple_start">#A262FF</color>
     <color name="favorites_ringtone_purple_end">#D0A6FF</color>
+
+    <color name="favorites_ringtone_rose_start">#FF5F8F</color>
+    <color name="favorites_ringtone_rose_end">#FF9BB9</color>
+    <color name="favorites_ringtone_lilac_start">#956CFF</color>
+    <color name="favorites_ringtone_lilac_end">#C89CFF</color>
+    <color name="favorites_ringtone_peach_start">#FF7B73</color>
+    <color name="favorites_ringtone_peach_end">#FFC08D</color>
 </resources>

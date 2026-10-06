@@ -10,8 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
@@ -31,12 +29,6 @@ class QuoteDetailFragment : BaseFragment<FragmentQuoteDetailBinding>() {
         FragmentQuoteDetailBinding.inflate(inflater, container, false)
 
     override fun initView() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val safe = insets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
-            view.updatePadding(top = safe.top, bottom = safe.bottom, left = safe.left, right = safe.right)
-            insets
-        }
-        ViewCompat.requestApplyInsets(binding.root)
         binding.poster.setQuote(viewModel.item?.quote.orEmpty())
     }
 

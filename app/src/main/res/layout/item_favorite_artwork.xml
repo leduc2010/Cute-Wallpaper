@@ -26,7 +26,6 @@
         android:src="@drawable/ic_heart_filled"
         android:tint="@color/quotes_favorite_tint"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/favorites"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <ImageView

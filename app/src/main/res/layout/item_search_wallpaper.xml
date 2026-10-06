@@ -36,7 +36,6 @@
         android:layout_margin="8dp"
         android:background="@drawable/bg_favorite_button"
         android:clickable="true"
-        android:contentDescription="@string/favorites"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:padding="6dp"

@@ -12,9 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
@@ -24,6 +22,7 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.cute.wallpaper.ringtones.R
 import com.cute.wallpaper.ringtones.databinding.FragmentWallpaperDetailBinding
 import com.cute.wallpaper.ringtones.domain.model.WallpaperTarget
@@ -92,19 +91,15 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
         }
         WindowCompat.getInsetsController(requireActivity().window, binding.root)
             .isAppearanceLightStatusBars = true
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
-            val safeArea = insets.getInsets(
-                WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.displayCutout()
-            )
-            view.updatePadding(top = safeArea.top, left = safeArea.left, right = safeArea.right)
-            insets
-        }
 
         currentPosition = viewModel.currentPage.value
             ?.takeIf { it in viewModel.items.indices }
             ?: viewModel.initialPageIndex
         binding.wallpaperPager.apply {
-            adapter = WallpaperDetailAdapter(viewModel.items)
+            adapter = WallpaperDetailAdapter(
+                items = viewModel.items,
+                requestManager = Glide.with(this@WallpaperDetailFragment)
+            )
             isSaveEnabled = false
             offscreenPageLimit = 3
             setCurrentItem(currentPosition, false)
@@ -124,7 +119,6 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
             }
         }
         renderItemActions()
-        ViewCompat.requestApplyInsets(binding.root)
     }
 
     override fun initListener() {
@@ -197,9 +191,6 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
         if (!loading) {
             binding.btnPrimaryAction.setImageResource(
                 if (expanded) R.drawable.ic_close_circle else R.drawable.ic_set_wallpaper
-            )
-            binding.btnPrimaryAction.contentDescription = getString(
-                if (expanded) R.string.wallpaper_set_close else R.string.wallpaper_action_set
             )
         }
     }

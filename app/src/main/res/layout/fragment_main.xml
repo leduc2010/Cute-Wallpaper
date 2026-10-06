@@ -14,21 +14,26 @@
         android:stateListAnimator="@null"
         app:liftOnScroll="false">
 
-        <LinearLayout
-            android:id="@+id/collapsibleChrome"
+        <com.cute.wallpaper.ringtones.widget.SafeAreaView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             app:layout_scrollFlags="scroll|enterAlways|snap">
 
-            <include
-                android:id="@+id/header"
-                layout="@layout/view_main_header" />
+            <LinearLayout
+                android:id="@+id/collapsibleChrome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <include
-                android:id="@+id/collections"
-                layout="@layout/view_home_collections" />
-        </LinearLayout>
+                <include
+                    android:id="@+id/header"
+                    layout="@layout/view_main_header" />
+
+            </LinearLayout>
+        </com.cute.wallpaper.ringtones.widget.SafeAreaView>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager2.widget.ViewPager2

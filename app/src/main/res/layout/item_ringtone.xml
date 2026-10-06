@@ -17,14 +17,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/playButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/ringtone_action_play"
-            android:padding="8dp"
-            android:src="@drawable/ic_play" />
+            android:padding="4dp"
+            android:src="@drawable/ic_ringtone_play" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/playLoading"
@@ -49,10 +47,10 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/neutral_0"
-        app:layout_constraintBottom_toTopOf="@id/playProgress"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/newBadge"
         app:layout_constraintStart_toEndOf="@id/playContainer"
-        app:layout_constraintTop_toTopOf="@id/playContainer"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Pink Dream 💕" />
 
     <TextView
@@ -69,43 +67,25 @@
         app:layout_constraintTop_toTopOf="@id/contentTitle"
         tools:visibility="visible" />
 
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/playProgress"
-        android:layout_width="0dp"
-        android:layout_height="3dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="8dp"
-        android:max="100"
-        android:progress="0"
-        app:indicatorColor="@color/neutral_0"
-        app:layout_constraintBottom_toBottomOf="@id/playContainer"
-        app:layout_constraintEnd_toStartOf="@id/favoriteButton"
-        app:layout_constraintStart_toEndOf="@id/playContainer"
-        app:trackColor="@color/alpha_light_30"
-        app:trackCornerRadius="2dp"
-        app:trackThickness="3dp" />
-
-    <ImageButton
+    <ImageView
         android:id="@+id/favoriteButton"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginEnd="6dp"
         android:background="@drawable/bg_home_action"
-        android:contentDescription="@string/favorites"
         android:padding="8dp"
         android:src="@drawable/ic_heart_outline"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/setButton"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
+    <ImageView
         android:id="@+id/setButton"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:background="@drawable/bg_home_action"
-        android:contentDescription="@string/ringtone_action_set"
         android:padding="8dp"
-        android:src="@drawable/ic_phone"
+        android:src="@drawable/ic_ringtone_add_folder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

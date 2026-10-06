@@ -76,7 +76,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
-            <ImageButton
+            <ImageView
                 android:id="@+id/btnFavorite"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
@@ -84,25 +84,23 @@
                 android:padding="8dp"
                 android:src="@drawable/ic_favorite"
                 android:tint="@color/quotes_favorite_tint" />
-            <ImageButton
+            <ImageView
                 android:id="@+id/btnPreview"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="6dp"
                 android:background="@drawable/bg_home_action"
                 android:padding="8dp"
-                android:src="@drawable/ic_quote_preview"
-                android:contentDescription="@string/quotes_preview" />
-            <ImageButton
+                android:src="@drawable/ic_quote_preview" />
+            <ImageView
                 android:id="@+id/btnCopy"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="6dp"
                 android:background="@drawable/bg_home_action"
                 android:padding="8dp"
-                android:src="@drawable/ic_copy"
-                android:contentDescription="@string/quotes_copy" />
-            <ImageButton
+                android:src="@drawable/ic_copy" />
+            <ImageView
                 android:id="@+id/btnShare"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
@@ -110,8 +108,7 @@
                 android:background="@drawable/bg_home_action"
                 android:padding="8dp"
                 android:src="@drawable/ic_share"
-                android:tint="@color/primary_500"
-                android:contentDescription="@string/quotes_share" />
+                app:tint="@color/primary_500" />
         </LinearLayout>
         <ImageView
             android:id="@+id/separator"
