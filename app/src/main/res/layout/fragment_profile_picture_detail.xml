@@ -25,13 +25,12 @@
             android:id="@+id/btnBack"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:scaleType="fitXY"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/bg_home_action"
-            android:padding="5dp"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_back_secondary_action"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -144,11 +143,10 @@
             android:id="@+id/btnPrevious"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:background="@drawable/profile_editor_navigation_background"
+            android:scaleType="fitXY"
             android:clickable="true"
             android:focusable="true"
-            android:padding="4dp"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_back_secondary_action_compact"
             android:translationX="10dp"
             app:layout_constraintBottom_toBottomOf="@id/previewContainer"
             app:layout_constraintEnd_toStartOf="@id/previewContainer"
@@ -158,12 +156,11 @@
             android:id="@+id/btnNext"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:background="@drawable/profile_editor_navigation_background"
+            android:scaleType="fitXY"
             android:clickable="true"
             android:focusable="true"
-            android:padding="4dp"
             android:scaleX="-1"
-            android:src="@drawable/ic_back"
+            android:src="@drawable/ic_back_secondary_action_compact"
             android:translationX="-10dp"
             app:layout_constraintBottom_toBottomOf="@id/previewContainer"
             app:layout_constraintStart_toEndOf="@id/previewContainer"
@@ -183,12 +180,12 @@
                 android:id="@+id/btnPhoto"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:scaleType="fitXY"
                 android:layout_marginHorizontal="7dp"
-                android:background="@drawable/profile_editor_tool_photo_background"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="12dp"
-                android:src="@drawable/ic_camera" />
+                android:stateListAnimator="@animator/enabled_alpha_50"
+                android:src="@drawable/ic_photo_profile_tool" />
 
             <TextView
                 android:id="@+id/btnText"
@@ -198,6 +195,7 @@
                 android:background="@drawable/profile_editor_tool_text_background"
                 android:fontFamily="@font/poppins_semi_bold"
                 android:gravity="center"
+                android:stateListAnimator="@animator/enabled_alpha_50"
                 android:text="T"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
@@ -206,34 +204,34 @@
                 android:id="@+id/btnDownload"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:scaleType="fitXY"
                 android:layout_marginHorizontal="7dp"
-                android:background="@drawable/profile_editor_tool_download_background"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="12dp"
-                android:src="@drawable/ic_download" />
+                android:stateListAnimator="@animator/enabled_alpha_50"
+                android:src="@drawable/ic_download_profile_tool" />
 
             <ImageView
                 android:id="@+id/btnAdjust"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:scaleType="fitXY"
                 android:layout_marginHorizontal="7dp"
-                android:background="@drawable/profile_editor_tool_adjust_background"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="12dp"
-                android:src="@drawable/ic_adjust" />
+                android:stateListAnimator="@animator/enabled_alpha_50"
+                android:src="@drawable/ic_adjust_profile_tool" />
 
             <ImageView
                 android:id="@+id/btnFrame"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
+                android:scaleType="fitXY"
                 android:layout_marginHorizontal="7dp"
-                android:background="@drawable/profile_editor_tool_frame_background"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="12dp"
-                android:src="@drawable/ic_frame" />
+                android:stateListAnimator="@animator/enabled_alpha_50"
+                android:src="@drawable/ic_frame_profile_tool" />
         </LinearLayout>
 
         <TextView

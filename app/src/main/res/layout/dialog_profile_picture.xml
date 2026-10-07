@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,59 +13,32 @@
         android:paddingVertical="28dp">
 
         <ImageView
-            android:id="@+id/privacyIcon"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/profile_editor_privacy_icon_background"
             android:importantForAccessibility="no"
-            android:padding="12dp"
-            android:src="@drawable/ic_camera"
-                android:tint="@color/primary_500" />
-
-        <com.cute.wallpaper.ringtones.presentation.profile.ProfilePhotoView
-            android:id="@+id/downloadPreview"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:importantForAccessibility="no"
-            android:visibility="gone" />
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_profile_privacy_heart" />
 
         <TextView
-            android:id="@+id/title"
-            style="@style/Heading18B"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:textColor="@color/tertiary_900"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/description"
             style="@style/Body14R"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:gravity="center"
+            android:lineHeight="20dp"
             android:text="@string/profile_editor_privacy"
             android:textColor="@color/tertiary_500" />
 
         <TextView
             android:id="@+id/confirm"
-            style="@style/Body16S"
+            style="@style/Button16S"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_marginTop="28dp"
-            android:background="@drawable/bg_detail_primary_action"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_button_primary"
             android:gravity="center"
             android:text="@string/profile_editor_choose_photo"
-            android:textColor="@color/white" />
-
-        <ProgressBar
-            android:id="@+id/saveProgress"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="12dp"
-            android:visibility="gone" />
+            android:textColor="@color/neutral_0" />
     </LinearLayout>
 
     <ImageView

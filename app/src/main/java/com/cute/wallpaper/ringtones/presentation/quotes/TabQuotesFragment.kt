@@ -169,10 +169,7 @@ class TabQuotesFragment : BaseFragment<FragmentTabQuotesBinding>() {
 
             item.root.isSelected = selected
             item.root.setPaddingRelative(0, 0, dp(if (selected) 12 else 0), 0)
-            item.tabIcon.setImageResource(tab.iconRes)
             item.tabTitle.isVisible = selected
-            item.tabTitle.setText(tab.titleRes)
-            item.root.elevation = if (selected) dp(2).toFloat() else 0f
         }
         binding.quoteTabs.requestLayout()
     }

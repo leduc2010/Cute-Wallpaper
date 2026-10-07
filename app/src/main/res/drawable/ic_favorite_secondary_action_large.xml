@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true" android:drawable="@drawable/ic_favorite_selected" />
+    <item>
+        <layer-list>
+            <item android:drawable="@drawable/bg_action_secondary" />
+            <item android:left="13dp" android:top="13dp" android:right="13dp" android:bottom="13dp"
+                android:drawable="@drawable/ic_heart_outline" />
+        </layer-list>
+    </item>
+</selector>

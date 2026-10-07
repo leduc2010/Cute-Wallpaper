@@ -1,120 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="188dp"
-    android:layout_marginBottom="16dp"
-    android:background="@drawable/bg_ringtone_featured"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="14dp">
+    android:layout_marginBottom="16dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/img_ringtone_banner_feature"
+        android:layout_height="match_parent"/>
 
     <TextView
         android:id="@+id/featuredBadge"
         style="@style/Label10B"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
-        android:background="@drawable/profile_feed_badge"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_alpha_light_90_rounded"
         android:drawableStart="@drawable/ic_star"
         android:drawablePadding="4dp"
         android:gravity="center"
         android:paddingHorizontal="8dp"
         android:text="@string/ringtone_featured"
-        android:textColor="@color/primary_500"
-        app:drawableTint="@color/primary_500"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="@color/primary_500" />
 
-    <TextView
-        android:id="@+id/contentTitle"
-        style="@style/Heading20B"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/neutral_0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/featuredBadge"
-        tools:text="Stardust Chime ✨" />
+        android:layout_gravity="top|start"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="56dp"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/contentSubtitle"
-        style="@style/Label12R"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:textColor="@color/neutral_0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/contentTitle"
-        tools:text="Soft, dreamy, sparkling" />
+        <TextView
+            android:id="@+id/contentTitle"
+            style="@style/Heading20B"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/neutral_0"
+            tools:text="Stardust Chime ✨" />
 
-    <FrameLayout
-        android:id="@+id/playContainer"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:background="@drawable/bg_home_action"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:id="@+id/contentSubtitle"
+            style="@style/Label12R"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/neutral_0"
+            tools:text="A soft chime that sparkles like a starry dream." />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/playContainer"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_ringtone_play_state">
+
+            <ImageView
+                android:id="@+id/playButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:duplicateParentState="true"
+                android:padding="4dp"
+                android:src="@drawable/ic_ringtone_play_state" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/playLoading"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:indicatorColor="@color/primary_500"
+                app:indicatorSize="22dp"
+                app:trackColor="@android:color/transparent"
+                app:trackThickness="2dp"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                tools:visibility="visible" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginStart="12dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <com.cute.wallpaper.ringtones.presentation.ringtone.RingtoneWaveformView
+                android:id="@+id/waveform"
+                android:layout_width="48dp"
+                android:layout_height="16dp" />
+
+            <TextView
+                android:id="@+id/duration"
+                style="@style/Label10R"
+                android:layout_width="wrap_content"
+                android:layout_height="14dp"
+                android:layout_marginTop="2dp"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:textColor="@color/alpha_light_80"
+                tools:text="00:12 / 00:30" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
 
         <ImageView
-            android:id="@+id/playButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:padding="8dp"
-            android:src="@drawable/ic_ringtone_play" />
+            android:id="@+id/favoriteButton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_favorite_ringtone_action" />
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/playLoading"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            app:indicatorColor="@color/primary_500"
-            app:indicatorSize="22dp"
-            app:trackColor="@android:color/transparent"
-            app:trackThickness="2dp"
-            tools:visibility="visible" />
-    </FrameLayout>
+        <ImageView
+            android:id="@+id/setButton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:scaleType="fitXY"
+            android:layout_marginStart="6dp"
+            android:src="@drawable/ic_add_folder_secondary_action" />
+    </LinearLayout>
 
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/playProgress"
-        android:layout_width="96dp"
-        android:layout_height="4dp"
-        android:layout_marginStart="12dp"
-        android:max="100"
-        app:indicatorColor="@color/neutral_0"
-        app:layout_constraintBottom_toBottomOf="@id/playContainer"
-        app:layout_constraintStart_toEndOf="@id/playContainer"
-        app:layout_constraintTop_toTopOf="@id/playContainer"
-        app:trackColor="@color/alpha_light_30"
-        app:trackCornerRadius="2dp"
-        app:trackThickness="4dp" />
-
-    <ImageView
-        android:id="@+id/favoriteButton"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/bg_home_action"
-        android:padding="8dp"
-        android:src="@drawable/ic_heart_outline"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/setButton" />
-
-    <ImageView
-        android:id="@+id/setButton"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:background="@drawable/bg_home_action"
-        android:padding="8dp"
-        android:src="@drawable/ic_ringtone_add_folder"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

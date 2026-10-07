@@ -65,7 +65,7 @@ internal class QuotesFeedAdapter(
             val label = category.name.replaceFirstChar(Char::titlecase)
             binding.title.text = label
             binding.explore.text = binding.root.context.getString(R.string.quotes_explore_category, label)
-            bindThumbnail(binding.thumbnail, binding.thumbnailOverlay, category.thumbnailUrl)
+            bindThumbnail(binding.thumbnail, category.thumbnailUrl)
             binding.explore.setOnClickListener { onCategory(category) }
             binding.root.setOnClickListener { onCategory(category) }
         }
@@ -73,15 +73,14 @@ internal class QuotesFeedAdapter(
     private inner class CategoryHolder(val binding: ItemQuoteCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(category: QuoteCategoryUiModel) {
             binding.title.text = category.name.replaceFirstChar(Char::titlecase)
-            bindThumbnail(binding.thumbnail, binding.thumbnailOverlay, category.thumbnailUrl)
+            bindThumbnail(binding.thumbnail, category.thumbnailUrl)
             binding.root.setOnClickListener { onCategory(category) }
         }
     }
 
-    private fun bindThumbnail(image: android.widget.ImageView, overlay: android.view.View, url: String?) {
+    private fun bindThumbnail(image: android.widget.ImageView, url: String?) {
         val hasThumbnail = !url.isNullOrBlank()
         image.isVisible = hasThumbnail
-        overlay.isVisible = hasThumbnail
         if (hasThumbnail) {
             Glide.with(image).load(url).centerCrop().into(image)
         } else {

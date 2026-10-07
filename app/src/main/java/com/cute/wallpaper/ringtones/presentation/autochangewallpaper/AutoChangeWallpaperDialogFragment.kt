@@ -2,7 +2,10 @@ package com.cute.wallpaper.ringtones.presentation.autochangewallpaper
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import kotlin.math.roundToInt
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.cute.wallpaper.ringtones.R
@@ -10,7 +13,6 @@ import com.cute.wallpaper.ringtones.databinding.DialogAutoChangeWallpaperBinding
 import com.cute.wallpaper.ringtones.domain.model.AutoChangeConfig
 import com.cute.wallpaper.ringtones.domain.model.WallpaperTarget
 import com.cute.wallpaper.ringtones.presentation.base.BaseDialogFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -91,15 +93,17 @@ class AutoChangeWallpaperDialogFragment :
 
     private fun ensureEnoughWallpapers(): Boolean {
         if (downloadedCount >= AutoChangeConfig.MIN_DOWNLOADED_WALLPAPERS) return true
-        MaterialAlertDialogBuilder(requireContext())
-            .setMessage(
-                getString(
-                    R.string.auto_change_minimum_dialog_message,
-                    AutoChangeConfig.MIN_DOWNLOADED_WALLPAPERS
-                )
+
+        if (
+            childFragmentManager.findFragmentByTag(
+                AutoChangeMinimumDialogFragment.TAG
+            ) == null
+        ) {
+            AutoChangeMinimumDialogFragment().show(
+                childFragmentManager,
+                AutoChangeMinimumDialogFragment.TAG
             )
-            .setPositiveButton(R.string.ok, null)
-            .show()
+        }
         return false
     }
 
@@ -110,7 +114,7 @@ class AutoChangeWallpaperDialogFragment :
         )
 
         val hasEnoughWallpapers = downloadedCount >= AutoChangeConfig.MIN_DOWNLOADED_WALLPAPERS
-        binding.minimumHint.isVisible = !hasEnoughWallpapers
+        binding.minimumBanner.isVisible = !hasEnoughWallpapers
         binding.minimumHint.text = getString(
             R.string.auto_change_minimum_hint,
             AutoChangeConfig.MIN_DOWNLOADED_WALLPAPERS,
@@ -122,10 +126,10 @@ class AutoChangeWallpaperDialogFragment :
         binding.optionLock.isSelected = selectedTarget == WallpaperTarget.LOCK
         binding.optionBoth.isSelected = selectedTarget == WallpaperTarget.BOTH
 
-        binding.option3Hours.isSelected = selectedIntervalHours == 3
-        binding.option6Hours.isSelected = selectedIntervalHours == 6
-        binding.option12Hours.isSelected = selectedIntervalHours == 12
-        binding.option24Hours.isSelected = selectedIntervalHours == 24
+        renderFrequencyOption(binding.option3Hours, selectedIntervalHours == 3)
+        renderFrequencyOption(binding.option6Hours, selectedIntervalHours == 6)
+        renderFrequencyOption(binding.option12Hours, selectedIntervalHours == 12)
+        renderFrequencyOption(binding.option24Hours, selectedIntervalHours == 24)
 
         val changed = selectedTarget != savedTarget ||
             selectedIntervalHours != savedIntervalHours
@@ -133,6 +137,34 @@ class AutoChangeWallpaperDialogFragment :
         binding.btnEnable.isVisible = !enabled
         binding.btnSaveChanges.isVisible = enabled && changed
         binding.btnStop.isVisible = enabled
+        if (enabled) {
+            val topMarginDp = if (changed) 12 else 32
+            val params = binding.btnStop.layoutParams as ViewGroup.MarginLayoutParams
+            params.topMargin = dp(topMarginDp)
+            binding.btnStop.layoutParams = params
+        }
+    }
+
+    private fun renderFrequencyOption(view: View, selected: Boolean) {
+        view.isSelected = selected
+        val params = view.layoutParams
+        val targetHeight = dp(if (selected) 44 else 40)
+        if (params.height != targetHeight) {
+            params.height = targetHeight
+            view.layoutParams = params
+        }
+    }
+
+    private fun dp(value: Int): Int {
+        return (value * resources.displayMetrics.density).roundToInt()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.apply {
+            addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+            setDimAmount(0.7f)
+        }
     }
 
     companion object {

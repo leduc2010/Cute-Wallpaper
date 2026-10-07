@@ -64,6 +64,7 @@ class RingtoneCategoryFragment : BaseFragment<FragmentHomeCollectionBinding>() {
         viewModel.searchQuery.observe(viewLifecycleOwner) { renderContent() }
         viewModel.favoriteKeys.observe(viewLifecycleOwner) { renderContent() }
         ringtoneViewModel.playbackState.observe(viewLifecycleOwner) { renderContent() }
+        ringtoneViewModel.durationByContentId.observe(viewLifecycleOwner) { renderContent() }
         viewModel.bottomContentPadding.observe(viewLifecycleOwner) { padding ->
             binding.rvContent.updatePadding(bottom = padding + dp(16))
         }
@@ -73,16 +74,25 @@ class RingtoneCategoryFragment : BaseFragment<FragmentHomeCollectionBinding>() {
         val favorites = viewModel.favoriteKeys.value.orEmpty()
         val query = viewModel.searchQuery.value.orEmpty().trim()
         val playback = ringtoneViewModel.playbackState.value
-        val cards = viewModel.contentItems.value.orEmpty().filter { item ->
-            item.type == ContentType.RINGTONE && item.category == category.remoteKey && item.matches(query)
-        }.map { item ->
+        val durations = ringtoneViewModel.durationByContentId.value.orEmpty()
+        val items = viewModel.contentItems.value.orEmpty().filter { item ->
+            item.type == ContentType.RINGTONE &&
+                item.category == category.remoteKey &&
+                item.matches(query)
+        }
+        items.firstOrNull()?.let { ringtoneViewModel.ensureDuration(it.id) }
+
+        val cards = items.map { item ->
             val active = playback?.contentId == item.id
+            val playbackDuration = playback?.durationMs?.takeIf { active && it > 0 }
             ContentCard(
                 content = item,
                 isFavorite = item.ref.toFavoriteKey() in favorites,
                 isPlaying = active && playback?.isPlaying == true,
                 isPreparing = active && playback?.isPreparing == true,
-                playbackProgress = if (active) playback?.progress ?: 0 else 0
+                playbackProgress = if (active) playback?.progress ?: 0 else 0,
+                currentPositionMs = if (active) playback?.currentPositionMs ?: 0L else 0L,
+                durationMs = playbackDuration ?: durations[item.id] ?: 0L
             )
         }
         feedAdapter?.submitCards(cards)

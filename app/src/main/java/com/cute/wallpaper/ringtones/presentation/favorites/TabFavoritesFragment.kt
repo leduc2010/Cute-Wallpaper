@@ -110,6 +110,7 @@ class TabFavoritesFragment : BaseFragment<FragmentTabFavoritesBinding>() {
         }
         viewModel.searchVisible.observe(viewLifecycleOwner) { binding.etSearch.isVisible = it }
         ringtoneViewModel.playbackState.observe(viewLifecycleOwner) { renderContent() }
+        viewModel.durationByContentId.observe(viewLifecycleOwner) { renderContent() }
         ringtoneViewModel.actionEvent.observe(viewLifecycleOwner) { event -> event.getContentIfNotHandled()?.let(::handleRingtoneAction) }
         mainViewModel.bottomContentPadding.observe(viewLifecycleOwner) { padding ->
             binding.rvContent.updatePadding(bottom = padding + dp(16))
@@ -142,11 +143,28 @@ class TabFavoritesFragment : BaseFragment<FragmentTabFavoritesBinding>() {
         }
         val query = viewModel.searchQuery.value.orEmpty().trim()
         val filtered = saved.filter { category.matches(it) && it.matches(query) }
+        if (category == FavoriteCategory.VIDEO) {
+            filtered.forEach { item ->
+                viewModel.ensureVideoDuration(item.id, item.contentUrl)
+            }
+        }
         val playback = ringtoneViewModel.playbackState.value
+        val durations = viewModel.durationByContentId.value.orEmpty()
         val cards = filtered.map { item ->
             val active = playback?.contentId == item.id
-            ContentCard(item, true, active && playback?.isPlaying == true, active && playback?.isPreparing == true,
-                if (active) playback?.progress ?: 0 else 0)
+            ContentCard(
+                content = item,
+                isFavorite = true,
+                isPlaying = active && playback?.isPlaying == true,
+                isPreparing = active && playback?.isPreparing == true,
+                playbackProgress = if (active) playback?.progress ?: 0 else 0,
+                currentPositionMs = if (active) playback?.currentPositionMs ?: 0L else 0L,
+                durationMs = when {
+                    item.type == ContentType.VIDEO_WALLPAPER -> durations[item.id] ?: 0L
+                    active -> playback?.durationMs ?: 0L
+                    else -> 0L
+                }
+            )
         }
         when (category) {
             FavoriteCategory.QUOTES -> quoteAdapter?.submitList(filtered.map { QuoteCard(it, true) })
@@ -193,7 +211,6 @@ class TabFavoritesFragment : BaseFragment<FragmentTabFavoritesBinding>() {
             item.root.isSelected = isSelected
             item.root.setPaddingRelative(0, 0, dp(if (isSelected) 12 else 0), 0)
             item.tabTitle.isVisible = isSelected
-            item.root.elevation = if (isSelected) dp(2).toFloat() else 0f
         }
     }
 

@@ -7,7 +7,7 @@ data class AutoChangeConfig(
 ) {
     companion object {
         const val MIN_DOWNLOADED_WALLPAPERS = 5
-        const val DEFAULT_INTERVAL_HOURS = 12
+        const val DEFAULT_INTERVAL_HOURS = 6
 
         val SUPPORTED_INTERVAL_HOURS = setOf(3, 6, 12, 24)
     }

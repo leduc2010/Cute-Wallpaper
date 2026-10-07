@@ -6,7 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.ActivityNotFoundException
 import android.os.Build
-import android.widget.Toast
+import com.cute.wallpaper.ringtones.utils.showCenterToast
+import com.cute.wallpaper.ringtones.utils.showErrorToast
 import com.cute.wallpaper.ringtones.R
 import com.cute.wallpaper.ringtones.presentation.home.HomeContentUiModel
 
@@ -17,7 +18,7 @@ object QuoteActions {
         clipboard.setPrimaryClip(ClipData.newPlainText(context.getString(R.string.quotes_new), text))
         // Android 13+ already presents the system clipboard confirmation.
         if (Build.VERSION.SDK_INT < 33) {
-            Toast.makeText(context, R.string.quotes_copied, Toast.LENGTH_SHORT).show()
+            context.showCenterToast(R.string.quotes_copied)
         }
     }
 
@@ -29,7 +30,7 @@ object QuoteActions {
                 putExtra(Intent.EXTRA_TEXT, text)
             }, context.getString(R.string.quotes_share)))
         } catch (_: ActivityNotFoundException) {
-            Toast.makeText(context, R.string.quotes_export_failed, Toast.LENGTH_SHORT).show()
+            context.showErrorToast(R.string.quotes_export_failed)
         }
     }
 }

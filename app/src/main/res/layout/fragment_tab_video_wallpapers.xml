@@ -7,7 +7,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/etSearch"
-        style="@style/Widget.CuteWallpaper.SearchField.Standard"
+        style="@style/Widget.CuteWallpaper.SearchField"
         android:layout_width="0dp"
         android:layout_marginHorizontal="18dp"
         android:layout_marginTop="16dp"

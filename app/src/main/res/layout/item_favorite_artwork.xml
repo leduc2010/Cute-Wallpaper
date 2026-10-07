@@ -18,25 +18,38 @@
         android:id="@+id/favoriteButton"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:scaleType="fitXY"
         android:layout_margin="8dp"
-        android:background="@drawable/quotes_favorite_background"
         android:clickable="true"
         android:focusable="true"
-        android:padding="8dp"
-        android:src="@drawable/ic_heart_filled"
-        android:tint="@color/quotes_favorite_tint"
+        android:src="@drawable/ic_favorite_featured_light_action"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/playBadge"
         android:layout_width="16dp"
         android:layout_height="16dp"
+        android:scaleType="fitXY"
         android:layout_margin="8dp"
-        android:src="@drawable/ic_play"
-        android:tint="@color/neutral_0"
         android:importantForAccessibility="no"
+        android:src="@drawable/ic_play_video_favorite_action"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/artwork" />
+        app:layout_constraintBottom_toBottomOf="@id/artwork"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/videoDuration"
+        style="@style/Label10B"
+        android:layout_width="wrap_content"
+        android:layout_height="14dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:textColor="@color/tertiary_50"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/artwork"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

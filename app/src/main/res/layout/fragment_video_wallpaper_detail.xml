@@ -12,13 +12,12 @@
         android:id="@+id/btnBack"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:scaleType="fitXY"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
-        android:background="@drawable/bg_home_action"
         android:clickable="true"
         android:focusable="true"
-        android:padding="5dp"
-        android:src="@drawable/ic_back"
+        android:src="@drawable/ic_back_secondary_action"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,39 +40,16 @@
         android:id="@+id/btnFavorite"
         android:layout_width="52dp"
         android:layout_height="52dp"
+        android:scaleType="fitXY"
         android:layout_marginStart="50dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/bg_detail_secondary_action"
         android:clickable="true"
         android:elevation="3dp"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:padding="13dp"
-        android:src="@drawable/ic_heart_outline"
+        android:src="@drawable/ic_favorite_secondary_action_large"
         app:layout_constraintBottom_toBottomOf="@id/wallpaperPager"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/resultMessage"
-        style="@style/Label12R"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginBottom="18dp"
-        android:background="@drawable/bg_detail_result_message"
-        android:drawableStart="@drawable/ic_sparkles"
-        android:drawablePadding="8dp"
-        android:elevation="2dp"
-        android:paddingHorizontal="16dp"
-        android:gravity="center"
-        android:maxLines="1"
-        android:textColor="@color/tertiary_700"
-        android:visibility="gone"
-        app:drawableTint="@color/primary_500"
-        app:layout_constraintBottom_toTopOf="@id/primaryActionContainer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="Wallpaper set on home screen"
-        tools:visibility="visible" />
 
     <FrameLayout
         android:id="@+id/primaryActionContainer"
@@ -90,12 +66,11 @@
             android:id="@+id/btnPrimaryAction"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:padding="18dp"
-            android:src="@drawable/ic_set_wallpaper" />
+            android:src="@drawable/ic_wallpaper_primary_action_state" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/actionProgress"
@@ -115,15 +90,14 @@
         android:id="@+id/btnInfo"
         android:layout_width="52dp"
         android:layout_height="52dp"
+        android:scaleType="fitXY"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/bg_detail_secondary_action"
         android:clickable="true"
         android:elevation="3dp"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:padding="13dp"
-        android:src="@drawable/ic_info"
+        android:src="@drawable/ic_info_secondary_action"
         app:layout_constraintBottom_toBottomOf="@id/wallpaperPager"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -144,13 +118,12 @@
             android:id="@+id/actionShare"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:background="@drawable/bg_wallpaper_action"
+            android:scaleType="fitXY"
             android:clickable="true"
             android:elevation="3dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:padding="16dp"
-            android:src="@drawable/ic_share"
+            android:src="@drawable/ic_share_wallpaper_action"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -158,14 +131,13 @@
             android:id="@+id/actionSetLiveWallpaper"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:scaleType="fitXY"
             android:layout_marginStart="72dp"
-            android:background="@drawable/bg_wallpaper_action"
             android:clickable="true"
             android:elevation="3dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:padding="16dp"
-            android:src="@drawable/ic_phone"
+            android:src="@drawable/ic_phone_wallpaper_action"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

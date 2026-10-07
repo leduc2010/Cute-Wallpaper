@@ -14,35 +14,13 @@
         android:layout_height="match_parent"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop" />
-    <View
-        android:id="@+id/thumbnailOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/alpha_light_70" />
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingHorizontal="16dp">
-        <ImageView
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginTop="12dp"
-            android:importantForAccessibility="no"
-            android:padding="2dp"
-            android:src="@drawable/ic_quote_category"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
         <TextView
             android:id="@+id/title"
             style="@style/Body14B"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textColor="@color/tertiary_900"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:textColor="@color/tertiary_900"/>
 </com.google.android.material.card.MaterialCardView>

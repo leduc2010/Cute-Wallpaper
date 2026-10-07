@@ -208,7 +208,7 @@
                     android:duplicateParentState="true"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_favorite"
-                    app:tint="@color/bottom_nav_icon_tint" />
+                    app:tint="@color/bottom_nav_item_tint" />
 
                 <TextView
                     android:id="@+id/labelFavorites"

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/primary_50">
     <ImageView android:id="@+id/btnBack" android:layout_width="40dp" android:layout_height="40dp"
-        android:layout_marginStart="16dp" android:layout_marginTop="12dp" android:padding="5dp"
-        android:background="@drawable/bg_home_action" android:src="@drawable/ic_back"
+        android:layout_marginStart="16dp" android:layout_marginTop="12dp" android:padding="5dp" android:src="@drawable/ic_back_secondary_action"
         app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
     <TextView style="@style/Heading20B" android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="@string/settings_title" android:textColor="@color/primary_900"

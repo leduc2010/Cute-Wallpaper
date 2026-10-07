@@ -60,6 +60,23 @@ class ProfilePhotoView @JvmOverloads constructor(
     var thumbnailCornerRadius: Float? = null
     var onTransformChanged: ((ProfilePhotoTransform) -> Unit)? = null
 
+    init {
+        if (attrs != null) {
+            context.obtainStyledAttributes(attrs, R.styleable.ProfilePhotoView).use { typedArray ->
+                if (typedArray.hasValue(R.styleable.ProfilePhotoView_profileThumbnailCornerRadius)) {
+                    thumbnailCornerRadius = typedArray.getDimension(
+                        R.styleable.ProfilePhotoView_profileThumbnailCornerRadius,
+                        0f
+                    )
+                }
+                drawSparkles = typedArray.getBoolean(
+                    R.styleable.ProfilePhotoView_profileDrawSparkles,
+                    drawSparkles
+                )
+            }
+        }
+    }
+
     private val scaleDetector = ScaleGestureDetector(context,
         object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
             override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {

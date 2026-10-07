@@ -38,7 +38,6 @@ class FavoritesContentAdapter(
 
     private fun bindFavorite(view: ImageView, card: ContentCard) {
         view.isSelected = card.isFavorite
-        view.setImageResource(if (card.isFavorite) R.drawable.ic_heart_filled else R.drawable.ic_heart_outline)
         view.setOnClickListener { onFavorite(card.content, !card.isFavorite) }
     }
 
@@ -49,7 +48,10 @@ class FavoritesContentAdapter(
             binding.artwork.layoutParams = params
             Glide.with(binding.artwork).load(card.content.thumbnailUrl ?: card.content.contentUrl).centerCrop().into(binding.artwork)
             binding.artwork.setOnClickListener { onOpen(card.content) }
-            binding.playBadge.isVisible = card.content.type == ContentType.VIDEO_WALLPAPER
+            val isVideo = card.content.type == ContentType.VIDEO_WALLPAPER
+            binding.playBadge.isVisible = isVideo
+            binding.videoDuration.isVisible = isVideo
+            binding.videoDuration.text = formatDuration(card.durationMs)
             bindFavorite(binding.favoriteButton, card)
         }
     }
@@ -60,16 +62,26 @@ class FavoritesContentAdapter(
                 bindingAdapterPosition.coerceAtLeast(0) % ringtoneBackgrounds.size
             ]
             binding.root.setBackgroundResource(background)
-            binding.contentTitle.text = card.content.title
+            binding.contentTitle.text = ringtoneTitle(card.content.title)
             binding.playLoading.isVisible = card.isPreparing
             binding.playButton.isVisible = !card.isPreparing
-            binding.playButton.setImageResource(if (card.isPlaying) R.drawable.ic_ringtone_pause else R.drawable.ic_play)
-            binding.playProgress.setProgressCompat(card.playbackProgress, false)
+            binding.playContainer.isSelected = card.isPlaying
             binding.playButton.setOnClickListener { onOpen(card.content) }
             binding.root.setOnClickListener { onOpen(card.content) }
             binding.setButton.setOnClickListener { onSetRingtone(card.content) }
             bindFavorite(binding.favoriteButton, card)
         }
+    }
+
+    private fun ringtoneTitle(title: String): String =
+        if (title.contains("💕")) title else "$title 💕"
+
+    private fun formatDuration(durationMs: Long): String {
+        if (durationMs <= 0L) return "--:--"
+        val totalSeconds = durationMs / 1_000L
+        val minutes = totalSeconds / 60L
+        val seconds = totalSeconds % 60L
+        return "%02d:%02d".format(minutes, seconds)
     }
 
     private val ringtoneBackgrounds = intArrayOf(

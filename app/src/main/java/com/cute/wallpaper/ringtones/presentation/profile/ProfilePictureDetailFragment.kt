@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -23,6 +22,8 @@ import com.cute.wallpaper.ringtones.R
 import com.cute.wallpaper.ringtones.databinding.FragmentProfilePictureDetailBinding
 import com.cute.wallpaper.ringtones.databinding.ItemProfileEditorPresetBinding
 import com.cute.wallpaper.ringtones.presentation.base.BaseFragment
+import com.cute.wallpaper.ringtones.utils.showErrorToast
+import com.cute.wallpaper.ringtones.utils.showSuccessToast
 import com.leansoft.ads.AdManager
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,7 +46,8 @@ class ProfilePictureDetailFragment : BaseFragment<FragmentProfilePictureDetailBi
         }
     }
     private val storagePermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-        if (granted) savePicture() else toast(R.string.profile_editor_permission_denied)
+        if (granted) savePicture()
+        else requireContext().showErrorToast(R.string.profile_editor_permission_denied)
     }
 
     override fun inflateBinding(
@@ -58,8 +60,14 @@ class ProfilePictureDetailFragment : BaseFragment<FragmentProfilePictureDetailBi
         childFragmentManager.setFragmentResultListener(
             ProfilePictureDialogFragment.REQUEST,
             viewLifecycleOwner
-        ) { _, result ->
-            if (result.getBoolean("photo")) openPicker() else requestSave()
+        ) { _, _ ->
+            openPicker()
+        }
+        childFragmentManager.setFragmentResultListener(
+            ProfileDownloadDialogFragment.REQUEST,
+            viewLifecycleOwner
+        ) { _, _ ->
+            requestSave()
         }
         binding.photoPreview.onTransformChanged = viewModel::updateTransform
     }
@@ -79,12 +87,12 @@ class ProfilePictureDetailFragment : BaseFragment<FragmentProfilePictureDetailBi
         }
         binding.btnPhoto.setOnClickListener {
             hideKeyboard()
-            showDialog(true)
+            showPrivacyDialog()
         }
         binding.btnText.setOnClickListener { viewModel.tool.value = "TEXT" }
         binding.btnDownload.setOnClickListener {
             hideKeyboard()
-            showDialog(false)
+            showDownloadDialog()
         }
         binding.btnAdjust.setOnClickListener {
             hideKeyboard()
@@ -132,10 +140,14 @@ class ProfilePictureDetailFragment : BaseFragment<FragmentProfilePictureDetailBi
         viewModel.result.observe(viewLifecycleOwner) { event ->
             event.getContentIfNotHandled()?.let { success ->
                 if (success) {
-                    (childFragmentManager.findFragmentByTag(ProfilePictureDialogFragment.DOWNLOAD)
-                        as? ProfilePictureDialogFragment)?.dismiss()
+                    (childFragmentManager.findFragmentByTag(ProfileDownloadDialogFragment.TAG)
+                        as? ProfileDownloadDialogFragment)?.dismiss()
                 }
-                toast(if (success) R.string.profile_editor_saved else R.string.profile_editor_save_failed)
+                if (success) {
+                    requireContext().showSuccessToast(R.string.profile_editor_saved)
+                } else {
+                    requireContext().showErrorToast(R.string.profile_editor_save_failed)
+                }
             }
         }
     }
@@ -170,7 +182,6 @@ class ProfilePictureDetailFragment : BaseFragment<FragmentProfilePictureDetailBi
         val buttons = listOf(binding.btnPhoto, binding.btnText, binding.btnDownload, binding.btnAdjust, binding.btnFrame)
         val tools = listOf("PHOTO", "TEXT", "DOWNLOAD", "ADJUST", "FRAME")
         buttons.forEachIndexed { i, button ->
-            button.alpha = if (button.isEnabled) 1f else .5f
             button.isSelected = tool == tools[i]
         }
         binding.positionHint.isVisible = tool == "PHOTO" && viewModel.photoUri.value.orEmpty().isNotEmpty() && ready
@@ -234,11 +245,23 @@ class ProfilePictureDetailFragment : BaseFragment<FragmentProfilePictureDetailBi
 
     private fun backgroundColor() = ContextCompat.getColor(requireContext(), R.color.profile_editor_preview_background)
 
-    private fun showDialog(photo: Boolean) {
+    private fun showPrivacyDialog() {
         if (childFragmentManager.isStateSaved) return
-        val tag = if (photo) ProfilePictureDialogFragment.PRIVACY else ProfilePictureDialogFragment.DOWNLOAD
-        if (childFragmentManager.findFragmentByTag(tag) == null) {
-            ProfilePictureDialogFragment.newInstance(photo).show(childFragmentManager, tag)
+        if (childFragmentManager.findFragmentByTag(ProfilePictureDialogFragment.TAG) == null) {
+            ProfilePictureDialogFragment().show(
+                childFragmentManager,
+                ProfilePictureDialogFragment.TAG
+            )
+        }
+    }
+
+    private fun showDownloadDialog() {
+        if (childFragmentManager.isStateSaved) return
+        if (childFragmentManager.findFragmentByTag(ProfileDownloadDialogFragment.TAG) == null) {
+            ProfileDownloadDialogFragment().show(
+                childFragmentManager,
+                ProfileDownloadDialogFragment.TAG
+            )
         }
     }
 
@@ -250,7 +273,7 @@ class ProfilePictureDetailFragment : BaseFragment<FragmentProfilePictureDetailBi
             picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         } catch (_: Exception) {
             restoreResumeAds()
-            toast(R.string.profile_editor_picker_failed)
+            requireContext().showErrorToast(R.string.profile_editor_picker_failed)
         }
     }
 
@@ -278,10 +301,6 @@ class ProfilePictureDetailFragment : BaseFragment<FragmentProfilePictureDetailBi
         binding.nameInput.clearFocus()
         (requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
             .hideSoftInputFromWindow(binding.root.windowToken, 0)
-    }
-
-    private fun toast(message: Int) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()

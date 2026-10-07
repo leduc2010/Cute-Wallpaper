@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/bg_onboarding_button"
+                android:background="@drawable/bg_button_primary"
                 android:gravity="center"
                 android:text="@string/continue_label"
                 android:textColor="@color/neutral_0" />

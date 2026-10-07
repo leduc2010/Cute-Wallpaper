@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.cute.wallpaper.ringtones.R
 import com.cute.wallpaper.ringtones.databinding.FragmentWallpaperDetailBinding
@@ -31,6 +30,8 @@ import com.cute.wallpaper.ringtones.presentation.home.HomeContentUiModel
 import com.cute.wallpaper.ringtones.presentation.main.MainTab
 import com.cute.wallpaper.ringtones.presentation.search.SearchMode
 import com.cute.wallpaper.ringtones.presentation.search.SearchViewModel
+import com.cute.wallpaper.ringtones.utils.showErrorToast
+import com.cute.wallpaper.ringtones.utils.showSuccessToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.absoluteValue
 
@@ -38,7 +39,6 @@ import kotlin.math.absoluteValue
 class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
     private val viewModel: WallpaperDetailViewModel by viewModels()
     private var currentPosition = 0
-    private var resultMessageHideAction: Runnable? = null
 
     private val downloadPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -46,11 +46,7 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
         if (granted) {
             viewModel.downloadWallpaper()
         } else {
-            Toast.makeText(
-                requireContext(),
-                R.string.wallpaper_download_permission_denied,
-                Toast.LENGTH_SHORT
-            ).show()
+            requireContext().showErrorToast(R.string.wallpaper_download_permission_denied)
         }
     }
 
@@ -58,7 +54,6 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
         override fun onPageSelected(position: Int) {
             currentPosition = position
             viewModel.selectPage(position)
-            hideResultMessage()
             renderFavorite()
             renderItemActions()
         }
@@ -150,10 +145,8 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
 
     private fun renderItemActions() {
         val item = currentItem()
-        binding.actionDownload.alpha = if (item?.downloadEnabled == true) 1f else 0.5f
         binding.actionDownload.isEnabled = item?.downloadEnabled == true &&
             viewModel.actionState.value != DetailActionState.LOADING
-        binding.btnInfo.alpha = if (item?.tags?.isNotEmpty() == true) 1f else 0.5f
         binding.btnInfo.isEnabled = item?.tags?.isNotEmpty() == true &&
             viewModel.actionState.value != DetailActionState.LOADING
     }
@@ -165,16 +158,14 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
         val favorite = item?.let {
             it.ref.toFavoriteKey() in viewModel.favoriteKeys.value.orEmpty()
         } == true
-        binding.btnFavorite.setImageResource(
-            if (favorite) R.drawable.ic_heart_filled
-            else R.drawable.ic_heart_outline
-        )
+        binding.btnFavorite.isSelected = favorite
     }
 
     private fun renderActionState(state: DetailActionState) {
         val expanded = state == DetailActionState.EXPANDED
         val loading = state == DetailActionState.LOADING
         animateActionMenu(expanded)
+        binding.btnPrimaryAction.isSelected = expanded
         binding.btnPrimaryAction.isVisible = !loading
         binding.actionProgress.isVisible = loading
         binding.wallpaperPager.isUserInputEnabled = !loading
@@ -188,22 +179,21 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
         ).forEach { it.isEnabled = !loading }
         binding.primaryActionContainer.isEnabled = !loading
         renderItemActions()
-        if (!loading) {
-            binding.btnPrimaryAction.setImageResource(
-                if (expanded) R.drawable.ic_close_circle else R.drawable.ic_set_wallpaper
-            )
-        }
     }
 
     private fun showActionResult(result: DetailActionResult) {
         when (result) {
             is DetailActionResult.SetSuccess -> showSetSuccess(result.target)
 
-            DetailActionResult.SetFailed -> showToast(R.string.wallpaper_set_failed)
-            DetailActionResult.DownloadSuccess -> showToast(R.string.wallpaper_download_success)
-            DetailActionResult.DownloadFailed -> showToast(R.string.wallpaper_download_failed)
+            DetailActionResult.SetFailed ->
+                requireContext().showErrorToast(R.string.wallpaper_set_failed)
+            DetailActionResult.DownloadSuccess ->
+                requireContext().showSuccessToast(R.string.wallpaper_download_success)
+            DetailActionResult.DownloadFailed ->
+                requireContext().showErrorToast(R.string.wallpaper_download_failed)
             is DetailActionResult.ShareReady -> shareWallpaper(Uri.parse(result.uri))
-            DetailActionResult.ShareFailed -> showToast(R.string.wallpaper_share_failed)
+            DetailActionResult.ShareFailed ->
+                requireContext().showErrorToast(R.string.wallpaper_share_failed)
         }
     }
 
@@ -213,39 +203,7 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
             WallpaperTarget.LOCK -> R.string.wallpaper_success_lock
             WallpaperTarget.BOTH -> R.string.wallpaper_success_both
         }
-        val messageView = binding.resultMessage
-        resultMessageHideAction?.let(messageView::removeCallbacks)
-        messageView.animate().cancel()
-        messageView.setText(messageRes)
-        messageView.alpha = 0f
-        messageView.translationY = dp(8).toFloat()
-        messageView.isVisible = true
-        messageView.animate()
-            .alpha(1f)
-            .translationY(0f)
-            .setDuration(160L)
-            .start()
-
-        val hideAction = Runnable {
-            messageView.animate()
-                .alpha(0f)
-                .translationY(dp(8).toFloat())
-                .setDuration(140L)
-                .withEndAction { messageView.isVisible = false }
-                .start()
-        }
-        resultMessageHideAction = hideAction
-        messageView.postDelayed(hideAction, RESULT_MESSAGE_DURATION)
-    }
-
-    private fun hideResultMessage() {
-        val messageView = binding.resultMessage
-        resultMessageHideAction?.let(messageView::removeCallbacks)
-        resultMessageHideAction = null
-        messageView.animate().cancel()
-        messageView.isVisible = false
-        messageView.alpha = 1f
-        messageView.translationY = 0f
+        requireContext().showSuccessToast(messageRes)
     }
 
     private fun showCurrentTags() {
@@ -286,10 +244,6 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
         )
     }
 
-    private fun showToast(messageRes: Int) {
-        Toast.makeText(requireContext(), messageRes, Toast.LENGTH_SHORT).show()
-    }
-
     private fun animateActionMenu(show: Boolean) {
         val menu = binding.actionMenu
         menu.animate().cancel()
@@ -321,9 +275,6 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
     }
 
     override fun onDestroyView() {
-        resultMessageHideAction?.let(binding.resultMessage::removeCallbacks)
-        resultMessageHideAction = null
-        binding.resultMessage.animate().cancel()
         binding.actionMenu.animate().cancel()
         binding.wallpaperPager.unregisterOnPageChangeCallback(pageCallback)
         binding.wallpaperPager.adapter = null
@@ -334,6 +285,5 @@ class WallpaperDetailFragment : BaseFragment<FragmentWallpaperDetailBinding>() {
 
     private companion object {
         const val ACTION_ANIMATION_DURATION = 180L
-        const val RESULT_MESSAGE_DURATION = 1800L
     }
 }

@@ -24,10 +24,9 @@
         android:id="@+id/btnClose"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@android:color/transparent"
         android:padding="11dp"
         android:src="@drawable/ic_close"
-        android:tint="@color/primary_500"
+        app:tint="@color/primary_500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -69,7 +68,7 @@
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginTop="12dp"
-        android:background="@drawable/bg_cta_primary"
+        android:background="@drawable/bg_button_primary"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"

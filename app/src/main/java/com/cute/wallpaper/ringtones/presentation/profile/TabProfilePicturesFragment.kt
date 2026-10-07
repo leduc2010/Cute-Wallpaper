@@ -109,7 +109,11 @@ class TabProfilePicturesFragment : BaseFragment<FragmentTabProfilePicturesBindin
             } else {
                 contents.forEachIndexed { index, content ->
                     // Both card presentations refer to individual RC items. No collection contract exists.
-                    add(ProfileFeedRow.Avatar(content, !state.isSearching && index % 4 == 1))
+                    if (!state.isSearching && index % 4 == 1) {
+                        add(ProfileFeedRow.AvatarCaption(content))
+                    } else {
+                        add(ProfileFeedRow.Avatar(content))
+                    }
                 }
             }
         }

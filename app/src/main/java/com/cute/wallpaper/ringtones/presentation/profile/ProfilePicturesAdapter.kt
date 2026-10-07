@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.cute.wallpaper.ringtones.R
 import com.cute.wallpaper.ringtones.databinding.ItemProfileAvatarBinding
+import com.cute.wallpaper.ringtones.databinding.ItemProfileAvatarCaptionBinding
 import com.cute.wallpaper.ringtones.databinding.ItemProfileBannerBinding
 import com.cute.wallpaper.ringtones.databinding.ItemProfileEmptyBinding
 import com.cute.wallpaper.ringtones.databinding.ItemProfileFeaturedBinding
@@ -30,8 +30,12 @@ sealed interface ProfileFeedRow {
         override val key = "featured"
     }
     data object Banner : ProfileFeedRow { override val key = "banner" }
-    data class Avatar(val content: HomeContentUiModel, val caption: Boolean) : ProfileFeedRow {
+    data class Avatar(val content: HomeContentUiModel) : ProfileFeedRow {
         override val key = "avatar:${content.id}"
+    }
+
+    data class AvatarCaption(val content: HomeContentUiModel) : ProfileFeedRow {
+        override val key = "avatar-caption:${content.id}"
     }
     data class Filters(val tags: List<String>, val selectedColor: String, val selectedTags: Set<String>) : ProfileFeedRow {
         override val key = "filters"
@@ -51,6 +55,7 @@ class ProfilePicturesAdapter(
         is ProfileFeedRow.Featured -> FEATURED
         ProfileFeedRow.Banner -> BANNER
         is ProfileFeedRow.Avatar -> AVATAR
+        is ProfileFeedRow.AvatarCaption -> AVATAR_CAPTION
         is ProfileFeedRow.Filters -> FILTERS
         is ProfileFeedRow.Empty -> EMPTY
     }
@@ -61,6 +66,9 @@ class ProfilePicturesAdapter(
             FEATURED -> FeaturedHolder(ItemProfileFeaturedBinding.inflate(inflater, parent, false))
             BANNER -> BannerHolder(ItemProfileBannerBinding.inflate(inflater, parent, false))
             AVATAR -> AvatarHolder(ItemProfileAvatarBinding.inflate(inflater, parent, false))
+            AVATAR_CAPTION -> AvatarCaptionHolder(
+                ItemProfileAvatarCaptionBinding.inflate(inflater, parent, false)
+            )
             FILTERS -> FiltersHolder(ItemProfileFiltersBinding.inflate(inflater, parent, false))
             else -> EmptyHolder(ItemProfileEmptyBinding.inflate(inflater, parent, false))
         }
@@ -68,11 +76,13 @@ class ProfilePicturesAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val row = getItem(position)
-        (holder.itemView.layoutParams as? StaggeredGridLayoutManager.LayoutParams)?.isFullSpan = row !is ProfileFeedRow.Avatar
+        (holder.itemView.layoutParams as? StaggeredGridLayoutManager.LayoutParams)?.isFullSpan =
+            row !is ProfileFeedRow.Avatar && row !is ProfileFeedRow.AvatarCaption
         when (holder) {
             is FeaturedHolder -> holder.bind(row as ProfileFeedRow.Featured)
             is BannerHolder -> holder.bind()
             is AvatarHolder -> holder.bind(row as ProfileFeedRow.Avatar)
+            is AvatarCaptionHolder -> holder.bind(row as ProfileFeedRow.AvatarCaption)
             is FiltersHolder -> holder.bind(row as ProfileFeedRow.Filters)
             is EmptyHolder -> holder.binding.message.setText(
                 if ((row as ProfileFeedRow.Empty).searching) R.string.profile_search_no_results else R.string.profile_feed_empty
@@ -84,6 +94,7 @@ class ProfilePicturesAdapter(
         when (holder) {
             is FeaturedHolder -> Glide.with(holder.binding.artwork).clear(holder.binding.artwork)
             is AvatarHolder -> Glide.with(holder.binding.artwork).clear(holder.binding.artwork)
+            is AvatarCaptionHolder -> Glide.with(holder.binding.artwork).clear(holder.binding.artwork)
         }
         super.onViewRecycled(holder)
     }
@@ -94,45 +105,55 @@ class ProfilePicturesAdapter(
             binding.title.text = item.title
             binding.tags.text = item.tags.joinToString(" · ")
             binding.tags.isVisible = item.tags.isNotEmpty()
-            Glide.with(binding.artwork).load(item.thumbnailUrl ?: item.contentUrl).circleCrop().into(binding.artwork)
+            Glide.with(binding.artwork).load(item.thumbnailUrl ?: item.contentUrl).into(binding.artwork)
             binding.root.setOnClickListener { onOpen(item) }
-            binding.useButton.setStartIcon(R.drawable.ic_camera, 12)
             binding.useButton.setOnClickListener { onOpen(item) }
             binding.favoriteButton.isSelected = row.favorite
             binding.favoriteButton.setOnClickListener { onFavorite(item, !row.favorite) }
-            // Figma assets are rasterized at 4x; compound drawable bounds retain the design's dp size.
-            binding.featuredBadge.setStartIcon(R.drawable.ic_star, 12)
         }
     }
 
     private inner class BannerHolder(val binding: ItemProfileBannerBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind() {
-            binding.surpriseButton.setStartIcon(R.drawable.ic_gift, 16)
             binding.surpriseButton.setOnClickListener { onSurprise() }
         }
     }
 
-    private inner class AvatarHolder(val binding: ItemProfileAvatarBinding) : RecyclerView.ViewHolder(binding.root) {
+    private inner class AvatarHolder(
+        val binding: ItemProfileAvatarBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(row: ProfileFeedRow.Avatar) {
             val item = row.content
             val context = binding.root.context
             val neutral = ContextCompat.getColor(context, R.color.tertiary_50)
-            val fill = if (row.caption || item.color.isNullOrBlank()) neutral else {
+            val fill = if (item.color.isNullOrBlank()) {
+                neutral
+            } else {
                 val source = Color.parseColor(item.color.toDisplayColorHex())
                 ColorUtils.blendARGB(source, neutral, 0.82f)
             }
+
             binding.card.setCardBackgroundColor(fill)
-            binding.card.radius = dp(binding.root, if (row.caption) 28 else 24).toFloat()
-            binding.card.strokeColor = ContextCompat.getColor(context, if (row.caption) R.color.primary_200 else R.color.primary_100)
-            val size = dp(binding.root, if (row.caption) 110 else 100)
-            binding.avatarContainer.layoutParams = binding.avatarContainer.layoutParams.apply { width = size; height = size }
-            binding.artwork.strokeWidth = if (row.caption) dp(binding.root, 2).toFloat() else 0f
-            binding.artwork.strokeColor = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.primary_500))
-            Glide.with(binding.artwork).load(item.thumbnailUrl ?: item.contentUrl).circleCrop().into(binding.artwork)
+            Glide.with(binding.artwork)
+                .load(item.thumbnailUrl ?: item.contentUrl)
+                .into(binding.artwork)
+            binding.root.contentDescription = item.title
+            binding.root.setOnClickListener { onOpen(item) }
+        }
+    }
+
+    private inner class AvatarCaptionHolder(
+        val binding: ItemProfileAvatarCaptionBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(row: ProfileFeedRow.AvatarCaption) {
+            val item = row.content
+
+            Glide.with(binding.artwork)
+                .load(item.thumbnailUrl ?: item.contentUrl)
+                .into(binding.artwork)
             binding.title.text = item.title
             binding.tags.text = item.tags.joinToString(" · ")
-            binding.title.isVisible = row.caption
-            binding.tags.isVisible = row.caption && item.tags.isNotEmpty()
+            binding.tags.isVisible = item.tags.isNotEmpty()
             binding.root.contentDescription = item.title
             binding.root.setOnClickListener { onOpen(item) }
         }
@@ -179,15 +200,6 @@ class ProfilePicturesAdapter(
 
     private class EmptyHolder(val binding: ItemProfileEmptyBinding) : RecyclerView.ViewHolder(binding.root)
 
-    private fun TextView.setStartIcon(drawable: Int, size: Int) {
-        val icon = ContextCompat.getDrawable(context, drawable) ?: return
-        val pixels = dp(this, size)
-        icon.setBounds(0, 0, pixels, pixels)
-        setCompoundDrawablesRelative(icon, null, null, null)
-    }
-
-    private fun dp(view: View, value: Int): Int = (value * view.resources.displayMetrics.density).toInt()
-
     private object Diff : DiffUtil.ItemCallback<ProfileFeedRow>() {
         override fun areItemsTheSame(oldItem: ProfileFeedRow, newItem: ProfileFeedRow) = oldItem.key == newItem.key
         override fun areContentsTheSame(oldItem: ProfileFeedRow, newItem: ProfileFeedRow) = oldItem == newItem
@@ -197,8 +209,9 @@ class ProfilePicturesAdapter(
         const val FEATURED = 0
         const val BANNER = 1
         const val AVATAR = 2
-        const val FILTERS = 3
-        const val EMPTY = 4
+        const val AVATAR_CAPTION = 3
+        const val FILTERS = 4
+        const val EMPTY = 5
         val COLORS = listOf(
             "pink" to R.string.profile_color_pink, "green" to R.string.profile_color_green,
             "blue" to R.string.profile_color_blue, "black" to R.string.profile_color_black,

@@ -10,7 +10,7 @@
         android:id="@+id/playContainer"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:background="@drawable/bg_home_action"
+        android:background="@drawable/bg_ringtone_play_state"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -18,9 +18,9 @@
             android:id="@+id/playButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
+            android:duplicateParentState="true"
             android:padding="8dp"
-            android:src="@drawable/ic_play" />
+            android:src="@drawable/ic_ringtone_play_state" />
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/playLoading"
             android:layout_width="24dp"
@@ -41,44 +41,43 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/tertiary_50"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/newBadge"
         app:layout_constraintStart_toEndOf="@id/playContainer"
-        app:layout_constraintEnd_toStartOf="@id/favoriteButton"
-        app:layout_constraintTop_toTopOf="@id/playContainer" />
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/playProgress"
-        android:layout_width="0dp"
-        android:layout_height="4dp"
-        android:layout_marginStart="12dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/newBadge"
+        style="@style/Label10B"
+        android:layout_width="wrap_content"
+        android:layout_height="14dp"
         android:layout_marginEnd="8dp"
-        android:max="100"
-        app:trackColor="@color/primary_200"
-        app:indicatorColor="@color/primary_500"
-        app:trackThickness="4dp"
-        app:trackCornerRadius="2dp"
-        app:layout_constraintStart_toEndOf="@id/playContainer"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:text="@string/ringtone_new"
+        android:textColor="@color/primary_700"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/favoriteButton"
-        app:layout_constraintBottom_toBottomOf="@id/playContainer" />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/favoriteButton"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:scaleType="fitXY"
         android:layout_marginEnd="6dp"
-        android:background="@drawable/quotes_favorite_background"
-        android:padding="8dp"
-        android:src="@drawable/ic_heart_filled"
-        android:tint="@color/quotes_favorite_tint"
+        android:src="@drawable/ic_favorite_featured_light_action"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/setButton"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/setButton"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:background="@drawable/bg_favorite_button"
-        android:padding="8dp"
-        android:src="@drawable/ic_phone"
-        android:tint="@color/primary_500"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_add_folder_favorite_action"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

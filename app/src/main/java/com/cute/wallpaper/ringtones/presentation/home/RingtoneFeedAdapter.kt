@@ -81,9 +81,7 @@ internal class RingtoneFeedAdapter(
     }
 
     private fun bindFavorite(button: ImageView, card: ContentCard) {
-        button.setImageResource(
-            if (card.isFavorite) R.drawable.ic_heart_filled else R.drawable.ic_heart_outline
-        )
+        button.isSelected = card.isFavorite
         button.setOnClickListener { onFavorite(card.content, !card.isFavorite) }
     }
 
@@ -100,13 +98,12 @@ internal class RingtoneFeedAdapter(
                 .ifBlank { item.category.replaceFirstChar(Char::titlecase) }
             binding.playLoading.isVisible = card.isPreparing
             binding.playButton.isVisible = !card.isPreparing
-            binding.playContainer.setBackgroundResource(
-                if (card.isPlaying) R.drawable.bg_ringtone_play_active else R.drawable.bg_home_action
+            binding.playContainer.isSelected = card.isPlaying
+            binding.waveform.progress = card.playbackProgress / 100f
+            binding.duration.text = formatPlaybackTime(
+                currentPositionMs = card.currentPositionMs,
+                durationMs = card.durationMs
             )
-            binding.playButton.setImageResource(
-                if (card.isPlaying) R.drawable.ic_ringtone_pause else R.drawable.ic_ringtone_play
-            )
-            binding.playProgress.setProgressCompat(card.playbackProgress, false)
             binding.playButton.setOnClickListener { onPreview(item) }
             binding.root.setOnClickListener { onPreview(item) }
             binding.setButton.setOnClickListener { onSet(item) }
@@ -121,20 +118,32 @@ internal class RingtoneFeedAdapter(
             val card = row.card
             val item = card.content
             binding.root.setBackgroundResource(row.backgroundRes)
+            binding.root.isSelected = card.isPlaying || card.isPreparing
             binding.contentTitle.text = item.title
             binding.playLoading.isVisible = card.isPreparing
             binding.playButton.isVisible = !card.isPreparing
-            binding.playContainer.setBackgroundResource(
-                if (card.isPlaying) R.drawable.bg_ringtone_play_active else R.drawable.bg_home_action
-            )
-            binding.playButton.setImageResource(
-                if (card.isPlaying) R.drawable.ic_ringtone_pause else R.drawable.ic_ringtone_play
-            )
+            binding.playContainer.isSelected = card.isPlaying
             binding.playButton.setOnClickListener { onPreview(item) }
             binding.root.setOnClickListener { onPreview(item) }
             binding.setButton.setOnClickListener { onSet(item) }
             bindFavorite(binding.favoriteButton, card)
         }
+    }
+
+    private fun formatPlaybackTime(
+        currentPositionMs: Long,
+        durationMs: Long
+    ): String {
+        val current = formatDuration(currentPositionMs.coerceAtLeast(0L))
+        val duration = durationMs.takeIf { it > 0 }?.let(::formatDuration) ?: "--:--"
+        return "$current / $duration"
+    }
+
+    private fun formatDuration(durationMs: Long): String {
+        val totalSeconds = durationMs / 1_000L
+        val minutes = totalSeconds / 60L
+        val seconds = totalSeconds % 60L
+        return "%02d:%02d".format(minutes, seconds)
     }
 
     private class HeaderHolder(

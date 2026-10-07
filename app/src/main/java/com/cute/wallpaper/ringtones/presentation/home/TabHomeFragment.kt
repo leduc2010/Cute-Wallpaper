@@ -147,10 +147,7 @@ class TabHomeFragment : BaseFragment<FragmentTabHomeBinding>() {
 
             tabBinding.root.isSelected = selected
             tabBinding.root.setPaddingRelative(0, 0, dp(if (selected) 12 else 0), 0)
-            tabBinding.tabIcon.setImageResource(collection.iconRes)
             tabBinding.tabTitle.isVisible = selected
-            tabBinding.tabTitle.setText(collection.titleRes)
-            tabBinding.root.elevation = if (selected) dp(2).toFloat() else 0f
         }
         binding.collectionTabs.requestLayout()
     }

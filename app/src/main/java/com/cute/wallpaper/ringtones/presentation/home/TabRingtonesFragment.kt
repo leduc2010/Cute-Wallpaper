@@ -83,12 +83,8 @@ class TabRingtonesFragment : BaseFragment<FragmentTabRingtonesBinding>() {
         binding.ringtoneTabs.removeAllViews()
         RingtoneCategory.pages.forEachIndexed { index, category ->
             val tabView = createRingtoneTabView(category).apply {
-                layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    dp(36)
-                ).apply {
-                    marginStart = if (index == 0) 0 else dp(12)
-                }
+                (layoutParams as LinearLayout.LayoutParams).marginStart =
+                    if (index == 0) 0 else dp(10)
                 setOnClickListener {
                     viewModel.selectRingtoneCategory(category)
                 }
@@ -150,10 +146,7 @@ class TabRingtonesFragment : BaseFragment<FragmentTabRingtonesBinding>() {
             val selected = index == selectedPosition
             tabBinding.root.isSelected = selected
             tabBinding.root.setPaddingRelative(0, 0, dp(if (selected) 12 else 0), 0)
-            tabBinding.tabIcon.setImageResource(category.iconRes)
             tabBinding.tabTitle.isVisible = selected
-            tabBinding.tabTitle.setText(category.titleRes)
-            tabBinding.root.elevation = if (selected) dp(2).toFloat() else 0f
         }
         binding.ringtoneTabs.requestLayout()
     }

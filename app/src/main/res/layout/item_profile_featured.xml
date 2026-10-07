@@ -27,19 +27,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
+                android:padding="2dp"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.CollectionIcon"
                 app:strokeColor="@color/primary_500"
-                app:strokeWidth="2dp" />
+                app:strokeWidth="3dp" />
 
             <ImageView
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:scaleType="fitXY"
                 android:layout_gravity="bottom|end"
-                android:background="@drawable/profile_feed_camera_badge"
                 android:importantForAccessibility="no"
-                android:padding="8dp"
-                android:src="@drawable/ic_camera" />
+                android:src="@drawable/ic_camera_profile_badge_large" />
         </FrameLayout>
 
         <LinearLayout
@@ -58,6 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/profile_feed_badge"
+                android:drawableStart="@drawable/ic_star"
                 android:drawablePadding="4dp"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
@@ -89,29 +90,40 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp">
 
-                <TextView
-                    android:id="@+id/useButton"
-                    style="@style/Label12B"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="1"
                     android:background="@drawable/profile_feed_use_button"
-                    android:drawablePadding="6dp"
                     android:gravity="center"
-                    android:paddingHorizontal="8dp"
-                    android:text="@string/profile_use_picture"
-                    android:textColor="@color/white" />
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_marginEnd="6dp"
+                        android:src="@drawable/ic_camera" />
+
+                    <TextView
+                        android:id="@+id/useButton"
+                        style="@style/Label12B"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/profile_use_picture"
+                        android:textColor="@color/white" />
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/favoriteButton"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:scaleType="fitXY"
                     android:layout_marginStart="8dp"
-                    android:background="@drawable/profile_feed_badge"
-                    android:padding="12dp"
-                    android:src="@drawable/ic_favorite" />
+                    android:src="@drawable/ic_favorite_profile_badge" />
             </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,7 +21,10 @@ data class ContentCard(
     val isFavorite: Boolean,
     val isPlaying: Boolean = false,
     val isPreparing: Boolean = false,
-    val playbackProgress: Int = 0
+    val playbackProgress: Int = 0,
+    val currentPositionMs: Long = 0L,
+    val durationMs: Long = 0L,
+    val qualityLabel: String? = null
 )
 
 class ContentAdapter(
@@ -71,10 +74,6 @@ class ContentAdapter(
 
     private fun bindFavorite(button: ImageView, card: ContentCard) {
         button.isSelected = card.isFavorite
-        button.setImageResource(
-            if (card.isFavorite) R.drawable.ic_heart_filled
-            else R.drawable.ic_heart_outline
-        )
         button.setOnClickListener {
             onFavorite(card.content, !card.isFavorite)
         }
@@ -122,17 +121,11 @@ class ContentAdapter(
             val item = card.content
             val backgroundIndex = Math.floorMod(item.id.hashCode(), ringtoneBackgrounds.size)
             binding.root.setBackgroundResource(ringtoneBackgrounds[backgroundIndex])
+            binding.root.isSelected = card.isPlaying || card.isPreparing
             binding.contentTitle.text = item.title
             binding.playLoading.isVisible = card.isPreparing
             binding.playButton.isVisible = !card.isPreparing
-            binding.playContainer.setBackgroundResource(
-                if (card.isPlaying) R.drawable.bg_ringtone_play_active
-                else R.drawable.bg_home_action
-            )
-            binding.playButton.setImageResource(
-                if (card.isPlaying) R.drawable.ic_ringtone_pause
-                else R.drawable.ic_ringtone_play
-            )
+            binding.playContainer.isSelected = card.isPlaying
             binding.playButton.setOnClickListener { onPreview(item) }
             binding.root.setOnClickListener { onPreview(item) }
             binding.setButton.setOnClickListener { onRingtoneSet(item) }

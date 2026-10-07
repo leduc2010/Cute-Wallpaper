@@ -66,7 +66,7 @@
     <string name="wallpaper_action_share">Share wallpaper</string>
     <string name="wallpaper_success_home">Wallpaper set on home screen</string>
     <string name="wallpaper_success_lock">Wallpaper set on lock screen</string>
-    <string name="wallpaper_success_both">Wallpaper set on home and lock screens</string>
+    <string name="wallpaper_success_both">Lock and home wallpapers set</string>
     <string name="wallpaper_tags_title">Tags</string>
     <string name="wallpaper_tags_close">Close</string>
 
@@ -97,10 +97,11 @@
     <string name="ringtone_set_failed">Could not set this sound.</string>
     <string name="ringtone_preview_failed">Could not play this sound.</string>
     <!-- Auto change wallpaper -->
-    <string name="auto_change_title">Auto change ✨</string>
+    <string name="auto_change_title">Auto change</string>
+    <string name="auto_change_sparkle">✨</string>
     <string name="auto_change_downloaded_count">Downloaded wallpapers: %1$d</string>
-    <string name="auto_change_minimum_hint">Download at least %1$d wallpapers to enable Auto change. Downloaded: %2$d/%3$d.</string>
-    <string name="auto_change_minimum_dialog_message">Download at least %1$d wallpapers to your library to enable Auto change.</string>
+    <string name="auto_change_minimum_hint">Download at least %1$d wallpapers to enable Auto Wallpapers. Downloaded: %2$d/%3$d.</string>
+    <string name="auto_change_minimum_dialog_message">Download at least %1$d wallpapers to your gallery to enable Auto Wallpapers.</string>
     <string name="auto_change_apply_to">Apply to</string>
     <string name="auto_change_home_screen">Home screen</string>
     <string name="auto_change_lock_screen">Lock screen</string>
@@ -110,9 +111,106 @@
     <string name="auto_change_every_6_hours">Every 6 hours</string>
     <string name="auto_change_every_12_hours">Every 12 hours</string>
     <string name="auto_change_every_24_hours">Every 24 hours</string>
-    <string name="auto_change_enable">Enable auto change</string>
+    <string name="auto_change_enable">Turn on auto change</string>
     <string name="auto_change_save_changes">Save changes</string>
     <string name="auto_change_stop">Stop auto change</string>
     <string name="ok">OK</string>
     <string name="close">Close</string>
+
+    <!-- Settings & entry flow -->
+<string name="settings_title">Settings</string>
+    <string name="settings_general">General</string>
+    <string name="settings_help_about">Help &amp; about</string>
+    <string name="settings_legal">Legal</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_rate_app">Rate App</string>
+    <string name="settings_share_app">Share app</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_legal_disclaimer">Legal Disclaimer</string>
+    <string name="settings_dmca_policy">DMCA Policy</string>
+    <string name="settings_link_unavailable">This link is currently unavailable.</string>
+    <string name="settings_action_unavailable">No app is available to open this action.</string>
+    <string name="language_choose_title">Choose Language</string>
+    <string name="entry_get_started">Get Started</string>
+    <string name="onboarding_design_title_1">Make Your Screen\nMagical ✨</string>
+    <string name="onboarding_design_title_2">Find Your\nPerfect Vibe 🎶</string>
+    <string name="onboarding_design_title_3">Brighten Your Day\nwith Quotes 💕</string>
+    <string name="onboarding_swipe_next">Swipe to Next</string>
+
+    <!-- Favorites -->
+<string name="favorite_category_dual">Dual Wallpapers</string>
+    <string name="favorite_category_video">Video</string>
+    <string name="favorites_clear_search">Clear search</string>
+
+    <!-- Profile editor -->
+<string name="profile_editor_text">Text</string>
+    <string name="profile_editor_download">Download</string>
+    <string name="profile_editor_adjust">Adjust</string>
+    <string name="profile_editor_frame">Frame</string>
+    <string name="profile_editor_previous">Previous picture</string>
+    <string name="profile_editor_name">Write name</string>
+    <string name="profile_editor_position">Move and zoom your photo until it fits the frame.</string>
+    <string name="profile_editor_privacy">Your photo stays on this device. It is only used inside the app to create your profile picture and is not uploaded to our server.</string>
+    <string name="profile_editor_choose_photo">Choose Photo</string>
+    <string name="profile_editor_save_description">Save this image to your gallery and use it on social media.</string>
+    <string name="profile_editor_download_image">Download Image</string>
+    <string name="profile_download_username">Cutii</string>
+    <string name="profile_download_followers">112.8K</string>
+    <string name="profile_download_likes">840</string>
+    <string name="profile_editor_load_failed">Could not load this picture. Tap to retry.</string>
+    <string name="profile_editor_picker_failed">Could not open the photo picker.</string>
+    <string name="profile_editor_original">Original</string>
+    <string name="profile_editor_mono">Mono</string>
+    <string name="profile_editor_warm">Warm</string>
+    <string name="profile_editor_cool">Cool</string>
+    <string name="profile_editor_none">None</string>
+    <string name="profile_editor_pink">Pink</string>
+    <string name="profile_editor_purple">Purple</string>
+    <string name="profile_editor_sparkle">Sparkle</string>
+    <string name="profile_editor_saved">Profile picture saved to Pictures</string>
+    <string name="profile_editor_save_failed">Could not save this profile picture</string>
+    <string name="profile_editor_permission_denied">Storage permission is required to save pictures on this Android version.</string>
+    <string name="profile_editor_navigation_pictures">Pictures</string>
+
+    <!-- Profile feed -->
+<string name="profile_picture_title">Picture</string>
+    <string name="profile_featured">Featured</string>
+    <string name="profile_use_picture">Use Picture</string>
+    <string name="profile_banner_title">Be yourself, cutely!</string>
+    <string name="profile_banner_subtitle">Find a vibe that matches your mood ✨</string>
+    <string name="profile_surprise_me">Surprise Me</string>
+    <string name="profile_search_no_results">Try another profile picture keyword.</string>
+    <string name="profile_feed_empty">No profile pictures available yet.</string>
+    <string name="profile_color_pink">Pink</string>
+    <string name="profile_color_green">Green</string>
+    <string name="profile_color_blue">Blue</string>
+    <string name="profile_color_black">Black</string>
+    <string name="profile_color_purple">Purple</string>
+    <string name="profile_color_white">White</string>
+    <string name="profile_color_red">Red</string>
+    <string name="profile_color_orange">Orange</string>
+    <string name="profile_color_cyan">Cyan</string>
+    <string name="profile_color_yellow">Yellow</string>
+
+    <!-- Quotes -->
+<string name="quotes_new">New Quotes</string>
+    <string name="quotes_popular">Popular Quotes</string>
+    <string name="quotes_categories">Quote Categories</string>
+    <string name="quotes_featured">Featured</string>
+    <string name="quotes_explore_category">Explore %1$s</string>
+    <string name="quotes_empty">No quotes available</string>
+    <string name="quotes_search_empty">Try another quote keyword.</string>
+    <string name="quotes_copied">Quote copied</string>
+    <string name="quotes_share">Share quote</string>
+    <string name="quotes_saved">Quote image saved</string>
+    <string name="quotes_export_failed">Unable to save or share this quote. Please try again.</string>
+    <string name="quotes_permission_denied">Allow storage access to save this image.</string>
+    <string name="quotes_mark" translatable="false">“</string>
+    <string name="quotes_unknown_author">Unknown</string>
+
+    <!-- Settings links -->
+<!-- Awaiting LS129-approved links; never substitute another application's policies. -->
+    <string name="settings_privacy_url" translatable="false"></string>
+    <string name="settings_disclaimer_url" translatable="false"></string>
+    <string name="settings_dmca_url" translatable="false"></string>
 </resources>

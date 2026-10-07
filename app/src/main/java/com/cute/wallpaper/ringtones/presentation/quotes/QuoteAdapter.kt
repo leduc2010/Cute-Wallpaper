@@ -78,7 +78,6 @@ class QuoteViewHolder private constructor(
         binding.quoteText.text = card.content.quote.orEmpty()
         val hasThumbnail = !card.content.thumbnailUrl.isNullOrBlank()
         binding.thumbnail.isVisible = hasThumbnail
-        binding.thumbnailOverlay.isVisible = hasThumbnail
         if (hasThumbnail) {
             Glide.with(binding.thumbnail)
                 .load(card.content.thumbnailUrl)

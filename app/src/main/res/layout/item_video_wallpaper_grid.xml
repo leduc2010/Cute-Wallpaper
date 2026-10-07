@@ -18,14 +18,13 @@
         android:id="@+id/favoriteButton"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:scaleType="fitXY"
         android:layout_gravity="top|end"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/bg_home_action"
         android:clickable="true"
         android:focusable="true"
-        android:padding="8dp"
-        android:src="@drawable/ic_heart_outline" />
+        android:src="@drawable/ic_favorite_secondary_action" />
 
     <ImageView
         android:id="@+id/playButton"
@@ -34,10 +33,6 @@
         android:layout_gravity="bottom|start"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/bg_home_action"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="4dp"
-        android:src="@drawable/ic_play" />
+        android:src="@drawable/ic_play_secondary_action" />
 
 </FrameLayout>

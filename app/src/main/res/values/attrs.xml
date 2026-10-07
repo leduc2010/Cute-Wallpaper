@@ -4,4 +4,9 @@
         <attr name="enableSafeTop" format="boolean" />
         <attr name="enableSafeBottom" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="ProfilePhotoView">
+        <attr name="profileThumbnailCornerRadius" format="dimension" />
+        <attr name="profileDrawSparkles" format="boolean" />
+    </declare-styleable>
 </resources>

@@ -104,7 +104,9 @@ class SearchResultFragment : BaseFragment<FragmentSearchResultBinding>() {
                 isFavorite = content.ref.toFavoriteKey() in favorites,
                 isPlaying = active && playback?.isPlaying == true,
                 isPreparing = active && playback?.isPreparing == true,
-                playbackProgress = if (active) playback?.progress ?: 0 else 0
+                playbackProgress = if (active) playback?.progress ?: 0 else 0,
+                currentPositionMs = if (active) playback?.currentPositionMs ?: 0L else 0L,
+                durationMs = if (active) playback?.durationMs ?: 0L else 0L
             )
         }
         contentAdapter?.submitList(cards)

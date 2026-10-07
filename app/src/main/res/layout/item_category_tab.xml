@@ -5,6 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="40dp"
     android:background="@drawable/bg_home_category_item"
+    android:stateListAnimator="@animator/category_tab_elevation"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 

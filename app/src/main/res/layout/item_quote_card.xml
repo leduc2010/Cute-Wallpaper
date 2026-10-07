@@ -14,11 +14,6 @@
         android:layout_height="match_parent"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop" />
-    <View
-        android:id="@+id/thumbnailOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/alpha_light_80" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardContent"
         android:layout_width="match_parent"
@@ -80,35 +75,29 @@
                 android:id="@+id/btnFavorite"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="@drawable/quotes_favorite_background"
-                android:padding="8dp"
-                android:src="@drawable/ic_favorite"
-                android:tint="@color/quotes_favorite_tint" />
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_favorite_quote_action" />
             <ImageView
                 android:id="@+id/btnPreview"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:scaleType="fitXY"
                 android:layout_marginStart="6dp"
-                android:background="@drawable/bg_home_action"
-                android:padding="8dp"
-                android:src="@drawable/ic_quote_preview" />
+                android:src="@drawable/ic_quote_preview_secondary_action" />
             <ImageView
                 android:id="@+id/btnCopy"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:scaleType="fitXY"
                 android:layout_marginStart="6dp"
-                android:background="@drawable/bg_home_action"
-                android:padding="8dp"
-                android:src="@drawable/ic_copy" />
+                android:src="@drawable/ic_copy_secondary_action" />
             <ImageView
                 android:id="@+id/btnShare"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:scaleType="fitXY"
                 android:layout_marginStart="6dp"
-                android:background="@drawable/bg_home_action"
-                android:padding="8dp"
-                android:src="@drawable/ic_share"
-                app:tint="@color/primary_500" />
+                android:src="@drawable/ic_share_secondary_action_compact" />
         </LinearLayout>
         <ImageView
             android:id="@+id/separator"

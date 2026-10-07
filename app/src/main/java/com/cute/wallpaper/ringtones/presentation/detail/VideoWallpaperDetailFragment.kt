@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.bumptech.glide.Glide
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.WindowCompat
@@ -29,6 +28,8 @@ import com.cute.wallpaper.ringtones.presentation.main.MainTab
 import com.cute.wallpaper.ringtones.presentation.search.SearchMode
 import com.cute.wallpaper.ringtones.presentation.search.SearchViewModel
 import com.cute.wallpaper.ringtones.service.LiveWallpaperService
+import com.cute.wallpaper.ringtones.utils.showErrorToast
+import com.cute.wallpaper.ringtones.utils.showSuccessToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.absoluteValue
 
@@ -39,13 +40,12 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
     private var isActionMenuExpanded = false
     private lateinit var wallpaperAdapter: WallpaperDetailAdapter
     private var videoPlayer: ExoPlayer? = null
-    private var resultMessageHideAction: Runnable? = null
 
     private val liveWallpaperLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            showResultMessage(R.string.wallpaper_success_home)
+            requireContext().showSuccessToast(R.string.wallpaper_success_home)
         }
     }
 
@@ -55,7 +55,6 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
             viewModel.selectPage(position)
             wallpaperAdapter.stopPreview()
             setActionMenuExpanded(false, animate = false)
-            hideResultMessage()
             renderFavorite()
             renderInfo()
         }
@@ -100,7 +99,9 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
             requestManager = Glide.with(this),
             enableMediaPreview = true,
             videoPlayerProvider = ::getOrCreateVideoPlayer,
-            onPreviewError = { showToast(R.string.live_wallpaper_preview_failed) }
+            onPreviewError = {
+                requireContext().showErrorToast(R.string.live_wallpaper_preview_failed)
+            }
         )
         binding.wallpaperPager.apply {
             adapter = wallpaperAdapter
@@ -156,7 +157,8 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
         viewModel.event.observe(viewLifecycleOwner) { event ->
             when (val content = event.getContentIfNotHandled()) {
                 is LiveWallpaperEvent.LaunchPreview -> openLiveWallpaperPreview(content.url)
-                LiveWallpaperEvent.PrepareFailed -> showToast(R.string.live_wallpaper_preview_failed)
+                LiveWallpaperEvent.PrepareFailed ->
+                    requireContext().showErrorToast(R.string.live_wallpaper_preview_failed)
                 null -> Unit
             }
         }
@@ -168,10 +170,7 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
         val item = currentItem()
         binding.btnFavorite.isEnabled = item != null
         val favorite = item?.ref?.toFavoriteKey() in viewModel.favoriteKeys.value.orEmpty()
-        binding.btnFavorite.setImageResource(
-            if (favorite) R.drawable.ic_heart_filled
-            else R.drawable.ic_heart_outline
-        )
+        binding.btnFavorite.isSelected = favorite
     }
 
     private fun renderInfo() {
@@ -196,9 +195,7 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
 
     private fun setActionMenuExpanded(expanded: Boolean, animate: Boolean = true) {
         isActionMenuExpanded = expanded
-        binding.btnPrimaryAction.setImageResource(
-            if (expanded) R.drawable.ic_close_circle else R.drawable.ic_set_wallpaper
-        )
+        binding.btnPrimaryAction.isSelected = expanded
         val menu = binding.actionMenu
         menu.animate().cancel()
         if (!animate) {
@@ -250,41 +247,6 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
         )
     }
 
-    private fun showResultMessage(messageRes: Int) {
-        val messageView = binding.resultMessage
-        resultMessageHideAction?.let(messageView::removeCallbacks)
-        messageView.animate().cancel()
-        messageView.setText(messageRes)
-        messageView.alpha = 0f
-        messageView.translationY = dp(8).toFloat()
-        messageView.isVisible = true
-        messageView.animate()
-            .alpha(1f)
-            .translationY(0f)
-            .setDuration(160L)
-            .start()
-        val hideAction = Runnable {
-            messageView.animate()
-                .alpha(0f)
-                .translationY(dp(8).toFloat())
-                .setDuration(140L)
-                .withEndAction { messageView.isVisible = false }
-                .start()
-        }
-        resultMessageHideAction = hideAction
-        messageView.postDelayed(hideAction, RESULT_MESSAGE_DURATION)
-    }
-
-    private fun hideResultMessage() {
-        val messageView = binding.resultMessage
-        resultMessageHideAction?.let(messageView::removeCallbacks)
-        resultMessageHideAction = null
-        messageView.animate().cancel()
-        messageView.isVisible = false
-        messageView.alpha = 1f
-        messageView.translationY = 0f
-    }
-
     private fun openLiveWallpaperPreview(url: String) {
         val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).apply {
             putExtra(
@@ -297,7 +259,7 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
                 liveWallpaperLauncher.launch(Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER))
             }
             .onFailure {
-                showToast(R.string.live_wallpaper_preview_failed)
+                requireContext().showErrorToast(R.string.live_wallpaper_preview_failed)
             }
     }
 
@@ -311,10 +273,6 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
             childFragmentManager,
             WallpaperTagsDialogFragment.TAG
         )
-    }
-
-    private fun showToast(messageRes: Int) {
-        Toast.makeText(requireContext(), messageRes, Toast.LENGTH_SHORT).show()
     }
 
     private fun getOrCreateVideoPlayer(): ExoPlayer? {
@@ -339,9 +297,6 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
     }
 
     override fun onDestroyView() {
-        resultMessageHideAction?.let(binding.resultMessage::removeCallbacks)
-        resultMessageHideAction = null
-        binding.resultMessage.animate().cancel()
         binding.actionMenu.animate().cancel()
         wallpaperAdapter.stopPreview()
         binding.wallpaperPager.unregisterOnPageChangeCallback(pageCallback)
@@ -353,6 +308,5 @@ class VideoWallpaperDetailFragment : BaseFragment<FragmentVideoWallpaperDetailBi
 
     private companion object {
         const val ACTION_ANIMATION_DURATION = 180L
-        const val RESULT_MESSAGE_DURATION = 1800L
     }
 }

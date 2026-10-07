@@ -42,13 +42,12 @@
             android:id="@+id/btnPlay"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:scaleType="fitXY"
             android:layout_gravity="center"
-            android:background="@drawable/bg_detail_secondary_action"
             android:clickable="true"
             android:elevation="3dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:padding="22dp"
-            android:src="@drawable/ic_play" />
+            android:src="@drawable/ic_play_secondary_action_large" />
     </FrameLayout>
 </com.google.android.material.card.MaterialCardView>

@@ -117,4 +117,21 @@
     <color name="profile_editor_preview_background">#E1CAEA</color>
     <color name="profile_editor_download_button">#D05F34</color>
     <color name="profile_editor_adjust_button">#466C00</color>
+
+    <!-- Favorites ringtone gradients -->
+<color name="favorites_ringtone_pink_start">#FF6D98</color>
+    <color name="favorites_ringtone_pink_end">#FF92AE</color>
+    <color name="favorites_ringtone_blue_start">#8B86FF</color>
+    <color name="favorites_ringtone_blue_end">#B2AEFF</color>
+    <color name="favorites_ringtone_orange_start">#FF7360</color>
+    <color name="favorites_ringtone_orange_end">#FFAE85</color>
+    <color name="favorites_ringtone_purple_start">#A262FF</color>
+    <color name="favorites_ringtone_purple_end">#D0A6FF</color>
+
+    <color name="favorites_ringtone_rose_start">#FF5F8F</color>
+    <color name="favorites_ringtone_rose_end">#FF9BB9</color>
+    <color name="favorites_ringtone_lilac_start">#956CFF</color>
+    <color name="favorites_ringtone_lilac_end">#C89CFF</color>
+    <color name="favorites_ringtone_peach_start">#FF7B73</color>
+    <color name="favorites_ringtone_peach_end">#FFC08D</color>
 </resources>

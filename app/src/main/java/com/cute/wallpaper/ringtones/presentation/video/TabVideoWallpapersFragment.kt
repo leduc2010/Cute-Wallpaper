@@ -73,6 +73,9 @@ class TabVideoWallpapersFragment : BaseFragment<FragmentTabVideoWallpapersBindin
         viewModel.favoriteKeys.observe(viewLifecycleOwner) {
             renderContent()
         }
+        viewModel.featuredMediaInfo.observe(viewLifecycleOwner) {
+            renderContent()
+        }
         mainViewModel.bottomContentPadding.observe(viewLifecycleOwner) { padding ->
             binding.rvContent.updatePadding(bottom = padding + dp(16))
         }
@@ -80,10 +83,14 @@ class TabVideoWallpapersFragment : BaseFragment<FragmentTabVideoWallpapersBindin
 
     private fun renderContent() {
         val favorites = viewModel.favoriteKeys.value.orEmpty()
+        val featuredInfo = viewModel.featuredMediaInfo.value.orEmpty()
         val cards = viewModel.items.map { item ->
+            val mediaInfo = featuredInfo[item.id]
             ContentCard(
                 content = item,
-                isFavorite = item.ref.toFavoriteKey() in favorites
+                isFavorite = item.ref.toFavoriteKey() in favorites,
+                durationMs = mediaInfo?.durationMs ?: 0L,
+                qualityLabel = mediaInfo?.qualityLabel
             )
         }
         contentAdapter?.submitCards(cards)

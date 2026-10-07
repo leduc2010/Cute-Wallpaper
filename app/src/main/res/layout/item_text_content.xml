@@ -10,13 +10,12 @@
             android:id="@+id/favoriteButton"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:scaleType="fitXY"
             android:layout_gravity="top|end"
             android:layout_margin="8dp"
-            android:background="@drawable/bg_favorite_button"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:padding="6dp"
-            android:src="@drawable/ic_heart_outline" />
+            android:src="@drawable/ic_favorite_card_action" />
     </FrameLayout>
 </com.google.android.material.card.MaterialCardView>
